@@ -2,7 +2,8 @@ param(
     [ValidateSet('x64','ARM64')][string]$Architecture='x64',
     [string]$Publisher='CN=Agenda.Development',
     [string]$CertificatePath='',
-    [string]$CertificatePassword=''
+    [string]$CertificatePassword='',
+    [switch]$UseCertificateStore
 )
 $ErrorActionPreference='Stop'
 $repoRoot=Split-Path $PSScriptRoot -Parent
@@ -10,6 +11,7 @@ $temporaryPfx=$null
 $temporaryCertificateThumbprint=$null
 Push-Location $repoRoot
 try {
+    if($UseCertificateStore -and -not [string]::IsNullOrWhiteSpace($CertificatePath)) { throw 'UseCertificateStore cannot be combined with CertificatePath.' }
     $env:DOTNET_CLI_HOME=Join-Path $repoRoot '.dotnet'
     $runtimeId='win-'+$Architecture.ToLowerInvariant()
     # A new staging folder avoids stale files and never removes a previous build.
@@ -47,12 +49,23 @@ try {
     if (-not $signtool) { throw 'Windows SDK signtool.exe was not found.' }
 
     $publicCertificate=$null
-    if([string]::IsNullOrWhiteSpace($CertificatePath)) {
+    if($UseCertificateStore) {
+        $signingDirectory=Join-Path $repoRoot 'artifacts/signing'
+        New-Item -ItemType Directory -Path $signingDirectory -Force | Out-Null
+        $publicCertificate=Join-Path $signingDirectory 'Agenda-Development.cer'
+        & (Join-Path $PSScriptRoot 'setup-dev-certificate.ps1') -Publisher $Publisher | Out-Null
+        $certificate=Get-ChildItem -Path 'Cert:\CurrentUser\My' |
+            Where-Object { $_.Subject -eq $Publisher -and $_.HasPrivateKey -and $_.NotAfter -gt (Get-Date) -and ($_.EnhancedKeyUsageList | Where-Object { $_.ObjectId -eq '1.3.6.1.5.5.7.3.3' }) } |
+            Sort-Object NotAfter -Descending |
+            Select-Object -First 1
+        if(-not $certificate) { throw "No valid code-signing certificate for '$Publisher' was found in the current user's certificate store." }
+        $signArguments=@('sign','/fd','SHA256','/sha1',$certificate.Thumbprint,$package)
+    } elseif([string]::IsNullOrWhiteSpace($CertificatePath)) {
         $signingDirectory=Join-Path $repoRoot 'artifacts/signing'
         New-Item -ItemType Directory -Path $signingDirectory -Force | Out-Null
         $publicCertificate=Join-Path $signingDirectory 'Agenda-Development.cer'
         $temporaryPfx=[IO.Path]::GetTempFileName()
-        $certificate=New-SelfSignedCertificate -Type Custom -Subject $Publisher -FriendlyName 'Agenda development package signing' -CertStoreLocation 'Cert:\CurrentUser\My' -KeyUsage DigitalSignature -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3') -NotAfter (Get-Date).AddYears(5)
+        $certificate=New-SelfSignedCertificate -Type Custom -Subject $Publisher -FriendlyName 'Agenda temporary package signing' -CertStoreLocation 'Cert:\CurrentUser\My' -KeyUsage DigitalSignature -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3') -NotAfter (Get-Date).AddYears(1)
         $temporaryCertificateThumbprint=$certificate.Thumbprint
         $temporaryPassword=[Guid]::NewGuid().ToString('N')
         $securePassword=ConvertTo-SecureString $temporaryPassword -AsPlainText -Force

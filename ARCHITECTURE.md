@@ -231,7 +231,7 @@ Refreshes are cancellable and serialized by an operation gate. A refresh capture
 
 ## Packaging and deployment
 
-The normal development build is an unpackaged WinUI 3 executable. `scripts/build.ps1` restores and builds x64 or ARM64. `scripts/package.ps1` creates a self-contained portable directory and a signed MSIX in the ignored `artifacts/` directory. Without a supplied PFX it creates a temporary self-signed development certificate matching the publisher, exports only the public `.cer`, removes the private key, and leaves trust installation to the explicit `scripts/trust-dev-certificate.ps1` command. A publisher-matching PFX can be supplied for distribution signing. The scripts do not register startup, install the package automatically, or publish to the Store. `deployment/Assets` contains source artwork and tray icons used by both unpackaged and packaged output.
+The normal development build is an unpackaged WinUI 3 executable. `scripts/build.ps1` restores and builds x64 or ARM64. `scripts/package.ps1` creates a self-contained portable directory and a signed MSIX in the ignored `artifacts/` directory. By default it uses a temporary development certificate; `-UseCertificateStore` instead creates or reuses a self-signed certificate in `Cert:\CurrentUser\My`, signs with its private key, exports only the public `.cer`, and leaves trust installation to the explicit `scripts/trust-dev-certificate.ps1` command. A publisher-matching PFX can be supplied for distribution signing. The scripts do not register startup, install the package automatically, or publish to the Store. `deployment/Assets` contains source artwork and tray icons used by both unpackaged and packaged output.
 
 ## Test seams
 

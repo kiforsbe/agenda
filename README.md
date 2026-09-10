@@ -79,14 +79,17 @@ The notification-area icon and **Ctrl+Alt+A** open the flyout. Taskbar-clock int
 ./scripts/package.ps1 -Architecture ARM64
 ```
 
-The script creates a self-contained portable directory and a **signed** MSIX in `artifacts/`. With no certificate arguments it creates a temporary self-signed development certificate matching `-Publisher`, signs the package, exports its public certificate to `artifacts/signing/`, and removes the private key afterward. Trust that certificate once for the current Windows user before installing:
+The script creates a self-contained portable directory and a **signed** MSIX in `artifacts/`. By default it uses a temporary self-signed development certificate and removes its private key afterward. To reuse the persistent certificate in the current user's Personal certificate store (`Cert:\CurrentUser\My`), pass `-UseCertificateStore`; it creates the certificate if needed and exports only its public certificate to `artifacts/signing/`. Trust that certificate once for the current Windows user before installing:
 
 ```powershell
+./scripts/package.ps1 -Architecture x64 -UseCertificateStore
 ./scripts/trust-dev-certificate.ps1
 Add-AppxPackage ./artifacts/Agenda-x64.msix
 ```
 
-For distribution, pass a publisher-matching PFX with `-CertificatePath` and, when needed, `-CertificatePassword`. Store or certificate publishing remains a separate step; the scripts do not register startup, install the package automatically, or publish to the Store. Use `-Publisher` to set the intended certificate subject; Store publishing requires the identity assigned by Partner Center.
+To create or inspect the persistent development certificate without packaging, run `./scripts/setup-dev-certificate.ps1`. For distribution, pass a publisher-matching PFX with `-CertificatePath` and, when needed, `-CertificatePassword`.
+
+Store or certificate publishing remains a separate step; the scripts do not register startup, install the package automatically, or publish to the Store. Use `-Publisher` to set the intended certificate subject; Store publishing requires the identity assigned by Partner Center.
 
 User settings/cache are under `%LOCALAPPDATA%/Agenda` unless `--data-dir` is supplied. Credentials belong to the Windows authentication broker; event caches are protected for the current Windows user. Disconnect clears the active provider's cache; configured feed links remain until removed in the feed screen.
 
