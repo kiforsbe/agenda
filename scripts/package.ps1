@@ -15,7 +15,12 @@ try {
         if(-not(Test-Path -LiteralPath (Join-Path $stage $resource))) { throw "Publish omitted required XAML resource: $resource" }
     }
     & (Join-Path $PSScriptRoot 'create-assets.ps1')
-    Copy-Item -LiteralPath (Join-Path $repoRoot 'deployment/Assets') -Destination $stage -Recurse
+    # The WinUI publish target can already create an Assets directory for tray
+    # icons. Merge the deployment assets into it instead of copying a directory
+    # over an existing directory, which makes packaging repeatable.
+    $assetDestination=Join-Path $stage 'Assets'
+    New-Item -ItemType Directory -Path $assetDestination -Force | Out-Null
+    Copy-Item -Path (Join-Path $repoRoot 'deployment/Assets/*') -Destination $assetDestination -Recurse -Force
     $propsText=Get-Content -LiteralPath (Join-Path $repoRoot 'Directory.Build.props') -Raw
     $versionMatch=[regex]::Match($propsText,'<AgendaVersion>\s*([^<\s]+)\s*</AgendaVersion>')
     if(-not $versionMatch.Success -or $versionMatch.Groups[1].Value -notmatch '^\d+\.\d+\.\d+$') { throw 'Directory.Build.props must define AgendaVersion as major.minor.patch.' }
