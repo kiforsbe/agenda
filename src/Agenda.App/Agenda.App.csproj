@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.22000.0</TargetPlatformMinVersion>
+    <RootNamespace>Agenda.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>../../deployment/Assets/Agenda.ico</ApplicationIcon>
+    <Platforms>x64;ARM64</Platforms>
+    <PlatformTarget Condition="'$(Platform)' == '' or '$(Platform)' == 'AnyCPU'">x64</PlatformTarget>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+    <UseWinUI>true</UseWinUI>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <WindowsAppSdkBootstrapInitialize>false</WindowsAppSdkBootstrapInitialize>
+    <WindowsAppSdkDeploymentManagerInitialize>false</WindowsAppSdkDeploymentManagerInitialize>
+  </PropertyGroup>
+  <!-- The tray icons are read from disk at runtime so the shell can swap ink when
+       the system theme changes. Packaged builds get them from package.ps1, which
+       copies deployment/Assets wholesale; unpackaged builds need them here. -->
+  <ItemGroup>
+    <None Include="../../deployment/Assets/TrayDark.ico;../../deployment/Assets/TrayLight.ico"
+          Link="Assets/%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.4.0" />
+    <ProjectReference Include="../Agenda.Core/Agenda.Core.csproj" />
+    <ProjectReference Include="../Agenda.Providers/Agenda.Providers.csproj" />
+  </ItemGroup>
+  <!-- Unpackaged SDK publish currently omits the app's PRI and compiled XAML. -->
+  <Target Name="PublishAgendaXamlResources" AfterTargets="Publish">
+    <ItemGroup>
+      <_AgendaXamlResource Include="$(TargetDir)$(AssemblyName).pri" />
+      <_AgendaXamlResource Include="$(TargetDir)App.xbf;$(TargetDir)MainWindow.xbf" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_AgendaXamlResource)" DestinationFiles="@(_AgendaXamlResource->'$(PublishDir)%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+</Project>
