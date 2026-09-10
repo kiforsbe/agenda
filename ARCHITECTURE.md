@@ -2,6 +2,8 @@
 
 Agenda is a native, unpackaged Windows 11 desktop application. It presents a compact calendar flyout, is activated from the notification area or a global shortcut, and reads calendar data through provider implementations. The design keeps WinUI presentation, Win32 shell integration, calendar rules, and remote data access in separate layers so that each can be tested without requiring a live account.
 
+The editable application version lives in `Directory.Build.props` as `AgendaVersion`. MSBuild emits it as assembly informational, file, and assembly version metadata; `App.Version` reads that compiled value for the Settings page. The package script converts the same three-part value to the four-part MSIX manifest format, and `scripts/check-release.ps1` verifies that a `vX.Y.Z` tag and changelog heading match before release tagging.
+
 ## System boundary
 
 The process owns the flyout window and its notification-area icon. Windows owns the taskbar, Explorer, the Windows account broker, and the appointment store. Agenda does not inject UI into Explorer, subclass the taskbar, or capture broad mouse input. Taskbar-clock interception is intentionally disabled; the supported entry points are the Agenda tray icon and `Ctrl+Alt+A`.

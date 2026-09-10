@@ -5,6 +5,17 @@ A native Windows 11 calendar flyout built with C#, WinUI 3 and Windows App SDK.
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the component boundaries, runtime flows, protected-data model, and Mermaid diagrams.
 See [CHANGELOG.md](CHANGELOG.md) for the current unreleased feature and fix history.
 
+## Versioning and releases
+
+The editable version is `AgendaVersion` in [Directory.Build.props](Directory.Build.props). It is compiled into the app and displayed in Settings; packaging derives the four-part MSIX version from the same value. Before creating a tag, update `AgendaVersion`, add or update the matching `## [major.minor.patch]` entry in [CHANGELOG.md](CHANGELOG.md), and run:
+
+```powershell
+./scripts/check-release.ps1 -Tag v0.1.0
+git tag v0.1.0
+```
+
+The check fails when the tag, project version, or changelog heading does not match. Replace `0.1.0` with the new version in both the command and the files.
+
 ## Build and run
 
 Requirements: Windows 11, .NET 10 SDK and Windows SDK 10.0.26100.0. The Windows App SDK is restored from NuGet; no browser rendering engine is used for the flyout.

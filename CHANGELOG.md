@@ -1,8 +1,8 @@
 # Changelog
 
-All notable changes to Agenda are documented here. The project has not published a numbered release yet; the current work is tracked as **Unreleased**.
+All notable changes to Agenda are documented here. The current project version is **0.1.0**; future work should use an **Unreleased** section until the next version is prepared.
 
-## [Unreleased] — 2026-09-10
+## [0.1.0] — 2026-09-10
 
 ### Added
 
@@ -15,6 +15,7 @@ All notable changes to Agenda are documented here. The project has not published
 - Windows appointment-store and optional Microsoft Graph provider implementations, retained behind the current settings surface.
 - Automated core, provider, shell, native smoke, portable startup, x64 packaging, and ARM64 compilation checks.
 - GitHub Actions verification workflow, issue template, repository attributes, publishing documentation, and architecture diagrams.
+- A single `AgendaVersion` source, Settings version display, package-version synchronization, and a pre-tag release metadata check.
 
 ### Changed
 

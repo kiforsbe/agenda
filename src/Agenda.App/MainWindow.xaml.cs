@@ -38,6 +38,7 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        VersionText.Text = $"Version {App.Version}";
         _culture = RegionalSettings.Read();
         _settings = AppSettings.Load(App.DataDirectory);
         Title = "Agenda";

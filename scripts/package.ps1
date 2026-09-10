@@ -16,9 +16,14 @@ try {
     }
     & (Join-Path $PSScriptRoot 'create-assets.ps1')
     Copy-Item -LiteralPath (Join-Path $repoRoot 'deployment/Assets') -Destination $stage -Recurse
+    $propsText=Get-Content -LiteralPath (Join-Path $repoRoot 'Directory.Build.props') -Raw
+    $versionMatch=[regex]::Match($propsText,'<AgendaVersion>\s*([^<\s]+)\s*</AgendaVersion>')
+    if(-not $versionMatch.Success -or $versionMatch.Groups[1].Value -notmatch '^\d+\.\d+\.\d+$') { throw 'Directory.Build.props must define AgendaVersion as major.minor.patch.' }
+    $packageVersion=$versionMatch.Groups[1].Value+'.0'
     [xml]$manifest=Get-Content -LiteralPath (Join-Path $repoRoot 'deployment/AppxManifest.xml') -Raw
     $manifest.Package.Identity.ProcessorArchitecture=$Architecture.ToLowerInvariant()
     $manifest.Package.Identity.Publisher=$Publisher
+    $manifest.Package.Identity.Version=$packageVersion
     $manifest.Save((Join-Path $stage 'AppxManifest.xml'))
     $sdkBin=Join-Path ${env:ProgramFiles(x86)} 'Windows Kits/10/bin'
     $makeappx=Get-ChildItem -LiteralPath $sdkBin -Directory | Where-Object Name -Match '^10\.' | Sort-Object { [Version]$_.Name } -Descending | ForEach-Object { Join-Path $_.FullName 'x64/makeappx.exe' } | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1

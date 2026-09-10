@@ -68,6 +68,7 @@
     </StackPanel>
     <StackPanel x:Name="SettingsPanel" Visibility="Collapsed" Padding="16,12" Spacing="14">
      <TextBlock Text="Settings" FontSize="20"/>
+     <TextBlock x:Name="VersionText" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12" AutomationProperties.Name="Application version"/>
      <ToggleSwitch x:Name="WeekToggle" Header="Show week numbers" Toggled="Preferences_Changed"/>
      <ToggleSwitch x:Name="IsoToggle" Header="Use ISO week numbering" Toggled="Preferences_Changed"/>
      <TextBlock Text="ISO uses Monday and the first four-day week. Otherwise, Windows regional settings apply." TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>

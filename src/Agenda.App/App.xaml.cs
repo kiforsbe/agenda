@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.UI.Xaml;
 
 namespace Agenda.App;
@@ -7,6 +8,10 @@ public partial class App : Application
     private MainWindow? _window;
     private Mutex? _instance;
     public static string DataDirectory { get; private set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Agenda");
+    public static string Version { get; } =
+        typeof(App).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+        ?? typeof(App).Assembly.GetName().Version?.ToString(3)
+        ?? "0.0.0";
 
     public App()
     {
