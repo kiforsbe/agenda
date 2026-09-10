@@ -79,7 +79,14 @@ The notification-area icon and **Ctrl+Alt+A** open the flyout. Taskbar-clock int
 ./scripts/package.ps1 -Architecture ARM64
 ```
 
-The script creates a self-contained portable directory and an **unsigned** MSIX in `artifacts/`. The MSIX needs publisher-matching signing before installation/distribution. The script does not install certificates, register startup, install the package or publish to the Store. Use `-Publisher` to set the intended certificate's subject; Store publishing requires the identity assigned by Partner Center.
+The script creates a self-contained portable directory and a **signed** MSIX in `artifacts/`. With no certificate arguments it creates a temporary self-signed development certificate matching `-Publisher`, signs the package, exports its public certificate to `artifacts/signing/`, and removes the private key afterward. Trust that certificate once for the current Windows user before installing:
+
+```powershell
+./scripts/trust-dev-certificate.ps1
+Add-AppxPackage ./artifacts/Agenda-x64.msix
+```
+
+For distribution, pass a publisher-matching PFX with `-CertificatePath` and, when needed, `-CertificatePassword`. Store or certificate publishing remains a separate step; the scripts do not register startup, install the package automatically, or publish to the Store. Use `-Publisher` to set the intended certificate subject; Store publishing requires the identity assigned by Partner Center.
 
 User settings/cache are under `%LOCALAPPDATA%/Agenda` unless `--data-dir` is supplied. Credentials belong to the Windows authentication broker; event caches are protected for the current Windows user. Disconnect clears the active provider's cache; configured feed links remain until removed in the feed screen.
 

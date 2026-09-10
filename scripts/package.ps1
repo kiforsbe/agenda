@@ -1,6 +1,13 @@
-param([ValidateSet('x64','ARM64')][string]$Architecture='x64',[string]$Publisher='CN=Agenda.Development')
+param(
+    [ValidateSet('x64','ARM64')][string]$Architecture='x64',
+    [string]$Publisher='CN=Agenda.Development',
+    [string]$CertificatePath='',
+    [string]$CertificatePassword=''
+)
 $ErrorActionPreference='Stop'
 $repoRoot=Split-Path $PSScriptRoot -Parent
+$temporaryPfx=$null
+$temporaryCertificateThumbprint=$null
 Push-Location $repoRoot
 try {
     $env:DOTNET_CLI_HOME=Join-Path $repoRoot '.dotnet'
@@ -36,7 +43,36 @@ try {
     $package=Join-Path $repoRoot "artifacts/Agenda-$Architecture.msix"
     & $makeappx pack /d $stage /p $package /o | Out-File -LiteralPath (Join-Path $repoRoot "artifacts/makeappx-$Architecture.log")
     if ($LASTEXITCODE -ne 0) { throw 'MSIX packaging failed.' }
-    Write-Output "Unsigned package: $package"
+    $signtool=Get-ChildItem -LiteralPath $sdkBin -Directory | Where-Object Name -Match '^10\.' | Sort-Object { [Version]$_.Name } -Descending | ForEach-Object { Join-Path $_.FullName 'x64/signtool.exe' } | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+    if (-not $signtool) { throw 'Windows SDK signtool.exe was not found.' }
+
+    $publicCertificate=$null
+    if([string]::IsNullOrWhiteSpace($CertificatePath)) {
+        $signingDirectory=Join-Path $repoRoot 'artifacts/signing'
+        New-Item -ItemType Directory -Path $signingDirectory -Force | Out-Null
+        $publicCertificate=Join-Path $signingDirectory 'Agenda-Development.cer'
+        $temporaryPfx=[IO.Path]::GetTempFileName()
+        $certificate=New-SelfSignedCertificate -Type Custom -Subject $Publisher -FriendlyName 'Agenda development package signing' -CertStoreLocation 'Cert:\CurrentUser\My' -KeyUsage DigitalSignature -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3') -NotAfter (Get-Date).AddYears(5)
+        $temporaryCertificateThumbprint=$certificate.Thumbprint
+        $temporaryPassword=[Guid]::NewGuid().ToString('N')
+        $securePassword=ConvertTo-SecureString $temporaryPassword -AsPlainText -Force
+        Export-PfxCertificate -Cert $certificate -FilePath $temporaryPfx -Password $securePassword | Out-Null
+        Export-Certificate -Cert $certificate -FilePath $publicCertificate -Type CERT | Out-Null
+        $signArguments=@('sign','/fd','SHA256','/f',$temporaryPfx,'/p',$temporaryPassword,'/a',$package)
+    } else {
+        $resolvedCertificate=Resolve-Path -LiteralPath $CertificatePath -ErrorAction Stop
+        $signArguments=@('sign','/fd','SHA256','/f',$resolvedCertificate.Path)
+        if(-not [string]::IsNullOrWhiteSpace($CertificatePassword)) { $signArguments+=@('/p',$CertificatePassword) }
+        $signArguments+=$package
+    }
+    & $signtool @signArguments
+    if ($LASTEXITCODE -ne 0) { throw 'MSIX signing failed.' }
+    Write-Output "Signed package: $package"
+    if($publicCertificate) { Write-Output "Development certificate: $publicCertificate" }
     Write-Output "Portable application: $stage/Agenda.App.exe"
-    Write-Output 'Signing and certificate trust are deployment steps; this script does not change certificate stores.'
-} finally { Pop-Location }
+    Write-Output 'Trust the development .cer in the current user TrustedPeople store before installing a locally signed package.'
+} finally {
+    if($temporaryPfx) { Remove-Item -LiteralPath $temporaryPfx -Force -ErrorAction SilentlyContinue }
+    if($temporaryCertificateThumbprint) { Remove-Item -LiteralPath "Cert:\CurrentUser\My\$temporaryCertificateThumbprint" -Force -ErrorAction SilentlyContinue }
+    Pop-Location
+}

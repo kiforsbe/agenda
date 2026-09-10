@@ -16,6 +16,7 @@ All notable changes to Agenda are documented here. The current project version i
 - Automated core, provider, shell, native smoke, portable startup, x64 packaging, and ARM64 compilation checks.
 - GitHub Actions verification workflow, issue template, repository attributes, publishing documentation, and architecture diagrams.
 - A single `AgendaVersion` source, Settings version display, package-version synchronization, and a pre-tag release metadata check.
+- Signed MSIX packaging with temporary local development certificates, optional publisher PFX input, and an explicit certificate-trust helper.
 
 ### Changed
 

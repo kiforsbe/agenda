@@ -9,9 +9,9 @@
 - Provider coverage includes Graph paging and consent boundaries, read-only rejection, encrypted caches and sign-out, ICS recurrence exceptions/replacements, all-day overlap, private URL redaction, partial feed failures, HTTPS redirects, download/evaluation limits and offline fallback.
 - Native shell smoke: window positioning/show/hide, tray lifecycle and Ctrl+Alt+A registration passed. Clock discovery reported no independently bounded Win32 clock target; Windows retains normal clock clicks.
 - Actual WinUI executable launched and its Agenda window was enumerated. Windows appointment-store probe returned one calendar and zero events for the range from seven days before the probe through thirty days after it. Event titles and account details were not written to the probe log.
-- `scripts/package.ps1 -Architecture x64` produced a self-contained portable directory and `artifacts/Agenda-x64.msix`; MakeAppx validation and packaging succeeded.
+- `scripts/package.ps1 -Architecture x64` produced a self-contained portable directory and signed `artifacts/Agenda-x64.msix`; MakeAppx validation, signing, and packaging succeeded. The generated development certificate is kept as a public `.cer` under ignored `artifacts/signing/`; it was not installed or trusted automatically.
 - Portable startup regression: first failed because publishing omitted `Agenda.App.pri` and compiled XAML. The publish target now includes those resources explicitly. `scripts/test-portable.ps1` then passed: the native process remained running without logged exceptions. This matches the upstream [unpackaged publish resource issue](https://github.com/microsoft/WindowsAppSDK/issues/6720).
-- ARM64 Release configuration compiled with zero warnings and errors; it was not executed on ARM hardware.
+- ARM64 Release configuration compiled with zero warnings and errors; it was not executed on ARM hardware. Signed ARM64 packaging and clean-machine installation remain unverified.
 
 ## Review changes
 
