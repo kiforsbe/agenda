@@ -95,5 +95,56 @@ Check("A newer overlapping window removes stale pinned events", () => {
     cache.PinCurrent(window,[appointment],now.AddSeconds(2));
     Equal(appointment,cache.Events(TimeZoneInfo.Utc).Single());
 });
+Check("Reminders include only visible timed events within five minutes", () => {
+    var now=new DateTimeOffset(2026,9,11,10,0,0,TimeSpan.Zero);
+    CalendarEvent Event(string id,int minutes,string calendar="c",bool allDay=false) => new(id,calendar,id,now.AddMinutes(minutes),now.AddHours(1),allDay,"");
+    var due=MeetingReminders.Due([Event("due",5),Event("soon",1),Event("later",6),Event("past",-1),Event("started",0),Event("hidden",3,"hidden"),Event("day",3,allDay:true)],new HashSet<string>{"c"},new Dictionary<string,DateTimeOffset>(),"feeds",now);
+    Equal("due",string.Join(",",due.Select(e=>e.Event.Id)));
+});
+Check("Reminder identity distinguishes recurring occurrences and source modes", () => {
+    var now=DateTimeOffset.UtcNow;
+    var item=new CalendarEvent("id","c","Call",now.AddMinutes(5),now.AddHours(1),false,"");
+    var sent=new Dictionary<string,DateTimeOffset>{{$"{MeetingReminders.Key("feeds",item)}:5",item.Start}};
+    Equal(0,MeetingReminders.Due([item],new HashSet<string>{"c"},sent,"feeds",now).Count);
+    Equal(1,MeetingReminders.Due([item],new HashSet<string>{"c"},sent,"windows",now).Count);
+    Equal(false,MeetingReminders.Key("feeds",item)==MeetingReminders.Key("feeds",item with {Start=item.Start.AddDays(1)}));
+    Equal(MeetingReminders.Key("feeds",item),MeetingReminders.Key("feeds",item with {Start=item.Start.ToOffset(TimeSpan.FromHours(2))}));
+});
+Check("Reminder lead time supports advance and at-start delivery without stale alerts", () => {
+    var now=new DateTimeOffset(2026,9,11,10,0,0,TimeSpan.Zero);
+    var item=new CalendarEvent("id","c","Call",now.AddMinutes(15),now.AddHours(1),false,"");
+    var visible=new HashSet<string>{"c"};var sent=new Dictionary<string,DateTimeOffset>();
+    Equal(0,MeetingReminders.Due([item],visible,sent,"feeds",now,[10]).Count);
+    Equal(1,MeetingReminders.Due([item],visible,sent,"feeds",now,[15]).Count);
+    Equal(0,MeetingReminders.Due([item],visible,sent,"feeds",now,[0]).Count);
+    Equal(1,MeetingReminders.Due([item],visible,sent,"feeds",item.Start.AddSeconds(10),[0]).Count);
+    Equal(0,MeetingReminders.Due([item],visible,sent,"feeds",item.Start.AddMinutes(1),[0]).Count);
+});
+Check("Multiple reminders deliver independently and per-event overrides replace defaults", () => {
+    var now=DateTimeOffset.UtcNow;
+    var item=new CalendarEvent("id","c","Call",now.AddMinutes(15),now.AddHours(1),false,"");
+    var visible=new HashSet<string>{"c"};var sent=new Dictionary<string,DateTimeOffset>();
+    var first=MeetingReminders.Due([item],visible,sent,"feeds",now,[15,5,0]).Single();
+    sent[first.DeliveryKey]=item.End;
+    Equal(0,MeetingReminders.Due([item],visible,sent,"feeds",now,[15,5,0]).Count);
+    Equal(5,MeetingReminders.Due([item],visible,sent,"feeds",now.AddMinutes(10),[15,5,0]).Single().MinutesBefore);
+    var custom=new Dictionary<string,EventReminderOptions>{{first.EventKey,new([10],item.End)}};
+    Equal(0,MeetingReminders.Due([item],visible,sent,"feeds",now.AddMinutes(10),[15,5,0],custom).Count);
+    Equal(10,MeetingReminders.Due([item],visible,sent,"feeds",now.AddMinutes(5),[15,5,0],custom).Single().MinutesBefore);
+    custom[first.EventKey]=new([],item.End);
+    Equal(0,MeetingReminders.Due([item],visible,sent,"feeds",now.AddMinutes(5),[10],custom).Count);
+    Equal(0,MeetingReminders.Due([item],visible,sent,"feeds",now.AddMinutes(12),[15,5,0]).Count);
+});
+Check("Reminder sounds inherit defaults and preserve silent overrides", () => {
+    Equal("Reminder",ReminderSounds.Resolve("Reminder",null));
+    Equal("Silent",ReminderSounds.Resolve("Mail","Silent"));
+    Equal("Mail",ReminderSounds.Resolve("Mail","unknown"));
+    Equal("Default",ReminderSounds.Resolve("unknown",null));
+    var old=System.Text.Json.JsonSerializer.Deserialize<EventReminderOptions>("{\"MinutesBefore\":[5],\"ExpiresAt\":\"2026-09-11T10:00:00Z\"}")!;
+    Equal("Reminder",ReminderSounds.Resolve("Reminder",old.Sound));
+    var custom=new EventReminderOptions([0,5],DateTimeOffset.UtcNow,"Silent");
+    var restored=System.Text.Json.JsonSerializer.Deserialize<EventReminderOptions>(System.Text.Json.JsonSerializer.Serialize(custom))!;
+    Equal("Silent",restored.Sound!);
+});
 Console.WriteLine($"{count-failures}/{count} checks passed");
 return failures==0?0:1;

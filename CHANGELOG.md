@@ -4,6 +4,15 @@ All notable changes to Agenda are documented here. The current project version i
 
 ## [Unreleased]
 
+### Added
+
+- Native Windows meeting notifications with an off-by-default master switch, multiple reminder times, and per-occurrence overrides in event details. Right-click an agenda entry to access details and reminder controls. Visible timed events are checked while the app runs in the tray; delivery keys prevent duplicates across refreshes and restarts.
+- Notification sound selection in Settings and per-event reminder overrides, with built-in Windows sounds and a Silent option that keeps visual notifications enabled.
+
+### Fixed
+
+- Self-contained builds now bundle the Windows App Runtime resource DLL required by notification registration, preventing error `0x8007007E`. Packaging checks that the DLL is included.
+
 ## [0.2.0] — 2026-09-11
 
 ### Added

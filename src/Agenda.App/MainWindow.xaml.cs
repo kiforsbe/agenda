@@ -71,6 +71,14 @@ public sealed partial class MainWindow : Window
         Root.ActualThemeChanged += (_, _) => { RenderCalendar(); ApplyFrame(); };
         WeekToggle.IsOn = _settings.ShowWeekNumbers;
         IsoToggle.IsOn = _settings.UseIsoWeeks;
+        NotificationToggle.IsOn = _settings.MeetingNotifications;
+        _settings.NotifiedMeetings ??= [];
+        _settings.ReminderMinutesBefore ??= [5];
+        _settings.EventReminders ??= [];
+        BuildReminderChoices(ReminderTimesPanel,_settings.ReminderMinutesBefore,SaveDefaultReminderTimes);
+        EnableReminderChoices(ReminderTimesPanel,_settings.MeetingNotifications);
+        BuildSoundChoices(NotificationSound,ReminderSounds.Resolve(_settings.ReminderSound,null),false);
+        NotificationSound.IsEnabled=_settings.MeetingNotifications;
         _settings.InterceptClock = false;
         ClientIdBox.Text = _settings.ClientId;
         _clockTimer.Tick += (_, _) => {
@@ -99,10 +107,11 @@ public sealed partial class MainWindow : Window
             () => DispatcherQueue.TryEnqueue(RegionalChanged),
             () => DispatcherQueue.TryEnqueue(HideFlyout));
         _shell.SetClockIntegration(false);
+        InitializeReminders();
         ShowFlyout();
         _refreshTimer.Start();
         if (Environment.GetCommandLineArgs().Contains("--probe-windows")) _ = ProbeWindowsAsync();
-        else _ = InitializeConnectionsAsync();
+        else _connectionsReady = InitializeConnectionsAsync();
     }
 
     private void ApplyFrame() => FlyoutFrame.Apply(WinRT.Interop.WindowNative.GetWindowHandle(this),Root.ActualTheme==ElementTheme.Dark);
@@ -256,6 +265,10 @@ public sealed partial class MainWindow : Window
             ToolTipService.SetToolTip(button,"Open source calendar");
             AutomationProperties.SetName(button,$"{item.Subject}, {EventTime(item)}. Open source calendar");
             button.Click += async (_,_) => await OpenSourceCalendarAsync(item);
+            var menu=new MenuFlyout();
+            var details=new MenuFlyoutItem { Text="Event details and reminders",Icon=new SymbolIcon(Symbol.Calendar) };
+            details.Click+=async (_,_)=>await ShowEventDetailsAsync(item,SourceWebsite(item));
+            menu.Items.Add(details);button.ContextFlyout=menu;
             EventList.Children.Add(button);
         }
         CalendarsButton.Content=$"{_calendars.Count(c=>IsCalendarVisible(c.Id))} calendars";
@@ -439,7 +452,8 @@ public sealed partial class MainWindow : Window
         }
         if(!string.IsNullOrWhiteSpace(item.Location))
             content.Children.Add(new TextBlock { Text=$"Location: {item.Location}",TextWrapping=TextWrapping.Wrap });
-        var dialog=new ContentDialog { XamlRoot=Root.XamlRoot,Title=item.Subject,Content=content,CloseButtonText="Close",DefaultButton=ContentDialogButton.Close };
+        AddEventReminderOptions(content,item);
+        var dialog=new ContentDialog { XamlRoot=Root.XamlRoot,Title=item.Subject,Content=new ScrollViewer { Content=content,MaxHeight=420 },CloseButtonText="Close",DefaultButton=ContentDialogButton.Close };
         if(ValidWebUri(item.JoinUrl))dialog.PrimaryButtonText="Join meeting";
         if(sourceWebsite is not null) {
             if(dialog.PrimaryButtonText is null)dialog.PrimaryButtonText="Open source calendar";
@@ -512,5 +526,5 @@ public sealed partial class MainWindow : Window
     private async void Registration_Click(object sender,RoutedEventArgs e) => await OpenUri("https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app");
     private void Root_KeyDown(object sender,KeyRoutedEventArgs e) { if (e.Key==VirtualKey.Escape && !_dialogOpen && !_feedDragActive) { e.Handled=true; if(_panel!="agenda") SetPanel("agenda"); else HideFlyout(); } }
     private void Exit_Click(object sender,RoutedEventArgs e) => ExitApp();
-    private void ExitApp() { _exiting=true; _refreshCts?.Cancel(); _clockTimer.Stop(); _refreshTimer.Stop(); _trayDismissTimer.Stop(); _shell?.Dispose(); _frame?.Dispose(); (_provider as IDisposable)?.Dispose(); Application.Current.Exit(); }
+    private void ExitApp() { _exiting=true; _reminderTimer.Stop(); _notifications?.Dispose(); _refreshCts?.Cancel(); _clockTimer.Stop(); _refreshTimer.Stop(); _trayDismissTimer.Stop(); _shell?.Dispose(); _frame?.Dispose(); (_provider as IDisposable)?.Dispose(); Application.Current.Exit(); }
 }

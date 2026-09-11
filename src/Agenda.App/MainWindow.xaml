@@ -71,8 +71,23 @@
      <TextBlock Text="Settings" FontSize="20"/>
      <ToggleSwitch x:Name="WeekToggle" Header="Show week numbers" Toggled="Preferences_Changed"/>
      <ToggleSwitch x:Name="IsoToggle" Header="Use ISO week numbering" Toggled="Preferences_Changed"/>
-     <TextBlock Text="ISO uses Monday and the first four-day week. Otherwise, Windows regional settings apply." TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
      <TextBlock x:Name="RegionText" TextWrapping="Wrap" FontSize="12"/>
+     <StackPanel Spacing="8">
+      <TextBlock Text="Meeting notifications"/>
+      <Grid ColumnSpacing="12">
+       <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+       <ToggleSwitch x:Name="NotificationToggle" MinWidth="0" VerticalAlignment="Center" AutomationProperties.Name="Meeting notifications" Toggled="Notifications_Changed"/>
+       <DropDownButton Grid.Column="1" Content="Reminder times" HorizontalAlignment="Right" VerticalAlignment="Center" AutomationProperties.Name="Default reminder times">
+        <DropDownButton.Flyout>
+         <Flyout Placement="Bottom">
+          <StackPanel x:Name="ReminderTimesPanel" Spacing="4" HorizontalAlignment="Left"/>
+         </Flyout>
+        </DropDownButton.Flyout>
+       </DropDownButton>
+      </Grid>
+     </StackPanel>
+     <TextBlock x:Name="NotificationStatus" Visibility="Collapsed" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
+     <ComboBox x:Name="NotificationSound" Header="Notification sound" HorizontalAlignment="Stretch" SelectionChanged="NotificationSound_Changed"/>
      <!-- Keep other providers implemented, but remove their setup from the current UI. -->
      <Button Content="Use Windows calendars" Click="WindowsCalendars_Click" Visibility="Collapsed"/>
      <StackPanel Orientation="Horizontal" Spacing="8" Visibility="Collapsed"><HyperlinkButton Content="Google Calendar" Click="GoogleCalendar_Click"/><HyperlinkButton Content="Outlook.com" Click="OutlookCalendar_Click"/></StackPanel>

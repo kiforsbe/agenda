@@ -46,6 +46,10 @@ Feeds are read-only: create and edit events in the service that owns the calenda
 
 ## Settings and current limitations
 
+Enable **Meeting notifications** in Settings to receive native Windows notifications while Agenda runs in the tray. Under **Reminder times**, select any combination of at start, 5, 10, 15, 30 minutes, or 1 hour before. Choose a **Notification sound**: Windows default, Reminder, Mail, Instant message, Text message, or Silent. Silent keeps the notification visible without playing audio. Reminders are off by default and apply only to timed events in visible calendars. Windows notification settings and Do Not Disturb still apply.
+
+Right-click an event (or press **Shift+F10** while it is focused) and choose **Event details and reminders**. Turn on **Use custom reminders**, then open **Reminder times** beside the toggle to select custom times for that occurrence. Choose its notification sound or leave **Use default sound** selected to follow Settings. Clear all custom times to disable notifications for the occurrence. Changes save immediately, and the main Settings toggle disables all reminders, including overrides. All-day events are excluded. Missed reminders more than a minute old are skipped after startup or sleep; each occurrence/time combination is delivered at most once.
+
 Settings contains week-number controls and the active Windows regional week-rule summary. Windows appointment-store and Microsoft sign-in management remain implemented in the codebase but are hidden from the current UI; saved feed sources are the supported setup path in this release.
 
 The taskbar clock is not intercepted. Windows continues to own clicks on its clock; use the Agenda tray icon or **Ctrl+Alt+A** instead. See [taskbar integration notes](docs/taskbar-integration.md) for the retained experimental implementation.
@@ -63,6 +67,8 @@ Requirements: Windows 11, .NET 10 SDK, and Windows SDK 10.0.26100.0. The Windows
 ./scripts/run.ps1
 ./scripts/test.ps1
 ```
+
+`run.ps1` automatically restores dependencies and runs an incremental build before launching. MSBuild rebuilds missing or out-of-date outputs; a failed build stops the launch. Use `-Configuration Release` for a Release build (the default is Debug).
 
 For an isolated development profile:
 
@@ -82,6 +88,8 @@ git tag v0.2.0
 The check fails when the tag, project version, or changelog heading does not match. Replace `0.2.0` with the new version in both the command and the files.
 
 ### Packaging and signing
+
+Self-contained builds include the notification runtime resource from the matching NuGet runtime package through [NotificationRuntime.targets](deployment/NotificationRuntime.targets). This works around the missing-resource registration failure tracked in [Windows App SDK #6071](https://github.com/microsoft/WindowsAppSDK/issues/6071); the package script checks that the DLL reaches the publish output.
 
 ```powershell
 ./scripts/package.ps1 -Architecture x64

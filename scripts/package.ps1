@@ -20,7 +20,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Dependency restore failed.' }
     dotnet publish src/Agenda.App --no-restore -c Release -p:Platform=$Architecture -r $runtimeId --self-contained true -o $stage
     if ($LASTEXITCODE -ne 0) { throw 'Publish failed.' }
-    foreach($resource in @('Agenda.App.pri','App.xbf','MainWindow.xbf')) {
+    foreach($resource in @('Agenda.App.pri','App.xbf','MainWindow.xbf','Microsoft.WindowsAppRuntime.Insights.Resource.dll')) {
         if(-not(Test-Path -LiteralPath (Join-Path $stage $resource))) { throw "Publish omitted required XAML resource: $resource" }
     }
     & (Join-Path $PSScriptRoot 'create-assets.ps1')

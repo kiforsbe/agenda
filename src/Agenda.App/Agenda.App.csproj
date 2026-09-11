@@ -36,4 +36,5 @@
     </ItemGroup>
     <Copy SourceFiles="@(_AgendaXamlResource)" DestinationFiles="@(_AgendaXamlResource->'$(PublishDir)%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
+  <Import Project="../../deployment/NotificationRuntime.targets"/>
 </Project>

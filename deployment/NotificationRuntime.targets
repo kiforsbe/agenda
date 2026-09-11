@@ -1,0 +1,25 @@
+<Project>
+  <!-- Windows App SDK 2.4's self-contained component copy omits the aggregate
+       resource used by AppNotificationManager.Register (HRESULT 0x8007007E).
+       Extract only this DLL from the matching NuGet runtime, never the machine's
+       installed runtime. Upstream: microsoft/WindowsAppSDK#6071 and #6725. -->
+  <Target Name="ExtractAgendaNotificationRuntimeResource"
+          DependsOnTargets="GetWindowsAppSDKNativePlatform"
+          Inputs="$(MicrosoftWindowsAppSDKPackageDir)tools/MSIX/win10-$(NativePlatform)/Microsoft.WindowsAppRuntime.2.msix"
+          Outputs="$(IntermediateOutputPath)notification-runtime/Microsoft.WindowsAppRuntime.Insights.Resource.dll">
+    <Unzip SourceFiles="$(MicrosoftWindowsAppSDKPackageDir)tools/MSIX/win10-$(NativePlatform)/Microsoft.WindowsAppRuntime.2.msix"
+           DestinationFolder="$(IntermediateOutputPath)notification-runtime"
+           Include="Microsoft.WindowsAppRuntime.Insights.Resource.dll"/>
+    <Error Condition="!Exists('$(IntermediateOutputPath)notification-runtime/Microsoft.WindowsAppRuntime.Insights.Resource.dll')"
+           Text="The Windows App Runtime package lacks its notification resource DLL."/>
+  </Target>
+  <Target Name="IncludeAgendaNotificationRuntimeResource" BeforeTargets="AssignTargetPaths"
+          DependsOnTargets="ExtractAgendaNotificationRuntimeResource"
+          Condition="'$(WindowsAppSDKSelfContained)' == 'true'">
+    <ItemGroup>
+      <None Include="$(IntermediateOutputPath)notification-runtime/Microsoft.WindowsAppRuntime.Insights.Resource.dll"
+            Link="Microsoft.WindowsAppRuntime.Insights.Resource.dll"
+            CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
+    </ItemGroup>
+  </Target>
+</Project>

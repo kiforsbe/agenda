@@ -5,6 +5,11 @@ public sealed class AppSettings
 {
     public bool ShowWeekNumbers { get; set; } = true;
     public bool UseIsoWeeks { get; set; }
+    public bool MeetingNotifications { get; set; }
+    public List<int> ReminderMinutesBefore { get; set; } = [5];
+    public string ReminderSound { get; set; } = "Default";
+    public Dictionary<string, Agenda.Core.EventReminderOptions> EventReminders { get; set; } = [];
+    public Dictionary<string, DateTimeOffset> NotifiedMeetings { get; set; } = [];
     public bool InterceptClock { get; set; }
     public string ClientId { get; set; } = "";
     public string SourceMode { get; set; } = "windows";
