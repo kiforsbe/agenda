@@ -1,8 +1,10 @@
 # Changelog
 
-All notable changes to Agenda are documented here. The current project version is **0.1.0**; future work should use an **Unreleased** section until the next version is prepared.
+All notable changes to Agenda are documented here. The current project version is **0.2.0**; future work should use an **Unreleased** section until the next version is prepared.
 
 ## [Unreleased]
+
+## [0.2.0] — 2026-09-11
 
 ### Added
 
