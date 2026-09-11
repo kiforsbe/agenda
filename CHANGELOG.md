@@ -1,13 +1,20 @@
 # Changelog
 
-All notable changes to Agenda are documented here. The current project version is **0.2.0**; future work should use an **Unreleased** section until the next version is prepared.
+All notable changes to Agenda are documented here. The current project version is **0.3.0**; future work should use an **Unreleased** section until the next version is prepared.
 
-## [Unreleased]
+## [0.3.0] — 2026-09-11
 
 ### Added
 
 - Native Windows meeting notifications with an off-by-default master switch, multiple reminder times, and per-occurrence overrides in event details. Right-click an agenda entry to access details and reminder controls. Visible timed events are checked while the app runs in the tray; delivery keys prevent duplicates across refreshes and restarts.
 - Notification sound selection in Settings and per-event reminder overrides, with built-in Windows sounds and a Silent option that keeps visual notifications enabled.
+
+### Changed
+
+- Reminder times appear in a left-aligned dropdown beside the notification toggle, ordered from at-start to one hour before. Event details use a **Use custom reminders** toggle; dropdowns no longer resize the dialog.
+- Removed explanatory text from Settings and event reminder controls for a more compact interface.
+- The run script automatically restores dependencies and performs an incremental build before launch, stopping if the build fails.
+- Expanded the README with user instructions and the main application screenshot.
 
 ### Fixed
 

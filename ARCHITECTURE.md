@@ -24,7 +24,7 @@ flowchart TB
         Window[Agenda.App\nMainWindow + WinUI XAML]
         Core[Agenda.Core\nCalendarMath + models]
         Providers[Agenda.Providers\nprovider contracts and implementations]
-        Storage[Protected local storage\nDPAPI settings and caches]
+        Storage[Protected local storage\nDPAPI feed configuration and caches]
     end
 
     subgraph Services[Calendar services]
@@ -57,6 +57,8 @@ This is the platform-independent domain layer. It contains the shared calendar m
 - `Models.cs` defines calendar sources, events, drafts, feed configuration, provider state, and regional settings contracts.
 - `CalendarMath.cs` builds month grids, applies the selected culture/calendar, calculates week numbers, handles ISO overrides, and determines which feeds contribute a marker to a day.
 - `FeedColorPalette.cs` owns the Windows-themed default palette and least-used color selection.
+- `CalendarEventMemory.cs` retains the current-month buffer independently of the browsing buffer.
+- `MeetingReminders.cs` selects due reminders and builds stable occurrence/delivery identities; `ReminderSounds.cs` defines sound choices and resolves default versus per-event sound preferences.
 
 The core layer does not know about WinUI, HWNDs, HTTP, Graph, DPAPI, or the Windows account broker. Date-only calculations are kept separate from event instants so that changing regional settings does not move an event in time.
 
@@ -81,6 +83,8 @@ The application layer owns the WinUI window, presentation state, settings, provi
 - `MainWindow.xaml.cs` coordinates rendering, selection, regional changes, refresh, and panel navigation. Long operations use cancellation and an operation gate so an older refresh cannot overwrite newer state.
 - `MainWindow.Connections.cs` loads configured feeds, switches providers, refreshes data, and opens the add/edit feed dialog. Microsoft and Windows-account controls are currently hidden while their implementation remains in the codebase.
 - `MainWindow.FeedColors.cs` handles feed color edits, source-marker rendering, and the palette UI without forcing a network refresh for a color-only change.
+- `MainWindow.Reminders.cs` owns the reminder timer, default and per-occurrence controls, delivery ledger, and notification activation dispatch.
+- `Services/MeetingNotificationService.cs` registers with Windows App SDK app notifications and translates reminders into native notifications, including sound and activation arguments.
 - `Services/RegionalSettings.cs` reads Windows culture, first weekday, week rule, time format, and calendar settings, and raises changes when Windows settings change.
 - `Shell/` contains the native notification icon, global hotkey, monitor/DPI geometry, DWM frame handling, and shell message window.
 
@@ -143,6 +147,52 @@ The month grid is fixed while only the selected-day agenda scrolls. A day marker
 Feed management is deliberately read-only with respect to the remote calendar. The add and edit dialog validates the name, source location, and palette color, then encrypts the saved configuration for the current Windows user. Editing a name or color preserves the feed identity; editing the source location invalidates reuse of the old source's cache until the new source refreshes successfully.
 
 ## Class relationships
+
+### Meeting reminders
+
+Notifications are opt-in. A ten-second dispatcher timer evaluates loaded events after connection initialization, including while the flyout is hidden. Only visible calendars and timed, unexpired events are eligible. Defaults allow multiple offsets (0, 5, 10, 15, 30, or 60 minutes). Enabling **Use custom reminders** in event details replaces those offsets for that occurrence; an empty custom list disables its reminders. The custom sound can inherit the global choice. The master switch disables every reminder.
+
+`MeetingReminders.Key` hashes source mode, calendar ID, event ID, and UTC start ticks. A delivery key adds the reminder offset, so recurring occurrences and multiple reminders remain distinct. Sound changes do not change delivery identity. Due times have a sixty-second grace window; old reminders are skipped after startup or sleep. The ledger is saved before Windows delivery for at-most-once attempts, so a crash or delivery failure can lose an alert rather than replay it. Expired ledger entries and overrides are pruned after a day.
+
+```mermaid
+sequenceDiagram
+    participant Timer as MainWindow reminder timer
+    participant Core as MeetingReminders
+    participant Settings as AppSettings
+    participant Service as MeetingNotificationService
+    participant Windows as Windows notifications
+    Timer->>Core: Due(events, visible calendars, defaults, overrides, ledger)
+    Core-->>Timer: Due occurrence/offset pairs
+    loop Each due reminder
+        Timer->>Settings: Persist delivery key before sending
+        Timer->>Service: Show(event, time, calendar, resolved sound)
+        Service->>Windows: AppNotificationManager.Show(notification)
+    end
+    Windows-->>Service: NotificationInvoked(event digest)
+    Service->>Timer: Dispatch activation to UI thread
+    Timer->>Timer: Await connections; open source event or details
+```
+
+Windows owns banners, Notification Center, audio policy, and Do Not Disturb. Built-in sounds use `SetAudioEvent`; Silent uses `MuteAudio` and still displays the notification. The service registers its activation handler before calling `Register`, and unregisters on exit. Activation looks up the digest among loaded events; if the event is unavailable, the flyout reports that instead. No future notifications are scheduled in Windows, so reminders require Agenda to remain running. Disabling notifications clears notification history; editing an occurrence clears its notification group.
+
+```mermaid
+classDiagram
+    MainWindow --> MeetingReminders : evaluates due events
+    MainWindow --> AppSettings : preferences and delivery ledger
+    MainWindow --> MeetingNotificationService : presentation and activation
+    MainWindow --> ReminderSounds : resolves sound
+    AppSettings o-- EventReminderOptions : per-occurrence overrides
+    MeetingReminders ..> MeetingReminder : returns
+    MeetingNotificationService ..> MeetingReminder : displays
+    MeetingNotificationService --> AppNotificationManager : native Windows API
+    class EventReminderOptions {
+        +List~int~ MinutesBefore
+        +DateTimeOffset ExpiresAt
+        +string Sound
+    }
+```
+
+### Calendar and shell components
 
 ```mermaid
 classDiagram
@@ -216,7 +266,7 @@ The application has three independent kinds of state:
 
 1. **Presentation state** — selected date, month, collapsed/expanded state, active panel, visible calendars, regional settings, and scroll position. This is held by `MainWindow` and rebuilt when system settings change.
 2. **Connection state** — the active provider, configured feed list, refresh timestamps, per-feed status, and cancellation handles. Provider replacement occurs only after new configuration validates and saves successfully.
-3. **Protected persistent state** — settings, feed locations, and event caches under `%LOCALAPPDATA%\\Agenda` (or the explicit development data directory). DPAPI `CurrentUser` protection binds this data to the Windows user profile.
+3. **Persistent state** — files under `%LOCALAPPDATA%\\Agenda` (or the explicit development data directory). Feed locations and event caches use DPAPI `CurrentUser` protection. `AppSettings` is plain JSON saved through a temporary file and atomic replacement; it contains presentation preferences, reminder defaults, occurrence overrides, and the delivery ledger. Reminder keys contain hashes rather than event titles, raw calendar IDs, or subscription URLs.
 
 Refreshes are cancellable and serialized by an operation gate. A refresh captures the requested date range and regional time zone, so a result for an older range or provider cannot replace a newer selection. Dialog saves use a deferral and validation before committing changes; cancellation clears the draft.
 
@@ -235,9 +285,11 @@ The normal development build is an unpackaged WinUI 3 executable. `scripts/build
 
 ## Test seams
 
+`scripts/run.ps1` invokes the incremental build before launching, so missing or stale outputs are rebuilt and build errors prevent launch. Self-contained builds import `deployment/NotificationRuntime.targets`, which extracts `Microsoft.WindowsAppRuntime.Insights.Resource.dll` from the matching NuGet runtime MSIX. This works around Windows App SDK 2.4 notification registration error `0x8007007E`; the package script verifies that the DLL reaches the publish output. The MSIX manifest declares matching toast-activation and COM-server entries for packaged activation. Optional `--notification-diagnostics` logging records registration status, accepted notification IDs, and activation without event payloads.
+
 The repository uses small executable test projects rather than a test framework:
 
-- `tests/Agenda.Tests` exercises regional date math, week-year boundaries, event overlap, and feed-color grouping.
+- `tests/Agenda.Tests` exercises regional date math, week-year boundaries, event overlap, feed-color grouping, memory buffers, reminder timing and deduplication, and sound inheritance and persistence compatibility.
 - `tests/Agenda.ProviderTests` uses deterministic fixtures and mocked transport/authentication for Graph, ICS parsing, recurrence, limits, protected caches, and failure behavior.
 - `tests/Agenda.ShellTests` links the shell sources directly and checks geometry, strict clock-target validation, tray lifecycle, notification callback de-duplication, and native smoke behavior.
 
