@@ -16,14 +16,14 @@ All notable changes to Agenda are documented here. The current project version i
 - Automated core, provider, shell, native smoke, portable startup, x64 packaging, and ARM64 compilation checks.
 - GitHub Actions verification workflow, issue template, repository attributes, publishing documentation, and architecture diagrams.
 - A single `AgendaVersion` source, Settings version display, package-version synchronization, and a pre-tag release metadata check.
-- Signed MSIX packaging with optional persistent local development certificates, optional publisher PFX input, and an explicit certificate-trust helper.
+- Signed MSIX packaging with optional persistent local development certificates, optional publisher PFX input, and an explicit certificate-trust helper for Windows trust stores.
 
 ### Changed
 
 - Settings and feed management are opened and closed from the footer controls; the former in-panel completion and experimental taskbar-clock controls are hidden.
 - The calendar view uses thin, theme-aware native-style iconography and a focused scroll region so the flyout frame and footer remain stable while agenda entries scroll.
 - Feed source edits preserve protected data only when the source identity still matches; changing a URL or file path requires a successful refresh before offline reuse.
-- Package generation remains local and produces unsigned output under ignored `artifacts/`; package binaries and signing certificates are excluded from source control.
+- Package generation remains local and produces signed output under ignored `artifacts/`; package binaries and signing certificates are excluded from source control.
 
 ### Fixed
 

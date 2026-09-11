@@ -9,7 +9,7 @@
 - Provider coverage includes Graph paging and consent boundaries, read-only rejection, encrypted caches and sign-out, ICS recurrence exceptions/replacements, all-day overlap, private URL redaction, partial feed failures, HTTPS redirects, download/evaluation limits and offline fallback.
 - Native shell smoke: window positioning/show/hide, tray lifecycle and Ctrl+Alt+A registration passed. Clock discovery reported no independently bounded Win32 clock target; Windows retains normal clock clicks.
 - Actual WinUI executable launched and its Agenda window was enumerated. Windows appointment-store probe returned one calendar and zero events for the range from seven days before the probe through thirty days after it. Event titles and account details were not written to the probe log.
-- `scripts/package.ps1 -Architecture x64 -UseCertificateStore` produced a self-contained portable directory and signed `artifacts/Agenda-x64.msix`; MakeAppx validation, signing, and packaging succeeded. The development signing certificate is stored in the current user's Personal store and its public `.cer` is kept under ignored `artifacts/signing/`; it was not installed into TrustedPeople automatically.
+- `scripts/package.ps1 -Architecture x64 -UseCertificateStore` produced a self-contained portable directory and signed `artifacts/Agenda-x64.msix`; MakeAppx validation, signing, and packaging succeeded. The development signing certificate is stored in the current user's Personal store and its public `.cer` is kept under ignored `artifacts/signing/`; trust is installed only when the explicit helper imports it into the current user's Root and TrustedPeople stores.
 - Portable startup regression: first failed because publishing omitted `Agenda.App.pri` and compiled XAML. The publish target now includes those resources explicitly. `scripts/test-portable.ps1` then passed: the native process remained running without logged exceptions. This matches the upstream [unpackaged publish resource issue](https://github.com/microsoft/WindowsAppSDK/issues/6720).
 - ARM64 Release configuration compiled with zero warnings and errors; it was not executed on ARM hardware. Signed ARM64 packaging and clean-machine installation remain unverified.
 
@@ -32,7 +32,7 @@ Independent code review identified stale OS calendar enumeration, a midnight reo
 - User-configured feeds were visible during follow-up inspection. Provider parsing/download/cache behavior is tested with fixtures; end-to-end freshness and changes at each remote calendar service still need checking.
 - Microsoft WAM/Graph live sign-in and event creation require an app registration and explicit user consent. No real calendar entries were created or changed.
 - Multiple monitor hardware, HDR, high contrast, screen readers, taskbar auto-hide and Explorer restart need interactive validation. Geometry and strict clock hit testing have automated coverage.
-- ARM64 runtime, signed MSIX installation and clean-machine installation have not been verified. The generated MSIX is unsigned and was not installed. No certificate or startup registration was added.
+- ARM64 runtime, x64 signed MSIX installation, and clean-machine installation have not been verified. The package was signed but not installed by the validation run. No startup registration was added.
 
 ## Try the app
 

@@ -83,13 +83,25 @@ The script creates a self-contained portable directory and a **signed** MSIX in 
 
 ```powershell
 ./scripts/package.ps1 -Architecture x64 -UseCertificateStore
-./scripts/trust-dev-certificate.ps1
+./scripts/trust-dev-certificate.ps1  # trusts the public cert in Root and TrustedPeople
 Add-AppxPackage ./artifacts/Agenda-x64.msix
 ```
 
 To create or inspect the persistent development certificate without packaging, run `./scripts/setup-dev-certificate.ps1`. For distribution, pass a publisher-matching PFX with `-CertificatePath` and, when needed, `-CertificatePassword`.
 
 Store or certificate publishing remains a separate step; the scripts do not register startup, install the package automatically, or publish to the Store. Use `-Publisher` to set the intended certificate subject; Store publishing requires the identity assigned by Partner Center.
+
+### Public distribution
+
+A self-signed certificate is suitable for development, testing, or managed devices where an administrator deploys the certificate. It cannot make a direct GitHub download installable for every Windows user because each target device must explicitly trust that certificate.
+
+For a public download, choose one of these paths:
+
+- Submit the MSIX to the [Microsoft Store](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/code-signing-options). The Store re-signs accepted packages with a trusted certificate, so users do not install your development certificate.
+- Use a CA-trusted code-signing certificate or [Azure Artifact Signing](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/code-signing-options) for direct distribution. Keep the PFX and password in a release system secret, run `package.ps1 -CertificatePath ...` in a release workflow, and publish only the signed MSIX.
+- For an organization-managed rollout, deploy the self-signed or enterprise certificate through Group Policy, MDM, or another trusted device-management process before installing the package.
+
+The repository's self-signed certificate scripts do not turn a certificate into a public trust anchor and must not commit a private key.
 
 User settings/cache are under `%LOCALAPPDATA%/Agenda` unless `--data-dir` is supplied. Credentials belong to the Windows authentication broker; event caches are protected for the current Windows user. Disconnect clears the active provider's cache; configured feed links remain until removed in the feed screen.
 
