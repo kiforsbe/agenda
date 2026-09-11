@@ -12,7 +12,7 @@ using IcalCalendarEvent = Ical.Net.CalendarComponents.CalendarEvent;
 
 namespace Agenda.Providers;
 
-public sealed record FeedConfiguration(string Id, string Name, string Location, string Color);
+public sealed record FeedConfiguration(string Id, string Name, string Location, string Color, string? CalendarWebsite = null);
 
 public enum CalendarFeedDataState { Empty, Fresh, OfflineCache }
 
@@ -381,6 +381,8 @@ internal static class FeedConfigurationValidator
         if (string.IsNullOrWhiteSpace(feed.Id)) throw new ArgumentException("A feed ID is required.", nameof(feed));
         if (string.IsNullOrWhiteSpace(feed.Name)) throw new ArgumentException("A feed name is required.", nameof(feed));
         if (string.IsNullOrWhiteSpace(feed.Location)) throw new ArgumentException("A feed location is required.", nameof(feed));
+        if(!string.IsNullOrWhiteSpace(feed.CalendarWebsite) && !FeedCalendarLinks.IsValidWebsite(feed.CalendarWebsite))
+            throw new ArgumentException("Calendar website must be an HTTPS address.",nameof(feed));
         if (Path.IsPathFullyQualified(feed.Location))
         {
             // Absolute Windows paths also parse as URIs with a drive-letter scheme.

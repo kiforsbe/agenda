@@ -20,8 +20,12 @@ public sealed partial class MainWindow : Window
     private CultureInfo _culture;
     private DateOnly _selected = DateOnly.FromDateTime(DateTime.Today);
     private DateOnly _month = DateOnly.FromDateTime(DateTime.Today);
+    private int _monthWheelDelta;
+    private long _lastMonthWheelTick;
     private IReadOnlyList<CalendarSource> _calendars = [];
     private IReadOnlyList<CalendarEvent> _events = [];
+    private readonly CalendarEventMemory _eventMemory=new();
+    private ICalendarProvider? _cachedEventProvider;
     private ICalendarProvider? _provider;
     private ShellHost? _shell;
     private IDisposable? _frame;
@@ -38,6 +42,7 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        CalendarPanel.AddHandler(UIElement.PointerWheelChangedEvent,new PointerEventHandler(Calendar_PointerWheelChanged),true);
         VersionText.Text = $"Version {App.Version}";
         _culture = RegionalSettings.Read();
         _settings = AppSettings.Load(App.DataDirectory);
@@ -53,7 +58,7 @@ public sealed partial class MainWindow : Window
         AppWindow.Closing += (_, e) => { if (!_exiting) { e.Cancel = true; HideFlyout(); } };
         Activated += (_, e) => {
             if(e.WindowActivationState!=WindowActivationState.Deactivated) { _trayDismissTimer.Stop();return; }
-            if(_dialogOpen || _authBusy)return;
+            if(_dialogOpen || _authBusy || _feedDragActive)return;
             // Explorer activates on mouse-down; our tray callback toggles on release.
             // Preserve visibility through that gesture so release closes the open flyout.
             if(_shell?.IsTrayInteraction==true)_trayDismissTimer.Start();
@@ -72,7 +77,10 @@ public sealed partial class MainWindow : Window
             var today = DateOnly.FromDateTime(DateTime.Today);
             var yesterday = DateOnly.FromDateTime(_lastClockDate);
             UpdateClock();
-            if (today != yesterday) { RenderCalendar(); RenderAgenda(); }
+            if (today != yesterday) {
+                RenderCalendar(); RenderAgenda();
+                if(CalendarMath.MonthStart(today,_culture)!=CalendarMath.MonthStart(yesterday,_culture))_=RefreshAsync();
+            }
         };
         _refreshTimer.Tick += async (_, _) => { if (_provider?.AccountName is not null && !_authBusy) await RefreshAsync(); };
         _ready = true;
@@ -193,7 +201,7 @@ public sealed partial class MainWindow : Window
         var delta = e.Key switch { VirtualKey.Left => -1,VirtualKey.Right => 1,VirtualKey.Up => -7,VirtualKey.Down => 7,_=>0 };
         if (delta==0) return;
         e.Handled=true; _selected=date.AddDays(delta);
-        if (CalendarMath.MonthStart(_selected,_culture)!=CalendarMath.MonthStart(_month,_culture)) { _month=_selected; _=RefreshAsync(); }
+        if (CalendarMath.MonthStart(_selected,_culture)!=CalendarMath.MonthStart(_month,_culture)) { _month=_selected; _=RefreshAsync(preferCache:true); }
         RenderCalendar(); RenderAgenda();
         var name=_selected.ToDateTime(TimeOnly.MinValue).ToString("D",_culture);
         MonthGrid.Children.OfType<Button>().FirstOrDefault(b=>AutomationProperties.GetName(b).StartsWith(name,StringComparison.Ordinal))?.Focus(FocusState.Keyboard);
@@ -245,7 +253,9 @@ public sealed partial class MainWindow : Window
             stack.Children.Add(new TextBlock { Text=EventTime(item),FontSize=12,Foreground=(Brush)Application.Current.Resources["TextFillColorSecondaryBrush"] });
             stack.Children.Add(new TextBlock { Text=string.Join(" · ",new[]{source?.Name,item.Location}.Where(s=>!string.IsNullOrWhiteSpace(s))),FontSize=12,TextWrapping=TextWrapping.Wrap,Foreground=(Brush)Application.Current.Resources["TextFillColorSecondaryBrush"] });
             var button=new Button { Content=grid,HorizontalAlignment=HorizontalAlignment.Stretch,HorizontalContentAlignment=HorizontalAlignment.Stretch,Background=new SolidColorBrush(Colors.Transparent),BorderThickness=new Thickness(0),Padding=new Thickness(2) };
-            button.Click += async (_,_) => await ShowDetailsAsync(item);
+            ToolTipService.SetToolTip(button,"Open source calendar");
+            AutomationProperties.SetName(button,$"{item.Subject}, {EventTime(item)}. Open source calendar");
+            button.Click += async (_,_) => await OpenSourceCalendarAsync(item);
             EventList.Children.Add(button);
         }
         CalendarsButton.Content=$"{_calendars.Count(c=>IsCalendarVisible(c.Id))} calendars";
@@ -261,7 +271,6 @@ public sealed partial class MainWindow : Window
     private void RenderSettings()
     {
         RegionText.Text=$"{_culture.DisplayName} · {(_settings.UseIsoWeeks?DayOfWeek.Monday:_culture.DateTimeFormat.FirstDayOfWeek)} first · {(_settings.UseIsoWeeks?"ISO 8601":_culture.DateTimeFormat.CalendarWeekRule.ToString())}";
-        SettingsAccountText.Text=_provider?.AccountName??"No calendar source connected";
         SignOutButton.IsEnabled=_provider?.AccountName is not null;
     }
 
@@ -269,12 +278,14 @@ public sealed partial class MainWindow : Window
     {
         _panel=panel;
         AutomationProperties.SetName(SettingsButton,panel=="settings"?"Close settings":"Settings");
+        ToolTipService.SetToolTip(CalendarsButton,panel=="calendars"?"Close calendars":"Choose visible calendars");
         AutomationProperties.SetName(ManageFeedsButton,panel=="feeds"?"Close calendar feeds":"Manage calendar feeds");
         AgendaPanel.Visibility=panel=="agenda"?Visibility.Visible:Visibility.Collapsed;
-        AuxiliaryScrollViewer.Visibility=panel=="agenda"?Visibility.Collapsed:Visibility.Visible;
+        AuxiliaryScrollViewer.Visibility=panel is "agenda" or "feeds"?Visibility.Collapsed:Visibility.Visible;
         CalendarsPanel.Visibility=panel=="calendars"?Visibility.Visible:Visibility.Collapsed;
         EditorPanel.Visibility=panel=="editor"?Visibility.Visible:Visibility.Collapsed;
         SettingsPanel.Visibility=panel=="settings"?Visibility.Visible:Visibility.Collapsed;
+        VersionText.Visibility=SettingsPanel.Visibility;
         FeedsPanel.Visibility=panel=="feeds"?Visibility.Visible:Visibility.Collapsed;
         CalendarPanel.Visibility=!_collapsed && (panel=="agenda"||panel=="calendars")?Visibility.Visible:Visibility.Collapsed;
         RenderSettings(); Position();
@@ -286,21 +297,56 @@ public sealed partial class MainWindow : Window
     private void ToggleFlyout() { if (_shell?.IsVisible ?? _visible) HideFlyout(); else ShowFlyout(); }
     private void Status(string message, InfoBarSeverity severity=InfoBarSeverity.Informational) { StatusBar.Message=message; StatusBar.Severity=severity; StatusBar.IsOpen=true; }
 
-    private async Task RefreshAsync()
+    private async Task RefreshAsync(bool preferCache=false)
     {
         if (_provider is null || _authBusy) { RenderAll(); return; }
-        _refreshCts?.Cancel(); _refreshCts?.Dispose(); _refreshCts=new();
+        // Cancel an obsolete refill even on a cache hit, so it cannot replace the
+        // buffer after the user has scrolled back to an already-cached month.
+        _refreshCts?.Cancel();
+        var required=CalendarEventWindow.Around(_month,_culture,_settings.UseIsoWeeks,1);
+        var today=DateOnly.FromDateTime(DateTime.Today);
+        var currentRequired=CalendarEventWindow.Around(today,_culture,_settings.UseIsoWeeks,1);
+        if(!ReferenceEquals(_cachedEventProvider,_provider)) { _eventMemory.Clear();_cachedEventProvider=_provider; }
+        if(preferCache && _eventMemory.CanReuse(required,DateTimeOffset.UtcNow) &&
+            _eventMemory.CurrentCanReuse(currentRequired,DateTimeOffset.UtcNow)) {
+            SetRefreshStatus(_provider);
+            RenderAll();
+            return;
+        }
+        _refreshCts?.Dispose(); _refreshCts=new();
         var token=_refreshCts.Token; var provider=_provider;
-        var rows=CalendarMath.BuildMonth(_month,_culture,_settings.UseIsoWeeks);
-        var startDate=rows[0].Days[0].ToDateTime(TimeOnly.MinValue); var endDate=rows[^1].Days[^1].AddDays(1).ToDateTime(TimeOnly.MinValue);
+        // An extra month on each side gives navigation room while the next buffer
+        // fills. Keep existing events visible until the entire refill succeeds.
+        var window=CalendarEventWindow.Around(_month,_culture,_settings.UseIsoWeeks,2);
         SyncText.Text="Refreshing…";
         var acquired=false;
         try {
             await _operationGate.WaitAsync(token); acquired=true;
             var calendars=await provider.GetCalendarsAsync(token);
-            var events=await provider.GetEventsAsync(calendars,new DateTimeOffset(startDate,TimeZoneInfo.Local.GetUtcOffset(startDate)),new DateTimeOffset(endDate,TimeZoneInfo.Local.GetUtcOffset(endDate)),token);
-            token.ThrowIfCancellationRequested(); if (_provider!=provider) return;
-            _calendars=calendars; _events=events;
+            async Task<IReadOnlyList<CalendarEvent>> ReadWindow(CalendarEventWindow range) {
+                var start=range.Start.ToDateTime(TimeOnly.MinValue);var end=range.EndExclusive.ToDateTime(TimeOnly.MinValue);
+                return await provider.GetEventsAsync(calendars,new DateTimeOffset(start,TimeZoneInfo.Local.GetUtcOffset(start)),new DateTimeOffset(end,TimeZoneInfo.Local.GetUtcOffset(end)),token);
+            }
+            // Browsing far away never evicts today's buffer or requests every month
+            // between today and the displayed date. Refresh two bounded ranges.
+            if(!window.Contains(currentRequired) && (!preferCache || !_eventMemory.CurrentCanReuse(currentRequired,DateTimeOffset.UtcNow))) {
+                var currentWindow=CalendarEventWindow.Around(today,_culture,_settings.UseIsoWeeks,2);
+                var currentEvents=await ReadWindow(currentWindow);
+                token.ThrowIfCancellationRequested();if(_provider!=provider)return;
+                _eventMemory.PinCurrent(currentWindow,currentEvents,DateTimeOffset.UtcNow);
+                _calendars=calendars;_events=_eventMemory.Events(TimeZoneInfo.Local);
+                RenderAll();
+            }
+            if(!preferCache || !_eventMemory.CanReuse(required,DateTimeOffset.UtcNow) ||
+                (window.Contains(currentRequired) && !_eventMemory.CurrentCanReuse(currentRequired,DateTimeOffset.UtcNow))) {
+                var events=await ReadWindow(window);
+                token.ThrowIfCancellationRequested(); if (_provider!=provider) return;
+                var now=DateTimeOffset.UtcNow;
+                _eventMemory.StoreBrowsing(window,events,now);
+                if(window.Contains(currentRequired))_eventMemory.PinCurrent(window,events,now);
+            }
+            token.ThrowIfCancellationRequested();if(_provider!=provider)return;
+            _calendars=calendars;_events=_eventMemory.Events(TimeZoneInfo.Local);
             SetRefreshStatus(provider);
             RenderAll();
         } catch (OperationCanceledException) { }
@@ -311,7 +357,8 @@ public sealed partial class MainWindow : Window
     private static string FriendlyError(Exception e) => e is HttpRequestException?"Calendar refresh failed. Check your connection and try again.":e.Message;
     private void Calendars_Click(object sender,RoutedEventArgs e)
     {
-        CalendarList.Children.Clear(); AccountText.Text=_provider?.AccountName??"Connect an account in Settings to choose calendars.";
+        if(_panel=="calendars") { SetPanel("agenda");return; }
+        CalendarList.Children.Clear(); AccountText.Text=_provider?.AccountName??"Add a feed using the calendar icon below to choose visible calendars.";
         foreach (var calendar in _calendars) {
             var check=new CheckBox { Content=calendar.Name+(calendar.CanEdit?"":" · read only"),IsChecked=IsCalendarVisible(calendar.Id) };
             check.Click += (_,_) => { if (check.IsChecked==true) _settings.HiddenCalendarIds.Remove(calendar.Id); else _settings.HiddenCalendarIds.Add(calendar.Id); _settings.Save(App.DataDirectory); RenderCalendar(); RenderAgenda(); };
@@ -351,17 +398,62 @@ public sealed partial class MainWindow : Window
         if (_panel=="agenda") await RefreshAsync();
     }
 
-    private async Task ShowDetailsAsync(CalendarEvent item)
+    private bool _openingCalendar;
+    private async Task OpenSourceCalendarAsync(CalendarEvent item)
     {
-        if (_dialogOpen) return;
-        var stack=new StackPanel { Spacing=12 };
-        stack.Children.Add(new TextBlock { Text=EventTime(item),TextWrapping=TextWrapping.Wrap });
-        stack.Children.Add(new TextBlock { Text=item.Location,TextWrapping=TextWrapping.Wrap });
-        var dialog=new ContentDialog { XamlRoot=Root.XamlRoot,Title=item.Subject,Content=stack,CloseButtonText="Close",DefaultButton=ContentDialogButton.Close };
-        if (ValidWebUri(item.JoinUrl)) dialog.PrimaryButtonText="Join meeting";
-        if (ValidWebUri(item.WebLink)) dialog.SecondaryButtonText="Open in calendar";
+        if(_dialogOpen || _openingCalendar)return;
+        var feed=_provider is IcsCalendarProvider?_feeds.FirstOrDefault(source=>source.Id==item.CalendarId):null;
+        var sourceWebsite=feed is not null?FeedCalendarLinks.Resolve(feed):null;
+        if(_provider is WindowsCalendarProvider) {
+            _openingCalendar=true;HideFlyout();
+            try { await Windows.ApplicationModel.Appointments.AppointmentManager.ShowAppointmentDetailsAsync(item.Id,item.Start); }
+            catch(Exception) { ShowFlyout();await ShowEventDetailsAsync(item,null); }
+            finally { _openingCalendar=false; }
+            return;
+        }
+
+        // Graph webLink and VEVENT.URL are event-specific when present. A feed
+        // website is only a fallback action inside the in-app details view.
+        if(ValidWebUri(item.WebLink)) {
+            _openingCalendar=true;HideFlyout();
+            try {
+                if(await Launcher.LaunchUriAsync(new Uri(item.WebLink!)))return;
+            }
+            catch { /* Fall through to the details view. */ }
+            finally { _openingCalendar=false; }
+            ShowFlyout();
+        }
+        await ShowEventDetailsAsync(item,sourceWebsite);
+    }
+
+    private async Task ShowEventDetailsAsync(CalendarEvent item,Uri? sourceWebsite)
+    {
+        if(_dialogOpen)return;
+        var source=_calendars.FirstOrDefault(calendar=>calendar.Id==item.CalendarId);
+        var content=new StackPanel { Spacing=10 };
+        content.Children.Add(new TextBlock { Text=EventTime(item),FontSize=14,TextWrapping=TextWrapping.Wrap });
+        if(source is not null) {
+            content.Children.Add(new TextBlock { Text=$"Calendar: {source.Name}",TextWrapping=TextWrapping.Wrap });
+            if(!string.IsNullOrWhiteSpace(source.AccountName))
+                content.Children.Add(new TextBlock { Text=$"Account: {source.AccountName}",TextWrapping=TextWrapping.Wrap,Foreground=(Brush)Application.Current.Resources["TextFillColorSecondaryBrush"] });
+        }
+        if(!string.IsNullOrWhiteSpace(item.Location))
+            content.Children.Add(new TextBlock { Text=$"Location: {item.Location}",TextWrapping=TextWrapping.Wrap });
+        var dialog=new ContentDialog { XamlRoot=Root.XamlRoot,Title=item.Subject,Content=content,CloseButtonText="Close",DefaultButton=ContentDialogButton.Close };
+        if(ValidWebUri(item.JoinUrl))dialog.PrimaryButtonText="Join meeting";
+        if(sourceWebsite is not null) {
+            if(dialog.PrimaryButtonText is null)dialog.PrimaryButtonText="Open source calendar";
+            else dialog.SecondaryButtonText="Open source calendar";
+        }
         _dialogOpen=true;
-        try { var result=await dialog.ShowAsync(); _dialogOpen=false; if (result==ContentDialogResult.Primary) { HideFlyout(); await OpenUri(item.JoinUrl!); } else if(result==ContentDialogResult.Secondary) { HideFlyout(); await OpenUri(item.WebLink!); } }
+        try {
+            var result=await dialog.ShowAsync();
+            if(result==ContentDialogResult.Primary) {
+                if(ValidWebUri(item.JoinUrl)) { HideFlyout();await OpenUri(item.JoinUrl!); }
+                else if(sourceWebsite is not null) { HideFlyout();await OpenUri(sourceWebsite.AbsoluteUri); }
+            }
+            else if(result==ContentDialogResult.Secondary && sourceWebsite is not null) { HideFlyout();await OpenUri(sourceWebsite.AbsoluteUri); }
+        }
         finally { _dialogOpen=false; }
     }
     private static bool ValidWebUri(string? value) => Uri.TryCreate(value,UriKind.Absolute,out var uri)&&uri.Scheme=="https";
@@ -369,9 +461,34 @@ public sealed partial class MainWindow : Window
     private void Preferences_Changed(object sender,RoutedEventArgs e) { if (!_ready) return; var rangeChanged=_settings.UseIsoWeeks!=IsoToggle.IsOn; _settings.ShowWeekNumbers=WeekToggle.IsOn; _settings.UseIsoWeeks=IsoToggle.IsOn; _settings.InterceptClock=false; _settings.Save(App.DataDirectory); RenderAll(); if(rangeChanged) _=RefreshAsync(); }
     private void AllDay_Toggled(object sender,RoutedEventArgs e) { if (StartTime is null) return; StartTime.Visibility=EndTime.Visibility=AllDayToggle.IsOn?Visibility.Collapsed:Visibility.Visible; }
     private void Collapse_Click(object sender,RoutedEventArgs e) { _collapsed=!_collapsed; ((FontIcon)CollapseButton.Content).Glyph=_collapsed?"\uE70E":"\uE70D"; AutomationProperties.SetName(CollapseButton,_collapsed?"Expand calendar":"Collapse calendar"); SetPanel(_panel); }
-    private async void Previous_Click(object sender,RoutedEventArgs e) { _month=CalendarMath.AddMonth(_month,-1,_culture); _selected=CalendarMath.MonthStart(_month,_culture); RenderAll(); await RefreshAsync(); }
-    private async void Next_Click(object sender,RoutedEventArgs e) { _month=CalendarMath.AddMonth(_month,1,_culture); _selected=CalendarMath.MonthStart(_month,_culture); RenderAll(); await RefreshAsync(); }
-    private async void Today_Click(object sender,RoutedEventArgs e) { _month=_selected=DateOnly.FromDateTime(DateTime.Today); RenderAll(); await RefreshAsync(); }
+    private async void Previous_Click(object sender,RoutedEventArgs e) => await NavigateMonthAsync(-1);
+    private async void Next_Click(object sender,RoutedEventArgs e) => await NavigateMonthAsync(1);
+    private async Task NavigateMonthAsync(int delta)
+    {
+        _month=CalendarMath.AddMonth(_month,delta,_culture);
+        _selected=CalendarMath.MonthStart(_month,_culture);
+        RenderAll();
+        await RefreshAsync(preferCache:true);
+    }
+
+    private async void Calendar_PointerWheelChanged(object sender,PointerRoutedEventArgs e)
+    {
+        if(_dialogOpen || CalendarPanel.Visibility!=Visibility.Visible)return;
+        var point=e.GetCurrentPoint(CalendarPanel);
+        if(point.Properties.IsHorizontalMouseWheel || point.Properties.MouseWheelDelta==0)return;
+        e.Handled=true;
+        var delta=point.Properties.MouseWheelDelta;
+        var now=Environment.TickCount64;
+        // Accumulate precision-wheel deltas: one standard notch (120) is one month.
+        // A new gesture or direction must not inherit a previous partial notch.
+        if(now-_lastMonthWheelTick>500 || Math.Sign(delta)!=Math.Sign(_monthWheelDelta))_monthWheelDelta=0;
+        _lastMonthWheelTick=now;
+        _monthWheelDelta+=delta;
+        var months=_monthWheelDelta/120;
+        _monthWheelDelta%=120;
+        if(months!=0)await NavigateMonthAsync(-months);
+    }
+    private async void Today_Click(object sender,RoutedEventArgs e) { _month=_selected=DateOnly.FromDateTime(DateTime.Today); RenderAll(); await RefreshAsync(preferCache:true); }
     private async void PreviousDay_Click(object sender,RoutedEventArgs e) => await NavigateDayAsync(-1);
     private async void NextDay_Click(object sender,RoutedEventArgs e) => await NavigateDayAsync(1);
     private async Task NavigateDayAsync(int delta)
@@ -380,7 +497,7 @@ public sealed partial class MainWindow : Window
         var monthChanged=CalendarMath.MonthStart(_selected,_culture)!=CalendarMath.MonthStart(_month,_culture);
         if(monthChanged)_month=_selected;
         RenderAll();
-        if(monthChanged)await RefreshAsync();
+        if(monthChanged)await RefreshAsync(preferCache:true);
     }
     private void ManageFeeds_Click(object sender,RoutedEventArgs e)
     {
@@ -393,7 +510,7 @@ public sealed partial class MainWindow : Window
     private async void WindowsAccounts_Click(object sender,RoutedEventArgs e) => await OpenUri("ms-settings:emailandaccounts");
     private async void RegionSettings_Click(object sender,RoutedEventArgs e) => await OpenUri("ms-settings:regionformatting");
     private async void Registration_Click(object sender,RoutedEventArgs e) => await OpenUri("https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app");
-    private void Root_KeyDown(object sender,KeyRoutedEventArgs e) { if (e.Key==VirtualKey.Escape && !_dialogOpen) { e.Handled=true; if(_panel!="agenda") SetPanel("agenda"); else HideFlyout(); } }
+    private void Root_KeyDown(object sender,KeyRoutedEventArgs e) { if (e.Key==VirtualKey.Escape && !_dialogOpen && !_feedDragActive) { e.Handled=true; if(_panel!="agenda") SetPanel("agenda"); else HideFlyout(); } }
     private void Exit_Click(object sender,RoutedEventArgs e) => ExitApp();
     private void ExitApp() { _exiting=true; _refreshCts?.Cancel(); _clockTimer.Stop(); _refreshTimer.Stop(); _trayDismissTimer.Stop(); _shell?.Dispose(); _frame?.Dispose(); (_provider as IDisposable)?.Dispose(); Application.Current.Exit(); }
 }

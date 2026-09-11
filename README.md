@@ -36,6 +36,7 @@ For an isolated development profile:
 
 ## Calendar behaviour
 
+- Month navigation keeps a rolling five-month event buffer (two months before and after the displayed month) plus a separate buffer pinned around the actual current month. Browsing distant dates never evicts today's data. Nearby months render from memory; the browsing buffer refills when it no longer covers the displayed month and both neighbors. Manual and five-minute refreshes update both buffers; existing provider disk caches remain encrypted.
 - Real Windows controls and desktop acrylic; system theme, accent and transparency fallbacks.
 - Month navigation, keyboard day selection, previous/next-day buttons around Today, a collapsible month and selected-day agenda. Month markers show each visible feed's color: one dot for one source, or a segmented pill for multiple sources.
 - Week numbers on by default; Windows first weekday and week rule, or explicit ISO 8601 override. ISO forces Monday. The week-year can differ from the date's calendar year near New Year.
@@ -43,6 +44,10 @@ For an isolated development profile:
 - Calendar visibility selection, event details and meeting links for the active source. iCalendar feeds are read-only; create or edit events in the calendar service that owns the feed.
 
 ## Connect calendars without an Entra registration
+
+Click an agenda event to open its event-specific source link when the provider supplies one. Windows appointments and Microsoft Graph events use their native event details; an ICS `VEVENT.URL` is used when it is an HTTPS event link. If no deep link exists, Agenda shows an in-app details view with the event time, source calendar, account, location, and available actions. For a source-calendar fallback, set **Calendar website (optional)** in Add/Edit feed. Leave it blank for automatic Google/Outlook detection. Private ICS subscription URLs are never opened as destinations.
+
+Reorder feeds by dragging an entry's name or background; the list scrolls near its edges and saves the order on drop. Color, edit, and delete buttons retain their normal actions. Keyboard users can focus an entry and press **Alt+Up/Down**. Feed order is retained when reopening the app.
 
 Use the calendar icon beside the bottom Settings button to open or close feed management, then choose **Add calendar feed**. A popup collects the calendar name and secret ICS link or absolute local `.ics` file path. Add saves the feed; Cancel dismisses the draft. Personal Google Calendar secret iCal links and Outlook.com published ICS links work without an Azure/Entra or Google developer registration. Multiple feeds can be displayed together.
 
@@ -79,11 +84,13 @@ The notification-area icon and **Ctrl+Alt+A** open the flyout. Taskbar-clock int
 ./scripts/package.ps1 -Architecture ARM64
 ```
 
-The script creates a self-contained portable directory and a **signed** MSIX in `artifacts/`. By default it uses a temporary self-signed development certificate and removes its private key afterward. To reuse the persistent certificate in the current user's Personal certificate store (`Cert:\CurrentUser\My`), pass `-UseCertificateStore`; it creates the certificate if needed and exports only its public certificate to `artifacts/signing/`. Trust that certificate once for the current Windows user before installing:
+The script creates a self-contained portable directory and a **signed** MSIX in `artifacts/`. By default it uses a temporary self-signed development certificate and removes its private key afterward. To reuse the persistent certificate in the current user's Personal certificate store (`Cert:\CurrentUser\My`), pass `-UseCertificateStore`; it creates the certificate if needed and exports only its public certificate to `artifacts/signing/`. Trust that certificate once per computer from an administrator PowerShell before installing. MSIX deployment requires Local Machine Trusted People; current-user trust and a successful SignTool verification alone are insufficient:
 
 ```powershell
 ./scripts/package.ps1 -Architecture x64 -UseCertificateStore
-./scripts/trust-dev-certificate.ps1  # trusts the public cert in Root and TrustedPeople
+# Run this trust step from PowerShell opened as Administrator:
+./scripts/trust-dev-certificate.ps1  # imports the public cert into Local Machine Trusted People
+# Install as the Windows user who will run Agenda:
 Add-AppxPackage ./artifacts/Agenda-x64.msix
 ```
 

@@ -21,7 +21,7 @@ public sealed partial class MainWindow
 
     private MicrosoftCalendarProvider NewMicrosoftProvider() => new(WinRT.Interop.WindowNative.GetWindowHandle(this),_settings.ClientId,App.DataDirectory);
 
-    private async Task SwitchConnectionAsync(ICalendarProvider candidate,string mode,bool signIn)
+    private async Task SwitchConnectionAsync(ICalendarProvider candidate,string mode,bool signIn,bool showAgenda=true)
     {
         if (_authBusy) { (candidate as IDisposable)?.Dispose(); return; }
         _authBusy=true; _refreshCts?.Cancel();
@@ -36,9 +36,11 @@ public sealed partial class MainWindow
             catch { _settings.SourceMode=previousMode;throw; }
             var previous=_provider; _provider=candidate;switched=true;
             _events=[];_calendars=calendars;
+            _eventMemory.Clear();_cachedEventProvider=null;
             (previous as IDisposable)?.Dispose();
             StatusBar.IsOpen=false;SyncText.Text="Loading events…";
-            SetPanel("agenda");RenderAll();
+            if(showAgenda)SetPanel("agenda");
+            RenderAll();
         } catch(OperationCanceledException) { Status("Connection cancelled."); }
         catch(Exception ex) { Status(FriendlyError(ex),InfoBarSeverity.Warning); }
         finally { if(!switched)(candidate as IDisposable)?.Dispose();_operationGate.Release();_authBusy=false; }
@@ -74,6 +76,7 @@ public sealed partial class MainWindow
         if(_authBusy||_provider is null)return;
         _authBusy=true;_refreshCts?.Cancel();await _operationGate.WaitAsync();
         var provider=_provider;_provider=null;_events=[];_calendars=[];
+        _eventMemory.Clear();_cachedEventProvider=null;
         try { await provider.SignOutAsync(); }
         catch(Exception ex) { Status(FriendlyError(ex),InfoBarSeverity.Warning); }
         finally {
@@ -97,24 +100,27 @@ public sealed partial class MainWindow
         if(_authBusy)return;
         try {
             _feeds=await FeedConfigurationStore.LoadAsync(App.DataDirectory);
+            RenderFeeds();SetPanel("feeds");
             // Opening feed management also restores saved feeds from a legacy
             // source or disconnected profile, without a separate activation button.
             if(_feeds.Count>0 && _provider is not IcsCalendarProvider)
-                await SwitchConnectionAsync(new IcsCalendarProvider(_feeds,App.DataDirectory),"feeds",false);
-            RenderFeeds();SetPanel("feeds");
+                await SwitchConnectionAsync(new IcsCalendarProvider(_feeds,App.DataDirectory),"feeds",false,showAgenda:false);
         }
         catch(Exception ex) { Status(FriendlyError(ex),InfoBarSeverity.Warning); }
     }
 
     private void RenderFeeds()
     {
-        FeedList.Children.Clear();
+        _feedDragOrigin=null;
+        FeedList.Items.Clear();
         foreach(var feed in _feeds) {
-            var row=new Grid { ColumnSpacing=8 };
+            var row=new Grid { ColumnSpacing=4,Tag=feed.Id,Background=new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Transparent) };
             row.ColumnDefinitions.Add(new(){Width=GridLength.Auto});
             row.ColumnDefinitions.Add(new(){Width=new GridLength(1,GridUnitType.Star)});
             row.ColumnDefinitions.Add(new(){Width=GridLength.Auto});row.ColumnDefinitions.Add(new(){Width=GridLength.Auto});
-            row.Children.Add(CreateFeedColorButton(feed));
+            ConfigureFeedRowDragging(row,feed);
+            var color=CreateFeedColorButton(feed);
+            row.Children.Add(color);
             var name=new TextBlock { Text=feed.Name,TextWrapping=TextWrapping.Wrap,VerticalAlignment=VerticalAlignment.Center };
             Grid.SetColumn(name,1);row.Children.Add(name);
             var edit=new Button { Content=new FontIcon { Glyph="\uE70F",FontSize=14 },Width=32,Height=32,MinWidth=0,MinHeight=0,Padding=new Thickness(4) };
@@ -127,7 +133,7 @@ public sealed partial class MainWindow
             ToolTipService.SetToolTip(remove,"Remove feed");
             Grid.SetColumn(remove,3);row.Children.Add(remove);
             remove.Click+=async (_,_)=>await RemoveFeedAsync(feed.Id);
-            FeedList.Children.Add(row);
+            FeedList.Items.Add(row);
         }
     }
 
@@ -144,6 +150,7 @@ public sealed partial class MainWindow
         AddFeedDialog.PrimaryButtonText=feed is null?"Add":"Save";
         FeedNameBox.Text=feed?.Name??"";
         FeedLocationBox.Password=feed?.Location??"";
+        FeedWebsiteBox.Text=feed?.CalendarWebsite??"";
         _newFeedColor=feed?.Color??FeedColorPalette.PickNext(_feeds.Select(item=>item.Color));
         FeedColorPicker.Children.Clear();
         FeedColorPicker.Children.Add(CreateFeedPalette(_newFeedColor,color=>_newFeedColor=color));
@@ -155,11 +162,11 @@ public sealed partial class MainWindow
             _dialogOpen=false;
             FeedNameBox.Text="";
             FeedLocationBox.Password="";
+            FeedWebsiteBox.Text="";
             _editingFeedId=null;
         }
         if(result==ContentDialogResult.Primary) {
-            await SwitchConnectionAsync(new IcsCalendarProvider(_feeds,App.DataDirectory),"feeds",false);
-            SetPanel("feeds");
+            await SwitchConnectionAsync(new IcsCalendarProvider(_feeds,App.DataDirectory),"feeds",false,showAgenda:false);
         }
     }
 
@@ -168,6 +175,7 @@ public sealed partial class MainWindow
         args.Cancel=true;
         if(_authBusy)return;
         var name=FeedNameBox.Text.Trim();var location=FeedLocationBox.Password.Trim();
+        var website=FeedWebsiteBox.Text.Trim();
         if(name.Length==0||location.Length==0) {
             FeedErrorBar.Message="Enter a calendar name and an ICS link or absolute file path.";
             FeedErrorBar.IsOpen=true;
@@ -175,10 +183,14 @@ public sealed partial class MainWindow
             else FeedLocationBox.Focus(FocusState.Programmatic);
             return;
         }
+        if(website.Length>0 && !FeedCalendarLinks.IsValidWebsite(website)) {
+            FeedErrorBar.Message="Enter an HTTPS calendar website, or leave it blank for automatic detection.";
+            FeedErrorBar.IsOpen=true;FeedWebsiteBox.Focus(FocusState.Programmatic);return;
+        }
         var deferral=args.GetDeferral();
         var candidate=_editingFeedId is null
-            ? _feeds.Append(new FeedConfiguration("feed-"+Guid.NewGuid().ToString("N"),name,location,_newFeedColor)).ToArray()
-            : _feeds.Select(feed=>feed.Id==_editingFeedId?feed with { Name=name,Location=location,Color=_newFeedColor }:feed).ToArray();
+            ? _feeds.Append(new FeedConfiguration("feed-"+Guid.NewGuid().ToString("N"),name,location,_newFeedColor,website.Length==0?null:website)).ToArray()
+            : _feeds.Select(feed=>feed.Id==_editingFeedId?feed with { Name=name,Location=location,Color=_newFeedColor,CalendarWebsite=website.Length==0?null:website }:feed).ToArray();
         _authBusy=true;AddFeedButton.IsEnabled=false;
         try {
             await FeedConfigurationStore.SaveAsync(App.DataDirectory,candidate);
@@ -195,8 +207,7 @@ public sealed partial class MainWindow
         try { var remaining=_feeds.Where(f=>f.Id!=id).ToArray();await FeedConfigurationStore.SaveAsync(App.DataDirectory,remaining);_feeds=remaining;RenderFeeds(); }
         catch(Exception ex) { Status(FriendlyError(ex),InfoBarSeverity.Warning);return; }
         finally { _authBusy=false; }
-        if(_provider is IcsCalendarProvider) await SwitchConnectionAsync(new IcsCalendarProvider(_feeds,App.DataDirectory),"feeds",false);
-        SetPanel("feeds");
+        if(_provider is IcsCalendarProvider) await SwitchConnectionAsync(new IcsCalendarProvider(_feeds,App.DataDirectory),"feeds",false,showAgenda:false);
     }
 
     private async void UseFeeds_Click(object sender,RoutedEventArgs e) { if(_feeds.Count==0) { Status("Add a calendar link or file first.");return; } await SwitchConnectionAsync(new IcsCalendarProvider(_feeds,App.DataDirectory),"feeds",false); }

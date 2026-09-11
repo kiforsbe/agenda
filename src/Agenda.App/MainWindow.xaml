@@ -11,7 +11,7 @@
      <StackPanel><TextBlock x:Name="ClockText" FontSize="28"/><TextBlock x:Name="DateText" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" /></StackPanel>
      <Button Grid.Column="1" x:Name="CollapseButton" Click="Collapse_Click" VerticalAlignment="Center" AutomationProperties.Name="Collapse calendar"><FontIcon Glyph="&#xE70D;" FontSize="12"/></Button>
     </Grid>
-    <StackPanel x:Name="CalendarPanel" Grid.Row="1" Padding="12,0,12,12">
+    <StackPanel x:Name="CalendarPanel" Grid.Row="1" Padding="12,0,12,12" Background="Transparent">
      <Grid Margin="4,0,0,8"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
       <TextBlock x:Name="MonthText" VerticalAlignment="Center" FontWeight="SemiBold"/>
       <Button Grid.Column="1" Click="Previous_Click" AutomationProperties.Name="Previous month" Background="Transparent" BorderThickness="0"><FontIcon Glyph="&#xE70E;" FontSize="12"/></Button>
@@ -20,8 +20,8 @@
      <Grid x:Name="MonthGrid"/>
     </StackPanel>
     <InfoBar x:Name="StatusBar" Grid.Row="2" IsOpen="False" IsClosable="True" Margin="12,0,12,8"/>
-    <Grid x:Name="AgendaPanel" Grid.Row="3" Background="{ThemeResource LayerFillColorDefaultBrush}" Padding="16,8,16,12" RowSpacing="8">
-     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="28"/></Grid.RowDefinitions>
+    <Grid x:Name="AgendaPanel" Grid.Row="3" Background="{ThemeResource LayerFillColorDefaultBrush}" Padding="16,8,16,4" RowSpacing="8">
+     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="18"/></Grid.RowDefinitions>
      <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
       <TextBlock x:Name="SelectedDateText" FontWeight="SemiBold" VerticalAlignment="Center"/>
       <Button Grid.Column="1" Click="PreviousDay_Click" AutomationProperties.Name="Previous day" ToolTipService.ToolTip="Previous day" Width="32" MinWidth="0" Padding="6" Background="Transparent" BorderThickness="0"><FontIcon Glyph="&#xE76B;" FontSize="12"/></Button>
@@ -39,20 +39,21 @@
       </StackPanel>
      </ScrollViewer>
      <!-- Keep the cue's space reserved so reaching the bottom cannot resize the viewport. -->
-     <Button x:Name="MoreEventsButton" Grid.Row="2" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="24" Padding="10,2" Background="Transparent" BorderThickness="0" Click="MoreEvents_Click" AutomationProperties.Name="Scroll to more events below">
+     <Button x:Name="MoreEventsButton" Grid.Row="2" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="18" Padding="10,0" Background="Transparent" BorderThickness="0" Click="MoreEvents_Click" AutomationProperties.Name="Scroll to more events below">
       <StackPanel Orientation="Horizontal" Spacing="6">
        <TextBlock Text="More events below" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
        <FontIcon Glyph="&#xE70D;" FontSize="10" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
       </StackPanel>
      </Button>
     </Grid>
-   <ScrollViewer x:Name="AuxiliaryScrollViewer" Grid.Row="3" Visibility="Collapsed" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+   <Grid Grid.Row="3">
+    <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+   <ScrollViewer x:Name="AuxiliaryScrollViewer" Visibility="Collapsed" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
     <StackPanel>
     <StackPanel x:Name="CalendarsPanel" Visibility="Collapsed" Padding="16,12" Spacing="12">
-     <Grid><TextBlock Text="Calendars" FontSize="20"/><Button HorizontalAlignment="Right" Content="Back" Click="Back_Click"/></Grid>
+     <TextBlock Text="Calendars" FontSize="20"/>
      <TextBlock x:Name="AccountText" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
      <StackPanel x:Name="CalendarList"/>
-     <Button Content="Calendar feed settings" Click="Feeds_Click"/>
     </StackPanel>
     <StackPanel x:Name="EditorPanel" Visibility="Collapsed" Padding="16,12" Spacing="12">
      <Grid><TextBlock Text="New event" FontSize="20"/><Button HorizontalAlignment="Right" Content="Cancel" Click="Back_Click"/></Grid>
@@ -68,16 +69,12 @@
     </StackPanel>
     <StackPanel x:Name="SettingsPanel" Visibility="Collapsed" Padding="16,12" Spacing="14">
      <TextBlock Text="Settings" FontSize="20"/>
-     <TextBlock x:Name="VersionText" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12" AutomationProperties.Name="Application version"/>
      <ToggleSwitch x:Name="WeekToggle" Header="Show week numbers" Toggled="Preferences_Changed"/>
      <ToggleSwitch x:Name="IsoToggle" Header="Use ISO week numbering" Toggled="Preferences_Changed"/>
      <TextBlock Text="ISO uses Monday and the first four-day week. Otherwise, Windows regional settings apply." TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
      <TextBlock x:Name="RegionText" TextWrapping="Wrap" FontSize="12"/>
-     <TextBlock Text="iCalendar feeds" FontSize="18"/>
-     <TextBlock x:Name="SettingsAccountText" Text="No calendar source connected" TextWrapping="Wrap"/>
      <!-- Keep other providers implemented, but remove their setup from the current UI. -->
      <Button Content="Use Windows calendars" Click="WindowsCalendars_Click" Visibility="Collapsed"/>
-     <TextBlock Text="Calendar feeds are read-only. Create and edit events in your calendar app." TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
      <StackPanel Orientation="Horizontal" Spacing="8" Visibility="Collapsed"><HyperlinkButton Content="Google Calendar" Click="GoogleCalendar_Click"/><HyperlinkButton Content="Outlook.com" Click="OutlookCalendar_Click"/></StackPanel>
      <Button Content="Microsoft sign-in (requires app ID)" Click="Connect_Click" Visibility="Collapsed"/>
      <Button x:Name="SignOutButton" Content="Disconnect active source" Click="SignOut_Click" Visibility="Collapsed"/>
@@ -91,16 +88,35 @@
       </StackPanel>
      </Expander>
     </StackPanel>
-    <StackPanel x:Name="FeedsPanel" Visibility="Collapsed" Padding="16,12" Spacing="12">
+   </StackPanel>
+  </ScrollViewer>
+    <Grid x:Name="FeedsPanel" Visibility="Collapsed" Padding="16,12" RowSpacing="12">
+     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
      <TextBlock Text="Calendar feeds" FontSize="20"/>
-     <StackPanel x:Name="FeedList" Spacing="8"/>
+     <ListView x:Name="FeedList" Grid.Row="1" SelectionMode="None" IsItemClickEnabled="False"
+      CanDragItems="True" CanReorderItems="True" AllowDrop="True"
+      DragItemsStarting="FeedList_DragItemsStarting" DragItemsCompleted="FeedList_DragItemsCompleted"
+      KeyDown="FeedList_KeyDown"
+      ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+      AutomationProperties.Name="Calendar feeds">
+      <ListView.ItemContainerStyle>
+       <Style TargetType="ListViewItem">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="0,0,0,8"/>
+        <Setter Property="MinHeight" Value="36"/>
+       </Style>
+      </ListView.ItemContainerStyle>
+     </ListView>
+     <StackPanel Grid.Row="2" Spacing="12">
      <Button x:Name="AddFeedButton" Content="Add calendar feed" Click="AddFeed_Click" Style="{StaticResource AccentButtonStyle}"/>
      <HyperlinkButton Content="Find Google’s secret iCal address" Click="GoogleFeedHelp_Click"/>
      <HyperlinkButton Content="Publish an Outlook.com ICS link" Click="OutlookFeedHelp_Click"/>
      <TextBlock Text="Feeds refresh periodically; changes may take time to appear. A local file is a snapshot until you replace it. Outlook published calendars are accessible to anyone holding the link." TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-    </StackPanel>
-   </StackPanel>
-  </ScrollViewer>
+     </StackPanel>
+    </Grid>
+   <TextBlock x:Name="VersionText" Grid.Row="1" Visibility="Collapsed" HorizontalAlignment="Right" Margin="16,8,16,12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12" AutomationProperties.Name="Application version"/>
+   </Grid>
   <Grid Grid.Row="4" Padding="12,8" Background="{ThemeResource LayerFillColorDefaultBrush}">
    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
    <Button x:Name="CalendarsButton" Content="Calendars" Click="Calendars_Click" Background="Transparent" BorderThickness="0"/>
@@ -117,6 +133,7 @@
     <InfoBar x:Name="FeedErrorBar" IsOpen="False" IsClosable="False" Severity="Warning"/>
     <TextBox x:Name="FeedNameBox" Header="Calendar name" PlaceholderText="Personal calendar"/>
     <PasswordBox x:Name="FeedLocationBox" Header="Secret ICS link or full file path" PlaceholderText="https://… or C:\…\calendar.ics" PasswordRevealMode="Peek"/>
+    <TextBox x:Name="FeedWebsiteBox" Header="Calendar website (optional)" PlaceholderText="Automatic for Google and Outlook"/>
     <StackPanel Spacing="6">
      <TextBlock Text="Feed color"/>
      <StackPanel x:Name="FeedColorPicker" AutomationProperties.Name="Feed color"/>

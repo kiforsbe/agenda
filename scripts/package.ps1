@@ -83,7 +83,7 @@ try {
     Write-Output "Signed package: $package"
     if($publicCertificate) { Write-Output "Development certificate: $publicCertificate" }
     Write-Output "Portable application: $stage/Agenda.App.exe"
-    Write-Output 'Trust the development .cer in the current user TrustedPeople store before installing a locally signed package.'
+    if($publicCertificate) { Write-Output 'Before installing, run scripts/trust-dev-certificate.ps1 from an administrator PowerShell to trust the development .cer in Local Machine Trusted People.' }
 } finally {
     if($temporaryPfx) { Remove-Item -LiteralPath $temporaryPfx -Force -ErrorAction SilentlyContinue }
     if($temporaryCertificateThumbprint) { Remove-Item -LiteralPath "Cert:\CurrentUser\My\$temporaryCertificateThumbprint" -Force -ErrorAction SilentlyContinue }

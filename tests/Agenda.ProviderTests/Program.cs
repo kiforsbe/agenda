@@ -26,7 +26,10 @@ var tests = new (string Name, Func<Task> Run)[]
     ("invalid ICS content raises a feed error", InvalidIcsRaisesErrorAsync),
     ("ICS feeds are read-only", IcsReadOnlyAsync),
     ("feed configuration storage encrypts secret URLs", FeedConfigurationEncryptionAsync),
+    ("feed reordering preserves details and persists order", FeedReorderingAsync),
+    ("feed reordering rejects incomplete or duplicate identities", FeedReorderingValidation),
     ("feed locations reject insecure network schemes", FeedLocationValidation),
+    ("calendar website resolution uses the feed source without exposing ICS links", FeedCalendarWebsite),
     ("offline ICS downloads return encrypted cache marked stale", IcsOfflineCacheAsync),
     ("ICS refresh rejects HTTPS redirects to plaintext", IcsRejectsDowngradeRedirectAsync),
     ("ICS failed feeds retain successful feeds and redact private URLs", IcsPartialFailureAsync),
@@ -486,12 +489,56 @@ static async Task FeedConfigurationEncryptionAsync()
         var loaded = await FeedConfigurationStore.LoadAsync(directory);
         Equal(secretUrl, loaded[0].Location);
         Equal("Personal", loaded[0].Name);
-        var edited=loaded[0] with { Name="Renamed",Color="#B69CFF",Location="https://example.com/edited-private.ics" };
+        var edited=loaded[0] with { Name="Renamed",Color="#B69CFF",Location="https://example.com/edited-private.ics",CalendarWebsite="https://example.com/calendar" };
         await FeedConfigurationStore.SaveAsync(directory,[edited]);
         Equal(edited,(await FeedConfigurationStore.LoadAsync(directory)).Single());
         DoesNotContain("edited-private",Encoding.UTF8.GetString(await File.ReadAllBytesAsync(FeedConfigurationStore.GetStoragePath(directory))));
     }
     finally { DeleteDirectory(directory); }
+}
+
+static async Task FeedReorderingAsync()
+{
+    var directory=TestDirectory();
+    try {
+        FeedConfiguration[] feeds=[
+            new("one","Personal","https://example.com/private-one.ics","#008000"),
+            new("two","Work","https://example.com/private-two.ics","#B69CFF"),
+            new("three","Birthdays","https://example.com/private-three.ics","#FFB900")];
+        var reordered=FeedConfigurationOrder.Apply(feeds,["three","one","two"]);
+        Equal(feeds[2],reordered[0]); Equal(feeds[0],reordered[1]); Equal(feeds[1],reordered[2]);
+        Equal("one",feeds[0].Id);
+        await FeedConfigurationStore.SaveAsync(directory,reordered);
+        var loaded=await FeedConfigurationStore.LoadAsync(directory);
+        for(var i=0;i<reordered.Count;i++) Equal(reordered[i],loaded[i]);
+        DoesNotContain("private-one",Encoding.UTF8.GetString(await File.ReadAllBytesAsync(FeedConfigurationStore.GetStoragePath(directory))));
+        var restored=FeedConfigurationOrder.Apply(loaded,["one","two","three"]);
+        for(var i=0;i<feeds.Length;i++) Equal(feeds[i],restored[i]);
+        Equal(0,FeedConfigurationOrder.Apply([],[]).Count);
+    } finally { DeleteDirectory(directory); }
+}
+
+static Task FeedReorderingValidation()
+{
+    FeedConfiguration[] feeds=[new("one","Personal","https://example.com/one.ics","#008000"),new("two","Work","https://example.com/two.ics","#B69CFF")];
+    Throws<ArgumentException>(()=>FeedConfigurationOrder.Apply(feeds,["one"]));
+    Throws<ArgumentException>(()=>FeedConfigurationOrder.Apply(feeds,["one","one"]));
+    Throws<ArgumentException>(()=>FeedConfigurationOrder.Apply(feeds,["one","unknown"]));
+    return Task.CompletedTask;
+}
+
+static Task FeedCalendarWebsite()
+{
+    var google=new FeedConfiguration("g","Anything","https://calendar.google.com/calendar/ical/person%40gmail.com/private-secret/basic.ics","auto");
+    Equal("https://calendar.google.com/calendar/u/0/r",FeedCalendarLinks.Resolve(google)!.AbsoluteUri);
+    Equal("https://outlook.live.com/calendar/0/view/month",FeedCalendarLinks.Resolve(google with { Location="https://outlook.live.com/owa/calendar/private-secret/calendar.ics" })!.AbsoluteUri);
+    Equal("https://outlook.office.com/calendar/",FeedCalendarLinks.Resolve(google with { Location="https://outlook.office365.com/owa/calendar/private-secret/calendar.ics" })!.AbsoluteUri);
+    Equal<Uri?>(null,FeedCalendarLinks.Resolve(google with { Location="https://calendar.google.com.example.org/private.ics" }));
+    Equal<Uri?>(null,FeedCalendarLinks.Resolve(google with { Location="C:\\Calendars\\local.ics" }));
+    Equal("https://example.com/my-calendar",FeedCalendarLinks.Resolve(google with { CalendarWebsite="https://example.com/my-calendar" })!.AbsoluteUri);
+    Equal(false,FeedCalendarLinks.IsValidWebsite("file:///C:/calendar.ics"));
+    Equal(false,FeedCalendarLinks.IsValidWebsite("javascript:alert(1)"));
+    return Task.CompletedTask;
 }
 
 static Task FeedLocationValidation()

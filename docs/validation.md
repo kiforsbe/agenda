@@ -2,6 +2,8 @@
 
 ## Verified on this machine
 
+- Current-month pinning follow-up (2026-09-11): 23 core checks passed, including retaining today's events while browsing distant months, retaining stale data until refreshed, clearing snapshots, and respecting deletions across overlapping refreshes.
+- Month buffer follow-up (2026-09-11): all 21 core checks passed, including neighboring-grid coverage across year boundaries, refill boundaries, regional weekdays, and Persian calendar months. These checks validate date coverage, not measured scrolling latency.
 - Windows 11 x64, build 26200; .NET SDK 10.0.301 and Windows SDK 26100.
 - Native WinUI app build: zero warnings and errors.
 - `scripts/test.ps1`: 19 calendar core checks, 33 provider checks, 13 shell checks passed, exit 0. Provider checks use deterministic local fixtures and mocked transport/authentication, not personal accounts.
@@ -9,7 +11,7 @@
 - Provider coverage includes Graph paging and consent boundaries, read-only rejection, encrypted caches and sign-out, ICS recurrence exceptions/replacements, all-day overlap, private URL redaction, partial feed failures, HTTPS redirects, download/evaluation limits and offline fallback.
 - Native shell smoke: window positioning/show/hide, tray lifecycle and Ctrl+Alt+A registration passed. Clock discovery reported no independently bounded Win32 clock target; Windows retains normal clock clicks.
 - Actual WinUI executable launched and its Agenda window was enumerated. Windows appointment-store probe returned one calendar and zero events for the range from seven days before the probe through thirty days after it. Event titles and account details were not written to the probe log.
-- `scripts/package.ps1 -Architecture x64 -UseCertificateStore` produced a self-contained portable directory and signed `artifacts/Agenda-x64.msix`; MakeAppx validation, signing, and packaging succeeded. The development signing certificate is stored in the current user's Personal store and its public `.cer` is kept under ignored `artifacts/signing/`; trust is installed only when the explicit helper imports it into the current user's Root and TrustedPeople stores.
+- `scripts/package.ps1 -Architecture x64 -UseCertificateStore` produced a self-contained portable directory and signed `artifacts/Agenda-x64.msix`; MakeAppx validation, signing, and packaging succeeded. The development signing certificate is stored in the current user's Personal store and its public `.cer` is kept under ignored `artifacts/signing/`; the corrected trust helper requires administrator privileges and targets Local Machine Trusted People. The previous current-user trust workflow passed SignTool verification but failed actual installation with 0x800B0109.
 - Portable startup regression: first failed because publishing omitted `Agenda.App.pri` and compiled XAML. The publish target now includes those resources explicitly. `scripts/test-portable.ps1` then passed: the native process remained running without logged exceptions. This matches the upstream [unpackaged publish resource issue](https://github.com/microsoft/WindowsAppSDK/issues/6720).
 - ARM64 Release configuration compiled with zero warnings and errors; it was not executed on ARM hardware. Signed ARM64 packaging and clean-machine installation remain unverified.
 
@@ -27,6 +29,9 @@ Independent code review identified stale OS calendar enumeration, a midnight reo
 - Repeated physical tray clicks and the exact ordering of outside-click dismissal still need interactive confirmation; the automated callback test verifies duplicate-notification handling and the delayed-dismissal path.
 
 ## Remaining manual checks
+
+- Event navigation: verify Windows appointment details, Microsoft Graph event links, HTTPS ICS VEVENT URLs, and the in-app fallback details view interactively. ICS feeds do not always provide event deep links; in those cases the details view can offer an inferred Google/Outlook or custom source-calendar website. No live calendar website or Windows appointment was opened by the automated checks.
+- Feed reorder follow-up (2026-09-11): Release x64 build passed with zero warnings/errors; all 35 provider checks passed, including encrypted order round-tripping and rejection of incomplete/duplicate orders. Interactive drag smoothness, row dragging while preserving button actions, Escape/outside-drop cancellation, edge scrolling, and Alt+Up/Down still need a live desktop check.
 
 - Initial screenshot inspection was blocked by an approval timeout; follow-up inspection succeeded as recorded above. Full keyboard and screen-reader coverage is still pending.
 - User-configured feeds were visible during follow-up inspection. Provider parsing/download/cache behavior is tested with fixtures; end-to-end freshness and changes at each remote calendar service still need checking.

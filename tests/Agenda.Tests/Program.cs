@@ -46,5 +46,54 @@ Check("Day markers respect visibility and retain separate sources with matching 
     Equal("b",CalendarMath.SourcesOnDay(events,sources.Skip(1),new(2026,9,10),TimeZoneInfo.Utc).Single().Id);
     Equal(0,CalendarMath.SourcesOnDay(events,sources,new(2026,9,11),TimeZoneInfo.Utc).Count);
 });
+Check("Buffered months include neighboring grids across a year boundary", () => {
+    var culture=new CultureInfo("sv-SE");
+    var anchor=new DateOnly(2026,1,15);
+    var buffer=CalendarEventWindow.Around(anchor,culture,true,2);
+    for(var offset=-2;offset<=2;offset++) {
+        var grid=CalendarMath.BuildMonth(CalendarMath.AddMonth(anchor,offset,culture),culture,true);
+        Equal(true,buffer.Start<=grid[0].Days[0]);
+        Equal(true,buffer.EndExclusive>grid[^1].Days[^1]);
+    }
+    Equal(true,buffer.Contains(CalendarEventWindow.Around(new(2026,2,1),culture,true,1)));
+    Equal(false,buffer.Contains(CalendarEventWindow.Around(new(2026,3,1),culture,true,1)));
+});
+Check("Buffered months honor regional calendars and weekday overrides", () => {
+    foreach(var name in new[]{"en-US","sv-SE","fa-IR"}) {
+        var culture=new CultureInfo(name);
+        culture.DateTimeFormat.FirstDayOfWeek=DayOfWeek.Saturday;
+        var anchor=new DateOnly(2024,3,20);
+        foreach(var iso in new[]{true,false}) {
+            var buffer=CalendarEventWindow.Around(anchor,culture,iso,1);
+            var first=CalendarMath.BuildMonth(CalendarMath.AddMonth(anchor,-1,culture),culture,iso);
+            var last=CalendarMath.BuildMonth(CalendarMath.AddMonth(anchor,1,culture),culture,iso);
+            Equal(first[0].Days[0],buffer.Start);
+            Equal(last[^1].Days[^1].AddDays(1),buffer.EndExclusive);
+        }
+    }
+});
+Check("Current month stays cached when browsing distant months", () => {
+    var cache=new CalendarEventMemory();var now=DateTimeOffset.UtcNow;
+    var current=new CalendarEventWindow(new(2026,9,1),new(2026,10,1));
+    var distant=new CalendarEventWindow(new(2027,5,1),new(2027,6,1));
+    var appointment=new CalendarEvent("today","home","Appointment",new(2026,9,11,9,0,0,TimeSpan.Zero),new(2026,9,11,10,0,0,TimeSpan.Zero),false,"");
+    cache.PinCurrent(current,[appointment],now);
+    cache.StoreBrowsing(distant,[],now);
+    Equal(appointment,cache.Events(TimeZoneInfo.Utc).Single());
+    Equal(true,cache.CanReuse(current,now.AddMinutes(1)));
+    Equal(false,cache.CanReuse(current,now.AddMinutes(6)));
+    Equal(appointment,cache.Events(TimeZoneInfo.Utc).Single()); // stale data stays resident
+    cache.Clear();Equal(0,cache.Events(TimeZoneInfo.Utc).Count);Equal(false,cache.CanReuse(current,now));
+});
+Check("A newer overlapping window removes stale pinned events", () => {
+    var cache=new CalendarEventMemory();var now=DateTimeOffset.UtcNow;
+    var window=new CalendarEventWindow(new(2026,9,1),new(2026,10,1));
+    var appointment=new CalendarEvent("old","home","Deleted",new(2026,9,11,9,0,0,TimeSpan.Zero),new(2026,9,11,10,0,0,TimeSpan.Zero),false,"");
+    cache.PinCurrent(window,[appointment],now);
+    cache.StoreBrowsing(window,[],now.AddSeconds(1));
+    Equal(0,cache.Events(TimeZoneInfo.Utc).Count);
+    cache.PinCurrent(window,[appointment],now.AddSeconds(2));
+    Equal(appointment,cache.Events(TimeZoneInfo.Utc).Single());
+});
 Console.WriteLine($"{count-failures}/{count} checks passed");
 return failures==0?0:1;

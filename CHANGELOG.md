@@ -2,6 +2,27 @@
 
 All notable changes to Agenda are documented here. The current project version is **0.1.0**; future work should use an **Unreleased** section until the next version is prepared.
 
+## [Unreleased]
+
+### Added
+
+- Clicking an agenda event opens its event-specific source link when available. Windows appointments, Microsoft Graph web links, and HTTPS ICS VEVENT URLs are supported; events without a deep link now open an in-app details view with optional source-calendar actions.
+- The actual current month and its neighbors remain pinned in memory independently of the browsing buffer, including when browsing distant dates. Refreshes replace overlapping data without resurrecting deleted events.
+- A rolling five-month event buffer keeps the displayed month and its neighbors ready for navigation, refills before adjacent-month coverage runs out, and reuses loaded events for up to five minutes between refreshes.
+- Scroll the mouse wheel over the month calendar to navigate months, with precision-wheel accumulation and the same regional calendar behavior as the month buttons.
+- Calendar feeds can be reordered by dragging an entry's name or background, with native drag feedback and scrolling, persistent order, and Alt+Up/Down keyboard support on focused entries.
+
+### Changed
+
+- The calendar count button now toggles calendar visibility selection open and closed; redundant Back/feed-settings buttons and the feed information section in Settings were removed.
+- Reduced the agenda overflow indicator's height and bottom padding to leave more space for events.
+- Moved the Settings version label to the bottom-right above the footer, outside the scrolling settings content.
+
+### Fixed
+
+- Adding, editing, and removing feeds keeps feed management open throughout the calendar refresh, without briefly switching to the agenda or navigating back after completion.
+- Development certificate trust now targets Local Machine Trusted People and requires administrator privileges, correcting MSIX installation error 0x800B0109 after current-user signature verification succeeded.
+
 ## [0.1.0] — 2026-09-10
 
 ### Added
