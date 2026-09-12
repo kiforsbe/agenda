@@ -147,7 +147,7 @@ public sealed partial class MainWindow
         var useCustom=new ToggleSwitch { IsOn=custom is not null,MinWidth=0,VerticalAlignment=VerticalAlignment.Center };
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(useCustom,"Use custom reminders");
         var choices=new StackPanel { Spacing=4,HorizontalAlignment=HorizontalAlignment.Left };
-        var sound=new ComboBox { Header="Notification sound",HorizontalAlignment=HorizontalAlignment.Stretch,IsEnabled=custom is not null };
+        var sound=new ComboBox { Header="Notification sound",HorizontalAlignment=HorizontalAlignment.Stretch,Visibility=custom is not null?Visibility.Visible:Visibility.Collapsed };
         BuildSoundChoices(sound,custom?.Sound,true);
         void Save() {
             if(!useCustom.IsOn)_settings.EventReminders.Remove(key);
@@ -158,7 +158,7 @@ public sealed partial class MainWindow
         BuildReminderChoices(choices,custom?.MinutesBefore??_settings.ReminderMinutesBefore,Save);
         EnableReminderChoices(choices,custom is not null);
         sound.SelectionChanged+=(_,_)=>Save();
-        useCustom.Toggled+=(_,_)=>{ EnableReminderChoices(choices,useCustom.IsOn);sound.IsEnabled=useCustom.IsOn;Save(); };
+        useCustom.Toggled+=(_,_)=>{ EnableReminderChoices(choices,useCustom.IsOn);sound.Visibility=useCustom.IsOn?Visibility.Visible:Visibility.Collapsed;Save(); };
         panel.Children.Add(new TextBlock { Text="Use custom reminders" });
         var row=new Grid { ColumnSpacing=12 };
         row.ColumnDefinitions.Add(new ColumnDefinition { Width=GridLength.Auto });

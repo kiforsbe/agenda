@@ -85,6 +85,7 @@ public sealed partial class MainWindow : Window
             var today = DateOnly.FromDateTime(DateTime.Today);
             var yesterday = DateOnly.FromDateTime(_lastClockDate);
             UpdateClock();
+            foreach(var update in _agendaAppearanceUpdates)update();
             if (today != yesterday) {
                 RenderCalendar(); RenderAgenda();
                 if(CalendarMath.MonthStart(today,_culture)!=CalendarMath.MonthStart(yesterday,_culture))_=RefreshAsync();
@@ -239,12 +240,15 @@ public sealed partial class MainWindow : Window
             Math.Min(AgendaScrollViewer.ScrollableHeight,
                 AgendaScrollViewer.VerticalOffset + AgendaScrollViewer.ViewportHeight * 0.8), null);
 
+    private readonly List<Action> _agendaAppearanceUpdates=[];
+
     private void RenderAgenda()
     {
         if (!_ready) return;
         SelectedDateText.Text = _selected==DateOnly.FromDateTime(DateTime.Today)?"Today":_selected.ToDateTime(TimeOnly.MinValue).ToString("m",_culture);
         var items=_events.Where(e=>IsCalendarVisible(e.CalendarId)&&CalendarMath.OccursOn(e,_selected,TimeZoneInfo.Local)).OrderByDescending(e=>e.IsAllDay).ThenBy(e=>e.Start).ToArray();
         EventList.Children.Clear();
+        _agendaAppearanceUpdates.Clear();
         if (_renderedAgendaDate!=_selected) { AgendaScrollViewer.ChangeView(null,0,null,true);_renderedAgendaDate=_selected; }
         EmptyPanel.Visibility=items.Length==0?Visibility.Visible:Visibility.Collapsed;
         var connected=_provider?.AccountName is not null;
@@ -258,10 +262,22 @@ public sealed partial class MainWindow : Window
             grid.ColumnDefinitions.Add(new() { Width=new GridLength(4) }); grid.ColumnDefinitions.Add(new() { Width=new GridLength(1,GridUnitType.Star) });
             var bar=new Border { Width=4,CornerRadius=new CornerRadius(2),Background=CalendarColor(source?.Color) }; grid.Children.Add(bar);
             var stack=new StackPanel { Spacing=1 }; Grid.SetColumn(stack,1); grid.Children.Add(stack);
-            stack.Children.Add(new TextBlock { Text=item.Subject,FontWeight=Microsoft.UI.Text.FontWeights.SemiBold,TextWrapping=TextWrapping.Wrap });
+            var title=new TextBlock { Text=item.Subject,FontWeight=Microsoft.UI.Text.FontWeights.SemiBold,TextWrapping=TextWrapping.Wrap };
+            stack.Children.Add(title);
             stack.Children.Add(new TextBlock { Text=EventTime(item),FontSize=12,Foreground=(Brush)Application.Current.Resources["TextFillColorSecondaryBrush"] });
-            stack.Children.Add(new TextBlock { Text=string.Join(" · ",new[]{source?.Name,item.Location}.Where(s=>!string.IsNullOrWhiteSpace(s))),FontSize=12,TextWrapping=TextWrapping.Wrap,Foreground=(Brush)Application.Current.Resources["TextFillColorSecondaryBrush"] });
+            var metadata=new TextBlock { Text=string.Join(" · ",new[]{source?.Name,item.Location}.Where(s=>!string.IsNullOrWhiteSpace(s))),FontSize=12,TextWrapping=TextWrapping.Wrap,Foreground=(Brush)Application.Current.Resources["TextFillColorSecondaryBrush"] };
+            stack.Children.Add(metadata);
             var button=new Button { Content=grid,HorizontalAlignment=HorizontalAlignment.Stretch,HorizontalContentAlignment=HorizontalAlignment.Stretch,Background=new SolidColorBrush(Colors.Transparent),BorderThickness=new Thickness(0),Padding=new Thickness(2) };
+            void UpdateAppearance() {
+                var ended=EventPresentation.HasEnded(item,DateTimeOffset.UtcNow,TimeZoneInfo.Local);
+                var compact=ended;
+                metadata.Visibility=compact?Visibility.Collapsed:Visibility.Visible;
+                grid.Padding=compact?new Thickness(2,3,4,3):new Thickness(2,8,4,8);
+                title.Foreground=(Brush)Application.Current.Resources[ended?"TextFillColorSecondaryBrush":"TextFillColorPrimaryBrush"];
+                bar.Opacity=ended?0.4:1;
+            }
+            _agendaAppearanceUpdates.Add(UpdateAppearance);
+            UpdateAppearance();
             ToolTipService.SetToolTip(button,"Open source calendar");
             AutomationProperties.SetName(button,$"{item.Subject}, {EventTime(item)}. Open source calendar");
             button.Click += async (_,_) => await OpenSourceCalendarAsync(item);
@@ -445,13 +461,15 @@ public sealed partial class MainWindow : Window
         var source=_calendars.FirstOrDefault(calendar=>calendar.Id==item.CalendarId);
         var content=new StackPanel { Spacing=10 };
         content.Children.Add(new TextBlock { Text=EventTime(item),FontSize=14,TextWrapping=TextWrapping.Wrap });
-        if(source is not null) {
-            content.Children.Add(new TextBlock { Text=$"Calendar: {source.Name}",TextWrapping=TextWrapping.Wrap });
-            if(!string.IsNullOrWhiteSpace(source.AccountName))
-                content.Children.Add(new TextBlock { Text=$"Account: {source.AccountName}",TextWrapping=TextWrapping.Wrap,Foreground=(Brush)Application.Current.Resources["TextFillColorSecondaryBrush"] });
-        }
         if(!string.IsNullOrWhiteSpace(item.Location))
             content.Children.Add(new TextBlock { Text=$"Location: {item.Location}",TextWrapping=TextWrapping.Wrap });
+        if(source is not null) {
+            var sourceDetails=new StackPanel { Spacing=2 };
+            sourceDetails.Children.Add(new TextBlock { Text=$"Calendar: {source.Name}",FontSize=12,TextWrapping=TextWrapping.Wrap,Foreground=(Brush)Application.Current.Resources["TextFillColorSecondaryBrush"] });
+            if(!string.IsNullOrWhiteSpace(source.AccountName))
+                sourceDetails.Children.Add(new TextBlock { Text=$"Account: {source.AccountName}",FontSize=12,TextWrapping=TextWrapping.Wrap,Foreground=(Brush)Application.Current.Resources["TextFillColorSecondaryBrush"] });
+            content.Children.Add(sourceDetails);
+        }
         AddEventReminderOptions(content,item);
         var dialog=new ContentDialog { XamlRoot=Root.XamlRoot,Title=item.Subject,Content=new ScrollViewer { Content=content,MaxHeight=420 },CloseButtonText="Close",DefaultButton=ContentDialogButton.Close };
         if(ValidWebUri(item.JoinUrl))dialog.PrimaryButtonText="Join meeting";

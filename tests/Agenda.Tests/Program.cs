@@ -146,5 +146,14 @@ Check("Reminder sounds inherit defaults and preserve silent overrides", () => {
     var restored=System.Text.Json.JsonSerializer.Deserialize<EventReminderOptions>(System.Text.Json.JsonSerializer.Serialize(custom))!;
     Equal("Silent",restored.Sound!);
 });
+Check("Past-event presentation respects end instants and exclusive all-day dates", () => {
+    var now=new DateTimeOffset(2026,9,12,10,0,0,TimeSpan.Zero);
+    var item=new CalendarEvent("id","c","Meeting",now.AddHours(-1),now,false,"");
+    Equal(true,EventPresentation.HasEnded(item,now,TimeZoneInfo.Utc));
+    Equal(false,EventPresentation.HasEnded(item with { End=now.AddSeconds(1) },now,TimeZoneInfo.Utc));
+    var day=item with { IsAllDay=true,AllDayStart=new DateOnly(2026,9,12),AllDayEnd=new DateOnly(2026,9,13) };
+    Equal(false,EventPresentation.HasEnded(day,now,TimeZoneInfo.Utc));
+    Equal(true,EventPresentation.HasEnded(day,new DateTimeOffset(2026,9,13,0,0,0,TimeSpan.Zero),TimeZoneInfo.Utc));
+});
 Console.WriteLine($"{count-failures}/{count} checks passed");
 return failures==0?0:1;

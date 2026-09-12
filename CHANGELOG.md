@@ -1,6 +1,14 @@
 # Changelog
 
-All notable changes to Agenda are documented here. The current project version is **0.3.0**; future work should use an **Unreleased** section until the next version is prepared.
+All notable changes to Agenda are documented here. The current project version is **0.4.0**; future work should use an **Unreleased** section until the next version is prepared.
+
+## [0.4.0] — 2026-09-12
+
+### Changed
+
+- Event details prioritize time and location, with smaller calendar/account details below them. The notification sound selector appears only when custom reminders are enabled.
+
+- Ended events use a compact layout with reduced padding and muted titles and feed markers, hiding calendar names and locations even when hovered or focused. Their appearance updates as events end while the flyout is open.
 
 ## [0.3.0] — 2026-09-11
 

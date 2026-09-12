@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <!-- Update this value, CHANGELOG.md, and the tag together for each release. -->
-    <AgendaVersion>0.3.0</AgendaVersion>
+    <AgendaVersion>0.4.0</AgendaVersion>
     <Version>$(AgendaVersion)</Version>
     <AssemblyVersion>$(AgendaVersion).0</AssemblyVersion>
     <FileVersion>$(AgendaVersion).0</FileVersion>
