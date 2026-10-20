@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "product": {
+    "id": "example",
+    "name": "Example",
+    "manufacturer": "Example",
+    "upgradeCode": "{B164DDA6-9BD3-460C-BB4D-3DF900619C3C}"
+  },
+  "installation": {
+    "scope": "machine",
+    "directoryName": "Example",
+    "minimumWindowsBuild": 22000
+  },
+  "application": {
+    "executable": "Example.exe",
+    "icon": "Assets/Example.ico"
+  },
+  "shortcuts": [
+    {
+      "name": "Example",
+      "location": "startMenu"
+    }
+  ],
+  "payload": {
+    "requiredFiles": [
+      "Example.exe",
+      "Assets/Example.ico"
+    ],
+    "allowedExtensions": [
+      ".exe",
+      ".ico"
+    ],
+    "allowedFiles": []
+  }
+}

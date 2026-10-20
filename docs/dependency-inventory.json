@@ -1,0 +1,798 @@
+{
+  "ReviewedOn": "2026-10-20",
+  "Scope": "All project restore graphs, SDK download dependencies and the selected self-contained .NET runtime for both installed RIDs.",
+  "Packages": [
+    {
+      "Id": "Ical.Net",
+      "Version": "5.2.3",
+      "LatestListedStable": "5.2.3",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://github.com/ical-org/ical.net",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/ical.net/5.2.3.json",
+      "LicenseMaterials": []
+    },
+    {
+      "Id": "Microsoft.AspNetCore.App.Runtime.win-arm64",
+      "Version": "10.0.13",
+      "LatestListedStable": "10.0.13",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://asp.net/",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.aspnetcore.app.runtime.win-arm64/10.0.13.json",
+      "LicenseMaterials": [
+        {
+          "Path": "LICENSE.txt",
+          "SHA256": "D7A68596AB69B06F51CA278A6545148E4269A9381C26D597C13DF5D88E08CF5B"
+        },
+        {
+          "Path": "THIRD-PARTY-NOTICES.TXT",
+          "SHA256": "307D014F65D8482314F1400DDEAE7A0CBABB96C2207BCC77F6233CC10588E5D9"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.AspNetCore.App.Runtime.win-x64",
+      "Version": "10.0.13",
+      "LatestListedStable": "10.0.13",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://asp.net/",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.aspnetcore.app.runtime.win-x64/10.0.13.json",
+      "LicenseMaterials": [
+        {
+          "Path": "LICENSE.txt",
+          "SHA256": "D7A68596AB69B06F51CA278A6545148E4269A9381C26D597C13DF5D88E08CF5B"
+        },
+        {
+          "Path": "THIRD-PARTY-NOTICES.TXT",
+          "SHA256": "307D014F65D8482314F1400DDEAE7A0CBABB96C2207BCC77F6233CC10588E5D9"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.Identity.Client.Broker",
+      "Version": "4.91.1",
+      "LatestListedStable": "4.91.1",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://go.microsoft.com/fwlink/?linkid=844761",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.identity.client.broker/4.91.1.json",
+      "LicenseMaterials": []
+    },
+    {
+      "Id": "Microsoft.Identity.Client.NativeInterop",
+      "Version": "0.20.6",
+      "LatestListedStable": "0.20.6",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://office.visualstudio.com/_git/OneAuth",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.identity.client.nativeinterop/0.20.6.json",
+      "LicenseMaterials": [
+        {
+          "Path": "LICENSE",
+          "SHA256": "0FE665C2ADA5962FD01190AB5B2947B9A9D2C625A9F8225577441EB3256E14E3"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.Identity.Client",
+      "Version": "4.91.1",
+      "LatestListedStable": "4.91.1",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://go.microsoft.com/fwlink/?linkid=844761",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.identity.client/4.91.1.json",
+      "LicenseMaterials": []
+    },
+    {
+      "Id": "Microsoft.IdentityModel.Abstractions",
+      "Version": "8.23.0",
+      "LatestListedStable": "8.23.0",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.identitymodel.abstractions/8.23.0.json",
+      "LicenseMaterials": []
+    },
+    {
+      "Id": "Microsoft.NETCore.App.Host.win-arm64",
+      "Version": "10.0.13",
+      "LatestListedStable": "10.0.13",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://dot.net/",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.netcore.app.host.win-arm64/10.0.13.json",
+      "LicenseMaterials": [
+        {
+          "Path": "LICENSE.TXT",
+          "SHA256": "D7A68596AB69B06F51CA278A6545148E4269A9381C26D597C13DF5D88E08CF5B"
+        },
+        {
+          "Path": "THIRD-PARTY-NOTICES.TXT",
+          "SHA256": "6D15E10A101C6BFFF2AB4429ED061BF76C456FC4B23AD6B03E0D0F8377148A21"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.NETCore.App.Runtime.win-arm64",
+      "Version": "10.0.13",
+      "LatestListedStable": "10.0.13",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://dot.net/",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.netcore.app.runtime.win-arm64/10.0.13.json",
+      "LicenseMaterials": [
+        {
+          "Path": "LICENSE.TXT",
+          "SHA256": "D7A68596AB69B06F51CA278A6545148E4269A9381C26D597C13DF5D88E08CF5B"
+        },
+        {
+          "Path": "THIRD-PARTY-NOTICES.TXT",
+          "SHA256": "6D15E10A101C6BFFF2AB4429ED061BF76C456FC4B23AD6B03E0D0F8377148A21"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.NETCore.App.Runtime.win-x64",
+      "Version": "10.0.13",
+      "LatestListedStable": "10.0.13",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://dot.net/",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.netcore.app.runtime.win-x64/10.0.13.json",
+      "LicenseMaterials": [
+        {
+          "Path": "LICENSE.TXT",
+          "SHA256": "D7A68596AB69B06F51CA278A6545148E4269A9381C26D597C13DF5D88E08CF5B"
+        },
+        {
+          "Path": "THIRD-PARTY-NOTICES.TXT",
+          "SHA256": "6D15E10A101C6BFFF2AB4429ED061BF76C456FC4B23AD6B03E0D0F8377148A21"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.Web.WebView2",
+      "Version": "1.0.4258.31",
+      "LatestListedStable": "1.0.4258.31",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://aka.ms/webview",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.web.webview2/1.0.4258.31.json",
+      "LicenseMaterials": [
+        {
+          "Path": "LICENSE.txt",
+          "SHA256": "0AF8F1B807512AAE39C2AC1AA4D0CAE65CABECB6FD554B8439A5162A0D6ECA55"
+        },
+        {
+          "Path": "NOTICE.txt",
+          "SHA256": "106423785C5B7EBA0A8E61D1837F2132E9C828E20AD530F565D981C1DF60DD90"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.Windows.AI.MachineLearning",
+      "Version": "2.4.89",
+      "LatestListedStable": "2.4.89",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://github.com/microsoft/windowsml",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windows.ai.machinelearning/2.4.89.json",
+      "LicenseMaterials": [
+        {
+          "Path": "license.txt",
+          "SHA256": "66395F8CB219087FAE2BD025010BD9076B736C14F03B48F20295471C0C376814"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.Windows.SDK.BuildTools.MSIX",
+      "Version": "1.7.260930100",
+      "LatestListedStable": "1.7.260930100",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://aka.ms/WinSDKProjectURL",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windows.sdk.buildtools.msix/1.7.260930100.json",
+      "LicenseMaterials": [
+        {
+          "Path": "NOTICE.txt",
+          "SHA256": "F09EBF5DE6A5C8E7EBC900BB2E52AF2F75E13610A1CF91E1514530E448D956C3"
+        },
+        {
+          "Path": "sdk_license.txt",
+          "SHA256": "A7A5C7E7FF998558983D6ACA2702117C328AEB0C6404D298CB275F5623C6FD13"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.Windows.SDK.BuildTools",
+      "Version": "10.0.28000.2705",
+      "LatestListedStable": "10.0.28000.2705",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/WinSDKLicenseURL",
+      "Upstream": "https://aka.ms/WinSDKProjectURL",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windows.sdk.buildtools/10.0.28000.2705.json",
+      "LicenseMaterials": []
+    },
+    {
+      "Id": "Microsoft.Windows.SDK.NET.Ref",
+      "Version": "10.0.19041.87",
+      "LatestListedStable": "10.0.28000.87",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/WinSDKLicenseURL",
+      "Upstream": "https://aka.ms/WinSDKProjectURL",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windows.sdk.net.ref/10.0.19041.87.json",
+      "LicenseMaterials": []
+    },
+    {
+      "Id": "Microsoft.Windows.SDK.NET.Ref",
+      "Version": "10.0.26100.87",
+      "LatestListedStable": "10.0.28000.87",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/WinSDKLicenseURL",
+      "Upstream": "https://aka.ms/WinSDKProjectURL",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windows.sdk.net.ref/10.0.26100.87.json",
+      "LicenseMaterials": []
+    },
+    {
+      "Id": "Microsoft.WindowsAppSDK.AI",
+      "Version": "2.5.5",
+      "LatestListedStable": "2.5.5",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://github.com/microsoft/windowsappsdk",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsappsdk.ai/2.5.5.json",
+      "LicenseMaterials": [
+        {
+          "Path": "license.txt",
+          "SHA256": "5B11E6347756E40FE0274BC08C97F89201B94F0D50181A09A00F1F4740840501"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.WindowsAppSDK.Base",
+      "Version": "2.0.4",
+      "LatestListedStable": "2.0.4",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://github.com/microsoft/windowsappsdk",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsappsdk.base/2.0.4.json",
+      "LicenseMaterials": [
+        {
+          "Path": "license.txt",
+          "SHA256": "5B11E6347756E40FE0274BC08C97F89201B94F0D50181A09A00F1F4740840501"
+        },
+        {
+          "Path": "NOTICE.txt",
+          "SHA256": "572B43D41DEA717DAE7DC5DE69ACB20A74DF025E8F5A3C0AA6F7BCA02615E23C"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.WindowsAppSDK.DWrite",
+      "Version": "2.1.0",
+      "LatestListedStable": "2.1.0",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://aka.ms/WindowsAppSDK",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsappsdk.dwrite/2.1.0.json",
+      "LicenseMaterials": [
+        {
+          "Path": "license.txt",
+          "SHA256": "5B11E6347756E40FE0274BC08C97F89201B94F0D50181A09A00F1F4740840501"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.WindowsAppSDK.Foundation",
+      "Version": "2.3.12",
+      "LatestListedStable": "2.3.12",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://aka.ms/windowsappsdk",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsappsdk.foundation/2.3.12.json",
+      "LicenseMaterials": [
+        {
+          "Path": "license.txt",
+          "SHA256": "5B11E6347756E40FE0274BC08C97F89201B94F0D50181A09A00F1F4740840501"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.WindowsAppSDK.InteractiveExperiences",
+      "Version": "2.1.9",
+      "LatestListedStable": "2.1.9",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://aka.ms/windowsappsdk",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsappsdk.interactiveexperiences/2.1.9.json",
+      "LicenseMaterials": [
+        {
+          "Path": "license.txt",
+          "SHA256": "5B11E6347756E40FE0274BC08C97F89201B94F0D50181A09A00F1F4740840501"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.WindowsAppSDK.ML",
+      "Version": "2.1.94",
+      "LatestListedStable": "2.1.94",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://github.com/microsoft/windowsappsdk",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsappsdk.ml/2.1.94.json",
+      "LicenseMaterials": [
+        {
+          "Path": "license.txt",
+          "SHA256": "656AAB74C15AA9F9964BCDCC993EB2755CBDB4822D5E0E3BC61D2E281897F758"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.WindowsAppSDK.Runtime",
+      "Version": "2.5.1",
+      "LatestListedStable": "2.5.1",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://github.com/microsoft/windowsappsdk",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsappsdk.runtime/2.5.1.json",
+      "LicenseMaterials": [
+        {
+          "Path": "license.txt",
+          "SHA256": "5B11E6347756E40FE0274BC08C97F89201B94F0D50181A09A00F1F4740840501"
+        },
+        {
+          "Path": "NOTICE.txt",
+          "SHA256": "572B43D41DEA717DAE7DC5DE69ACB20A74DF025E8F5A3C0AA6F7BCA02615E23C"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.WindowsAppSDK.Search",
+      "Version": "2.5.5",
+      "LatestListedStable": "2.5.5",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://github.com/microsoft/windowsappsdk",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsappsdk.search/2.5.5.json",
+      "LicenseMaterials": [
+        {
+          "Path": "license.txt",
+          "SHA256": "5B11E6347756E40FE0274BC08C97F89201B94F0D50181A09A00F1F4740840501"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.WindowsAppSDK.Widgets",
+      "Version": "2.0.5",
+      "LatestListedStable": "2.0.5",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://github.com/microsoft/windowsappsdk",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsappsdk.widgets/2.0.5.json",
+      "LicenseMaterials": [
+        {
+          "Path": "license.txt",
+          "SHA256": "5B11E6347756E40FE0274BC08C97F89201B94F0D50181A09A00F1F4740840501"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.WindowsAppSDK.WinUI",
+      "Version": "2.3.9",
+      "LatestListedStable": "2.3.9",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://github.com/microsoft/windowsappsdk",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsappsdk.winui/2.3.9.json",
+      "LicenseMaterials": [
+        {
+          "Path": "license.txt",
+          "SHA256": "5B11E6347756E40FE0274BC08C97F89201B94F0D50181A09A00F1F4740840501"
+        },
+        {
+          "Path": "NOTICE.txt",
+          "SHA256": "E25393C0D340A1821827B093FA4DBBFCCCD8FEB7BF769E7FA773E3955CD5314B"
+        },
+        {
+          "Path": "tools/NOTICE.txt",
+          "SHA256": "4A9321FD173EBF4E8BBC79130794D4C3FE233ACCCBF7DB8765E0ADDB8FBFB8CA"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.WindowsAppSDK",
+      "Version": "2.5.1",
+      "LatestListedStable": "2.5.1",
+      "Listed": true,
+      "LicenseExpression": null,
+      "LicenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "Upstream": "https://github.com/microsoft/windowsappsdk",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsappsdk/2.5.1.json",
+      "LicenseMaterials": [
+        {
+          "Path": "license.txt",
+          "SHA256": "5B11E6347756E40FE0274BC08C97F89201B94F0D50181A09A00F1F4740840501"
+        },
+        {
+          "Path": "NOTICE.txt",
+          "SHA256": "572B43D41DEA717DAE7DC5DE69ACB20A74DF025E8F5A3C0AA6F7BCA02615E23C"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.WindowsDesktop.App.Runtime.win-arm64",
+      "Version": "10.0.13",
+      "LatestListedStable": "10.0.13",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://dot.net/",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsdesktop.app.runtime.win-arm64/10.0.13.json",
+      "LicenseMaterials": [
+        {
+          "Path": "LICENSE",
+          "SHA256": "A89886665765362EB77E0F8E26602C924520041D1711B2EEDC136434FE4D01AB"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
+      "Version": "10.0.13",
+      "LatestListedStable": "10.0.13",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://dot.net/",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/microsoft.windowsdesktop.app.runtime.win-x64/10.0.13.json",
+      "LicenseMaterials": [
+        {
+          "Path": "LICENSE",
+          "SHA256": "A89886665765362EB77E0F8E26602C924520041D1711B2EEDC136434FE4D01AB"
+        }
+      ]
+    },
+    {
+      "Id": "NodaTime",
+      "Version": "3.3.5",
+      "LatestListedStable": "3.3.5",
+      "Listed": true,
+      "LicenseExpression": "Apache-2.0",
+      "LicenseUrl": "https://licenses.nuget.org/Apache-2.0",
+      "Upstream": "https://nodatime.org/",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/nodatime/3.3.5.json",
+      "LicenseMaterials": []
+    },
+    {
+      "Id": "System.Numerics.Tensors",
+      "Version": "10.0.13",
+      "LatestListedStable": "10.0.13",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://dot.net/",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/system.numerics.tensors/10.0.13.json",
+      "LicenseMaterials": [
+        {
+          "Path": "THIRD-PARTY-NOTICES.TXT",
+          "SHA256": "6D15E10A101C6BFFF2AB4429ED061BF76C456FC4B23AD6B03E0D0F8377148A21"
+        }
+      ]
+    },
+    {
+      "Id": "System.Security.Cryptography.ProtectedData",
+      "Version": "10.0.13",
+      "LatestListedStable": "10.0.13",
+      "Listed": true,
+      "LicenseExpression": "MIT",
+      "LicenseUrl": "https://licenses.nuget.org/MIT",
+      "Upstream": "https://dot.net/",
+      "Registry": "https://api.nuget.org/v3/registration5-gz-semver2/system.security.cryptography.protecteddata/10.0.13.json",
+      "LicenseMaterials": [
+        {
+          "Path": "THIRD-PARTY-NOTICES.TXT",
+          "SHA256": "6D15E10A101C6BFFF2AB4429ED061BF76C456FC4B23AD6B03E0D0F8377148A21"
+        }
+      ]
+    }
+  ],
+  "Reports": [
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--outdated --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "src/Agenda.App/Agenda.App.csproj"
+          }
+        ]
+      },
+      "Kind": "outdated"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--deprecated --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "src/Agenda.App/Agenda.App.csproj"
+          }
+        ]
+      },
+      "Kind": "deprecated"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--vulnerable --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "src/Agenda.App/Agenda.App.csproj"
+          }
+        ]
+      },
+      "Kind": "vulnerable"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--outdated --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "src/Agenda.Core/Agenda.Core.csproj"
+          }
+        ]
+      },
+      "Kind": "outdated"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--deprecated --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "src/Agenda.Core/Agenda.Core.csproj"
+          }
+        ]
+      },
+      "Kind": "deprecated"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--vulnerable --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "src/Agenda.Core/Agenda.Core.csproj"
+          }
+        ]
+      },
+      "Kind": "vulnerable"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--outdated --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "src/Agenda.Providers/Agenda.Providers.csproj"
+          }
+        ]
+      },
+      "Kind": "outdated"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--deprecated --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "src/Agenda.Providers/Agenda.Providers.csproj"
+          }
+        ]
+      },
+      "Kind": "deprecated"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--vulnerable --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "src/Agenda.Providers/Agenda.Providers.csproj"
+          }
+        ]
+      },
+      "Kind": "vulnerable"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--outdated --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "tests/Agenda.ProviderTests/Agenda.ProviderTests.csproj"
+          }
+        ]
+      },
+      "Kind": "outdated"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--deprecated --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "tests/Agenda.ProviderTests/Agenda.ProviderTests.csproj"
+          }
+        ]
+      },
+      "Kind": "deprecated"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--vulnerable --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "tests/Agenda.ProviderTests/Agenda.ProviderTests.csproj"
+          }
+        ]
+      },
+      "Kind": "vulnerable"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--outdated --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "tests/Agenda.ShellTests/Agenda.ShellTests.csproj"
+          }
+        ]
+      },
+      "Kind": "outdated"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--deprecated --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "tests/Agenda.ShellTests/Agenda.ShellTests.csproj"
+          }
+        ]
+      },
+      "Kind": "deprecated"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--vulnerable --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "tests/Agenda.ShellTests/Agenda.ShellTests.csproj"
+          }
+        ]
+      },
+      "Kind": "vulnerable"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--outdated --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "tests/Agenda.Tests/Agenda.Tests.csproj"
+          }
+        ]
+      },
+      "Kind": "outdated"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--deprecated --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "tests/Agenda.Tests/Agenda.Tests.csproj"
+          }
+        ]
+      },
+      "Kind": "deprecated"
+    },
+    {
+      "Report": {
+        "version": 1,
+        "parameters": "--vulnerable --include-transitive",
+        "sources": [
+          "https://api.nuget.org/v3/index.json"
+        ],
+        "projects": [
+          {
+            "path": "tests/Agenda.Tests/Agenda.Tests.csproj"
+          }
+        ]
+      },
+      "Kind": "vulnerable"
+    }
+  ]
+}

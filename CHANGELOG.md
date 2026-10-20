@@ -2,6 +2,18 @@
 
 All notable changes to Agenda are documented here. The current project version is **0.4.0**; future work should use an **Unreleased** section until the next version is prepared.
 
+## [Unreleased]
+
+### Added
+
+- JSON-configured, reusable native MSI packaging for x64 and ARM64 with inspected payloads and artifact hash manifests.
+- Standard build verification and contributor, security, licensing and developer documentation.
+
+### Changed
+
+- Updated the reviewed dependency set and retained existing MSIX packaging commands.
+- Made MSI the default and MSIX opt-in, with unsigned builds by default and explicit certificate selection for signing.
+
 ## [0.4.0] — 2026-09-12
 
 ### Changed

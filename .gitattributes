@@ -2,3 +2,10 @@
 *.png binary
 *.ico binary
 *.msix binary
+*.msi binary
+
+# Preserve reviewed upstream license bytes and their recorded SHA-256 hashes.
+deployment/licenses/** -text
+deployment/licenses/sources.json text eol=lf
+# RTF is a formatted upstream document; do not lint/diff its control-word whitespace.
+deployment/licenses/**/*.rtf binary

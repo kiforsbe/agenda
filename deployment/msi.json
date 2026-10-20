@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "product": {
+    "id": "Agenda",
+    "name": "Agenda",
+    "manufacturer": "Agenda",
+    "upgradeCode": "{D3E56D1A-A6C7-4C1D-BAF6-79ED739A2705}"
+  },
+  "installation": {
+    "scope": "machine",
+    "directoryName": "Agenda",
+    "minimumWindowsBuild": 22000
+  },
+  "application": {
+    "executable": "Agenda.App.exe",
+    "icon": "Assets/Agenda.ico"
+  },
+  "shortcuts": [
+    {
+      "name": "Agenda",
+      "location": "startMenu"
+    }
+  ],
+  "payload": {
+    "requiredFiles": [
+      "Agenda.App.exe",
+      "Agenda.App.dll",
+      "Agenda.App.pri",
+      "App.xbf",
+      "MainWindow.xbf",
+      "Microsoft.WindowsAppRuntime.Insights.Resource.dll",
+      "Agenda-LICENSE.txt",
+      "Agenda-THIRD-PARTY-NOTICES.md"
+    ],
+    "allowedExtensions": [
+      ".dll",
+      ".exe",
+      ".winmd",
+      ".pri",
+      ".xbf",
+      ".mui",
+      ".png",
+      ".ico",
+      ".svg",
+      ".txt",
+      ".md",
+      ".html",
+      ".manifest",
+      ".rtf"
+    ],
+    "allowedFiles": [
+      "Agenda.App.deps.json",
+      "Agenda.App.runtimeconfig.json",
+      "workloads.json",
+      "workloads.365.json",
+      "workloads.j32.json",
+      "workloads.lnl.json",
+      "workloads.qnn.json",
+      "workloads.stx.json"
+    ]
+  }
+}

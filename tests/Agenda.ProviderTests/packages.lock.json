@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0-windows10.0.19041": {
+      "Ical.Net": {
+        "type": "Transitive",
+        "resolved": "5.2.3",
+        "contentHash": "zROvmrRPKqND0e0Bt/wSY+d8iYtL4+sP9mORyjT/ySBiIDfik4iovTjS+L9PFg+zoXfkJ5eBTHK2lX9c7lganw==",
+        "dependencies": {
+          "NodaTime": "3.2.2"
+        }
+      },
+      "Microsoft.Identity.Client": {
+        "type": "Transitive",
+        "resolved": "4.91.1",
+        "contentHash": "o3loEgTbvlVlret7jG76SfOoeRWQQqyY11+rQXvkI9tQzs5I3C1FDkD3hZTMefC5LBeGZu3nRK9MJXiVcW4skQ==",
+        "dependencies": {
+          "Microsoft.IdentityModel.Abstractions": "8.14.0"
+        }
+      },
+      "Microsoft.Identity.Client.Broker": {
+        "type": "Transitive",
+        "resolved": "4.91.1",
+        "contentHash": "Dgbz4gTFLraA7YsWMfcPd5gzW8l9W4OC58VUOea42eyeR2pZugiVzShcHXfN34E6T/t/8hIXpSm6zMPEWDUSNg==",
+        "dependencies": {
+          "Microsoft.Identity.Client": "4.91.1",
+          "Microsoft.Identity.Client.NativeInterop": "0.20.6"
+        }
+      },
+      "Microsoft.Identity.Client.NativeInterop": {
+        "type": "Transitive",
+        "resolved": "0.20.6",
+        "contentHash": "noyfdMfVxyWpM6xUDmlW6gUvZ5ci24z7Qoy15JvynTQfZV5vTD2NEdsnT5Gy4ngViwgdIp5iRjRy10jAKXFAgw=="
+      },
+      "Microsoft.IdentityModel.Abstractions": {
+        "type": "Transitive",
+        "resolved": "8.23.0",
+        "contentHash": "JjiBkKj12OKvuWr+kB5sQwb7fmWW5bi03Mq/rd2Fu/7YwZ1RWQO9KhI9lBxki4o1VvY0wzqny8c7nwx1uuZzVg=="
+      },
+      "NodaTime": {
+        "type": "Transitive",
+        "resolved": "3.3.5",
+        "contentHash": "0qtGKHOYhQGCeUItP4RN8KJktsKD9j/B4IqmoecUL+ymReq69O71qEpZY6x0aQPZa5KDLXY41aEOOHZ9T6Uqgw=="
+      },
+      "System.Security.Cryptography.ProtectedData": {
+        "type": "Transitive",
+        "resolved": "10.0.13",
+        "contentHash": "aUSmC6cPjFLSE0rDTsmkR3wvUOnscqewebOaaELEToh12sNmoltZqT3f0C81mJ1zhxKjWco25soHTvYwsXCsUw=="
+      },
+      "agenda.core": {
+        "type": "Project"
+      },
+      "agenda.providers": {
+        "type": "Project",
+        "dependencies": {
+          "Agenda.Core": "[0.4.0, )",
+          "Ical.Net": "[5.2.3, )",
+          "Microsoft.Identity.Client.Broker": "[4.91.1, )",
+          "Microsoft.IdentityModel.Abstractions": "[8.23.0, )",
+          "NodaTime": "[3.3.5, )",
+          "System.Security.Cryptography.ProtectedData": "[10.0.13, )"
+        }
+      }
+    },
+    "net10.0-windows10.0.19041/win-arm64": {
+      "Microsoft.Identity.Client.NativeInterop": {
+        "type": "Transitive",
+        "resolved": "0.20.6",
+        "contentHash": "noyfdMfVxyWpM6xUDmlW6gUvZ5ci24z7Qoy15JvynTQfZV5vTD2NEdsnT5Gy4ngViwgdIp5iRjRy10jAKXFAgw=="
+      }
+    },
+    "net10.0-windows10.0.19041/win-x64": {
+      "Microsoft.Identity.Client.NativeInterop": {
+        "type": "Transitive",
+        "resolved": "0.20.6",
+        "contentHash": "noyfdMfVxyWpM6xUDmlW6gUvZ5ci24z7Qoy15JvynTQfZV5vTD2NEdsnT5Gy4ngViwgdIp5iRjRy10jAKXFAgw=="
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <Project>
-  <!-- Windows App SDK 2.4's self-contained component copy omits the aggregate
+  <!-- Preserve the Windows App SDK self-contained notification resource workaround:
        resource used by AppNotificationManager.Register (HRESULT 0x8007007E).
        Extract only this DLL from the matching NuGet runtime, never the machine's
        installed runtime. Upstream: microsoft/WindowsAppSDK#6071 and #6725. -->

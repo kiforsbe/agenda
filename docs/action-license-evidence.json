@@ -1,0 +1,667 @@
+[
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "88B0189BD57C117D5903E99F0DA03CB85B452419C360AC480EC5C783F8E089BC",
+    "CachedNotice": ".licenses-npm-@actions-core.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "D5F7D9CB224651A18BD0E0740D2ACC2FB572F9E0FC6F8655E4FF7C691D361D78",
+    "CachedNotice": ".licenses-npm-@actions-exec.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "5B14B049260335F92E1BE21545F257AF5D200437AE99D2894AB9A4924D2A073D",
+    "CachedNotice": ".licenses-npm-@actions-github.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "other",
+    "Action": "checkout",
+    "SHA256": "59214E3AFDC558FC4B355EB36B89B9330FC4CD2D97EE341A1880746333FE3B46",
+    "CachedNotice": ".licenses-npm-@actions-http-client-3.0.2.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "other",
+    "Action": "checkout",
+    "SHA256": "57A69514FD6B9EBB0C89C995EAAA2DE9D4243EA0BEBFB4400CEB7FCB36E598A0",
+    "CachedNotice": ".licenses-npm-@actions-http-client-4.0.1.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "CDD67DE6C960E083B48D57D53787CBEB6C240282DF3DA9128A04E2180F162F99",
+    "CachedNotice": ".licenses-npm-@actions-io.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "5D3EBBD719D56E85D0E5F81BE3EA82A9ED5B5946E29ECC0DB7F77E1811103F1F",
+    "CachedNotice": ".licenses-npm-@actions-tool-cache.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "37707682A627A51F0322688CB11A965902954EC295EC227A59B42FFFB7C17A84",
+    "CachedNotice": ".licenses-npm-@octokit-auth-token.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "80D10F55D807E858BA3AA052F2FCF09D1977817E87439A2522E11CABCEFCFBF6",
+    "CachedNotice": ".licenses-npm-@octokit-core.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "EF189177292CE6B5D46E0ADA4E5D071D560136F601B343B9CB4ECDA5EDF9CE1D",
+    "CachedNotice": ".licenses-npm-@octokit-endpoint.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "1C8985627AEF677ADD73217C20FE0839659C4FECC0EB10658BD94273B149F04C",
+    "CachedNotice": ".licenses-npm-@octokit-graphql.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "6FFB0939478CD16EF98C8A059C4B339DD75DC0ED8088F3B34C7E8322F273E40C",
+    "CachedNotice": ".licenses-npm-@octokit-openapi-types.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "65A0498B6646CE0CA68631C2ED01D029D00C78585A236FE7EE68DFD676702C7E",
+    "CachedNotice": ".licenses-npm-@octokit-plugin-paginate-rest.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "63054938E03E3B228E17F78349BA191B25FC4DD185AE9808679BD0D4EA421FE4",
+    "CachedNotice": ".licenses-npm-@octokit-plugin-rest-endpoint-methods.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "779926E2185F5C5AA941274B34F5BB41753D772343EF7447A0A5403166C3CE3C",
+    "CachedNotice": ".licenses-npm-@octokit-request-error.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "C13895F071DCC8C017472F38083A664C1BB00E49EF05E7DCD9BC6B8ECA7499F9",
+    "CachedNotice": ".licenses-npm-@octokit-request.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "C26DB6EB5FE15124A72609B7E851390DF75CE9D38E65ADF9EF4694AAC36FA1E0",
+    "CachedNotice": ".licenses-npm-@octokit-types.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "apache-2.0",
+    "Action": "checkout",
+    "SHA256": "9C40C7C3229715B895E63D8DA519EFEB701DBE4BCE5D6147FE434616A6136370",
+    "CachedNotice": ".licenses-npm-before-after-hook.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "86CB713A6EDFFA23F4A593E5E6C7BD1852B1D59887BAB4CDED60A6B509CE0D4B",
+    "CachedNotice": ".licenses-npm-content-type.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "712AD5D07D5673F6F2C9DAF1C7A09A7F041B6436B0A8B3A18A71221D31A90444",
+    "CachedNotice": ".licenses-npm-json-with-bigint.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "isc",
+    "Action": "checkout",
+    "SHA256": "1E5EF458A2D3773020C90F3C0FAEB49FC9A9788CCDBCFE0934D66AE449FE7BDB",
+    "CachedNotice": ".licenses-npm-semver.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "D31E076ABF1FA9783DCDC37E27753F6BD9A61F1A5935676475C39FF68297CE78",
+    "CachedNotice": ".licenses-npm-tunnel.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "checkout",
+    "SHA256": "CD339150046458BEA3B68305352F1B20F559E77D741CBF1AB39895C27DEB41F5",
+    "CachedNotice": ".licenses-npm-undici.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "isc",
+    "Action": "checkout",
+    "SHA256": "B0128AD96481B25F521AE4072B506ACF1EE8B54B603270C544D7E9C67543694A",
+    "CachedNotice": ".licenses-npm-universal-user-agent.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "80756D82AF60159C2CE894CA2F1D1D10244CE911C242185CFABC49E353D487AD",
+    "CachedNotice": ".licenses-npm-@actions-cache.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "88B0189BD57C117D5903E99F0DA03CB85B452419C360AC480EC5C783F8E089BC",
+    "CachedNotice": ".licenses-npm-@actions-core.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "D5F7D9CB224651A18BD0E0740D2ACC2FB572F9E0FC6F8655E4FF7C691D361D78",
+    "CachedNotice": ".licenses-npm-@actions-exec.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "5B14B049260335F92E1BE21545F257AF5D200437AE99D2894AB9A4924D2A073D",
+    "CachedNotice": ".licenses-npm-@actions-github.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "B7D958792DFBC03FE98CF3D0676038FC1826C2906306A29122D8D48E3CBFA66B",
+    "CachedNotice": ".licenses-npm-@actions-glob-0.6.1.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "E0517685D9AF1083DA2EA99012243E1C5B3A50460C38C85FA588EF42510858AD",
+    "CachedNotice": ".licenses-npm-@actions-glob-0.7.0.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "other",
+    "Action": "setup-dotnet",
+    "SHA256": "59214E3AFDC558FC4B355EB36B89B9330FC4CD2D97EE341A1880746333FE3B46",
+    "CachedNotice": ".licenses-npm-@actions-http-client-3.0.2.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "other",
+    "Action": "setup-dotnet",
+    "SHA256": "57A69514FD6B9EBB0C89C995EAAA2DE9D4243EA0BEBFB4400CEB7FCB36E598A0",
+    "CachedNotice": ".licenses-npm-@actions-http-client-4.0.1.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "CDD67DE6C960E083B48D57D53787CBEB6C240282DF3DA9128A04E2180F162F99",
+    "CachedNotice": ".licenses-npm-@actions-io.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "E6BF1958179C3C014C45C3AAEFCA4E7F9FAD7D3C99C49D725DEC71FF89C25DC5",
+    "CachedNotice": ".licenses-npm-@azure-abort-controller.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "1E35EC5457A0DCE6C0A39660F00F3243935762557B3D665A8D84A77ECC2A6FB9",
+    "CachedNotice": ".licenses-npm-@azure-core-auth.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "571FF96F014E14972A8614583F87D268ADC8A6C1861D891E2CD850E00D329752",
+    "CachedNotice": ".licenses-npm-@azure-core-client.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "A19649D0D2CC52BC59D2AA011CCD85661BA86E1D222A4B82AF3906552BA4271D",
+    "CachedNotice": ".licenses-npm-@azure-core-http-compat.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "404461E8770202F4CC12EFE715F0294285B2C1C48B0063708ED186BBABA55AE4",
+    "CachedNotice": ".licenses-npm-@azure-core-lro.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "278AFACCA342C18A659A74B7FBA31169C1850342FB22C1067515FD0DDD9DA684",
+    "CachedNotice": ".licenses-npm-@azure-core-paging.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "08F2FA56D53E0B80DEDEBC2D4B469CC667EF68262F7637B0494775A4802682EA",
+    "CachedNotice": ".licenses-npm-@azure-core-rest-pipeline.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "95804A90B9BE6F1B49B6C31642414BFF49F87DF4827D5C135717449CD92B1992",
+    "CachedNotice": ".licenses-npm-@azure-core-tracing.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "9B8DCD86A7E06C8F6880F8F6E8E9C6EB6D2AEAA7844D9175B2520FFD4A7FEECB",
+    "CachedNotice": ".licenses-npm-@azure-core-util.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "FA675D30B68F1EE9FC0A065419ACB485C5463480A3050E2FA55C883BBE02C351",
+    "CachedNotice": ".licenses-npm-@azure-core-xml.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "C1B7547EF5205B4D6886FFD0EDC4DEB1823706C71705E185354F4B8F0BCBAFD0",
+    "CachedNotice": ".licenses-npm-@azure-logger.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "D7C0D6F3574DD6043C3391D0FC8B8A56D0F8886740343BA2AC5C6452561E3795",
+    "CachedNotice": ".licenses-npm-@azure-storage-blob.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "CD442C71BFEF369CE100D71167992A65EBEB1A84B7396661FA177AAFA411757F",
+    "CachedNotice": ".licenses-npm-@azure-storage-common.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "18BE94628938E1F6236ED25E387E705F78F22421EFEE031E79BD7C957562C7DF",
+    "CachedNotice": ".licenses-npm-@nodable-entities.dep.yml",
+    "HasLicenseText": false
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "D3DC7172CA6BF9745AAB7AD01B2EDFFA60BD8B3B190B8B233C6A43F2BC1C022A",
+    "CachedNotice": ".licenses-npm-@octokit-auth-token.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "B5027CEE731511F917E931EBBD7DF92529AE79C048058CEB4AA507C978389CD0",
+    "CachedNotice": ".licenses-npm-@octokit-core.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "6A9934EB46D3B3259E078994DFC11BD5C18DC24D4D9704C7F1E79C0609CA800F",
+    "CachedNotice": ".licenses-npm-@octokit-endpoint.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "65EEE3904510E5AEA72AB66B388AB6B522A37448D8EBCBEEA09C005BAB674DAB",
+    "CachedNotice": ".licenses-npm-@octokit-graphql.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "8C16D0541515B15716C204E7E7821275A3F161C3EC470025C48C5F38450EA822",
+    "CachedNotice": ".licenses-npm-@octokit-openapi-types.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "3AB040003100A499F8F810CFD88EDA85F828392A591FE6D2D64EA53B698EA5D1",
+    "CachedNotice": ".licenses-npm-@octokit-plugin-paginate-rest.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "3B34F063A3AC6DEBF8A0DC5B879B6C4A8FE8C9093A7B51731D393E5B10B3F204",
+    "CachedNotice": ".licenses-npm-@octokit-plugin-rest-endpoint-methods.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "F3CD18A34145A10B98E8A7F519C8ACE2EBE651B1EE0E786C0FF0DE348D970322",
+    "CachedNotice": ".licenses-npm-@octokit-request-error.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "41F3A74B9B6A47DBAE2C1DFE1ECC0EF2A07F9D107C848025FA57ED47F2DEBD4C",
+    "CachedNotice": ".licenses-npm-@octokit-request.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "D020F8F654D377E04C58A39A172CA05FC4E41FA2D334D907B9D31254775521CA",
+    "CachedNotice": ".licenses-npm-@octokit-types.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "apache-2.0",
+    "Action": "setup-dotnet",
+    "SHA256": "67365D079671C885D511A90F3ABF65FF6693D8FD3088718B3BBD58A250D7A746",
+    "CachedNotice": ".licenses-npm-@protobuf-ts-runtime-rpc.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "apache-2.0",
+    "Action": "setup-dotnet",
+    "SHA256": "FFA212C3891A7308A7B738F875585E28E5A1C97A2C7D8E0CFD81B67F782DC3AE",
+    "CachedNotice": ".licenses-npm-@protobuf-ts-runtime.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "DB3FAF43A775164457A3F660A12911AC52E29FEF6F880037B3611A2C8BB42B30",
+    "CachedNotice": ".licenses-npm-@typespec-ts-http-runtime.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "CC28B97C68CF9BF241E4CF0B05E0AACB59EA540C12A1A5B00926B324015F630F",
+    "CachedNotice": ".licenses-npm-agent-base.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "FFEC48FD072C3712649CF0B41BC6CEF062FD9DE4BD09D4B94875D233D78428A6",
+    "CachedNotice": ".licenses-npm-anynum.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "6E9AEB4586D146F78D07A455D00144BCC0E9DC959685E3AC8493A445F1625111",
+    "CachedNotice": ".licenses-npm-balanced-match-1.0.2.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "other",
+    "Action": "setup-dotnet",
+    "SHA256": "B7F9A8C6CE61D3CD3CB080F3A502BCF2E3404EB5C195A31069CCEB6C7DC62DD4",
+    "CachedNotice": ".licenses-npm-balanced-match-4.0.4.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "apache-2.0",
+    "Action": "setup-dotnet",
+    "SHA256": "9D0ED9AF7DE8D0F0C6C3DBEDFFEEF5E5CA833D4F75A9CBAF237F81A7E9CDD405",
+    "CachedNotice": ".licenses-npm-before-after-hook.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "84EC8FB051F4005A2DD865AC70BC25E1ED01BDE2DD65B9D2012FF68645DB65E1",
+    "CachedNotice": ".licenses-npm-brace-expansion-1.1.15.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "other",
+    "Action": "setup-dotnet",
+    "SHA256": "AF855A0D3F96F8BD16FA7FA833F3DFEB87B9C358735D378627B9ED61FD465151",
+    "CachedNotice": ".licenses-npm-brace-expansion-5.0.6.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "other",
+    "Action": "setup-dotnet",
+    "SHA256": "4BFDE62903AD0D8819EA36ED304B1C1F547E37086FE1B17247D24BD75A004602",
+    "CachedNotice": ".licenses-npm-concat-map.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "6D54548D717CBB077A97378000C4B7A22CDC9BD0E676B2B78F238F004E43751E",
+    "CachedNotice": ".licenses-npm-content-type.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "77A97EF13F00EA4E5675EB93C442A099BA28D112359D520C110847310F7EBDC8",
+    "CachedNotice": ".licenses-npm-debug.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "7CD3EB7884922595665F74AE27D9031481D978F949F3FD5D3A718B40A66FF024",
+    "CachedNotice": ".licenses-npm-events.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "5A71488E5E93F4248D2D21A962A7F80A81668CC53479B429DB972BE16DEF556E",
+    "CachedNotice": ".licenses-npm-fast-xml-builder.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "9E8218F4D21DB75F70B9220B01493FEA52C2F55B1A52F1EEBDEAC24E4B3DC078",
+    "CachedNotice": ".licenses-npm-fast-xml-parser.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "C0F014771CA2D14F2834F24F6FD6DAF2A2111FED49BE717C18FBF129C192E34D",
+    "CachedNotice": ".licenses-npm-http-proxy-agent.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "1612DCC788E26D10D6FAEAAC186ECD44949D58DE16489493A97B84B1A5F2C55F",
+    "CachedNotice": ".licenses-npm-https-proxy-agent.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "BDFFC56C260CA30AB7EB26FEBC7C54C7E89B400A4BE486ED062B9DBBB8B6CB02",
+    "CachedNotice": ".licenses-npm-is-unsafe.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "87F05FACB2E7E6B4E1A8F83D9453A8E56CF3EF0E6CA2E49D903DADDF963AD945",
+    "CachedNotice": ".licenses-npm-json-with-bigint.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "65A356FA0A1C3AE40890CB476E8A1C24CEC5D3F5A045C8B73971B7CD930A59B6",
+    "CachedNotice": ".licenses-npm-json5.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "blueoak-1.0.0",
+    "Action": "setup-dotnet",
+    "SHA256": "69CBA6F029353479CE6C334C64FB3ABB063B0949D5597566AA6BF749B4D1F54F",
+    "CachedNotice": ".licenses-npm-minimatch-10.2.5.dep.yml",
+    "HasLicenseText": false
+  },
+  {
+    "License": "isc",
+    "Action": "setup-dotnet",
+    "SHA256": "B74C81A790EE18C1869EF0C563BCC2885B9E32DBEDF487BA515AFCE85D91C816",
+    "CachedNotice": ".licenses-npm-minimatch-3.1.5.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "D8571BD5CEA64E916812354B9B61A8A786C559B6AE93EAA56FCD7E0535FF3546",
+    "CachedNotice": ".licenses-npm-ms.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "DCA928D845EB566A862D81F32B9475D0B120E08EDD525348DD9833A5D7C01A86",
+    "CachedNotice": ".licenses-npm-path-expression-matcher.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "isc",
+    "Action": "setup-dotnet",
+    "SHA256": "3D12BD769A08EBF5ABE5B1F39624D954B51E71F3BF6495BDC4B46A20BAEA2133",
+    "CachedNotice": ".licenses-npm-semver.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "01AFD52B2663D05F875F8798392CF45F6996ED6E75F593B1C78B9ED1A84DFB80",
+    "CachedNotice": ".licenses-npm-strnum.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "0bsd",
+    "Action": "setup-dotnet",
+    "SHA256": "AB089DC6037A7416B0BA7A81BCD3142C9CA42D31BBFCDF69CDC2BD749B325655",
+    "CachedNotice": ".licenses-npm-tslib.dep.yml",
+    "HasLicenseText": false
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "D31E076ABF1FA9783DCDC37E27753F6BD9A61F1A5935676475C39FF68297CE78",
+    "CachedNotice": ".licenses-npm-tunnel.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "CD339150046458BEA3B68305352F1B20F559E77D741CBF1AB39895C27DEB41F5",
+    "CachedNotice": ".licenses-npm-undici.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "isc",
+    "Action": "setup-dotnet",
+    "SHA256": "145C8D8A00B1AB02F4FACAF6B800F9333844206CE1CC2069E80D3EF875E0E3EB",
+    "CachedNotice": ".licenses-npm-universal-user-agent.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "setup-dotnet",
+    "SHA256": "46384797400B7F114FCD599052D2FAE1C31282DA14AEAF06D2A8E038B831AD43",
+    "CachedNotice": ".licenses-npm-xml-naming.dep.yml",
+    "HasLicenseText": false
+  },
+  {
+    "License": "mit",
+    "Action": "upload-artifact",
+    "SHA256": "7F84909B4410E3500D21E021C77F3AE47F723D5FACFE9C02C09B1F441D7C66FA",
+    "CachedNotice": ".licenses-npm-@actions-artifact.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "upload-artifact",
+    "SHA256": "43536FA00022029F97C642A2752F16B22CD6F655FE334445C90D71827DD933FF",
+    "CachedNotice": ".licenses-npm-@actions-core.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "upload-artifact",
+    "SHA256": "585190FF307E5BD0F9B677F5CDAF287A8A5A3293D41E7100C70024E589C9ED24",
+    "CachedNotice": ".licenses-npm-@actions-github.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "upload-artifact",
+    "SHA256": "B7D958792DFBC03FE98CF3D0676038FC1826C2906306A29122D8D48E3CBFA66B",
+    "CachedNotice": ".licenses-npm-@actions-glob.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "mit",
+    "Action": "upload-artifact",
+    "SHA256": "CDD67DE6C960E083B48D57D53787CBEB6C240282DF3DA9128A04E2180F162F99",
+    "CachedNotice": ".licenses-npm-@actions-io.dep.yml",
+    "HasLicenseText": true
+  },
+  {
+    "License": "blueoak-1.0.0",
+    "Action": "upload-artifact",
+    "SHA256": "38BE220AB0016C8C39D47F25ECC535FFD4C3F64C46513EAA453B1832368AA889",
+    "CachedNotice": ".licenses-npm-minimatch.dep.yml",
+    "HasLicenseText": false
+  }
+]

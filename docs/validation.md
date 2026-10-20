@@ -46,3 +46,73 @@ Run `scripts/build.ps1`, then `scripts/run.ps1`. Open Agenda from its notificati
 After packaging, exit other Agenda instances and run `scripts/test-portable.ps1 -Directory <the portable directory printed by package.ps1>` to check resource inclusion and startup. This check launches and then closes its own isolated test instance.
 
 For an isolated profile use `scripts/run.ps1 -DataDirectory ./work/manual-profile`. Exit any running Agenda instance first: one instance runs per Windows session. Right-click its notification icon and choose Exit.
+
+## Generic MSI tooling and build/documentation integration — 2026-10-20
+
+Environment: Windows x64 build 26300, PowerShell 7.6.5, Windows SDK tools 26100,
+and current stable .NET SDK 10.0.402 staged locally after verifying the official
+archive SHA-512. Initial baseline also passed on installed SDK 10.0.301.
+
+Executed successfully:
+
+- scripts/verify.ps1 -Configuration Release -Architecture x64: configuration checks (27), native synthetic MSI checks (39), dependency-report, packaging-adapter and verification entry-point checks, all existing core/provider/shell executables, Release build and Git whitespace checks. Native MSI tests do not install any product.
+- scripts/build.ps1 -Configuration Release -Architecture ARM64: locked restore and Release cross-build, zero warnings/errors. Tests run on the host-compatible runtime.
+- scripts/package.ps1 for Msi/Msix and x64/ARM64: actual self-contained publishes and inspected containers. MSI cabinet files are hash-compared with published files; MSIX is unpacked and staged-file hashes compared. Development MSIX signing succeeds; private temporary keys are removed without importing trust.
+- test-portable.ps1 against the x64 MSI payload, with CheckNotifications: process remains running, no errors.log, and native AppNotificationManager registration logs Enabled. This does not deliver or activate a reminder.
+- Standalone engine copied outside Agenda into a path containing spaces, then invoked with a second synthetic product configuration; native package creation/inspection succeeds without repository or WinUI assumptions.
+- Public engine Get-Help synopsis resolves; 46 local documentation targets checked; all changed PowerShell scripts parse.
+- Live NuGet inventory records 32 resolved package/version pairs including transitive, target-reference and runtime-pack dependencies. No current NuGet advisory/deprecation findings. Action graphs have explicit known advisory/deprecation exceptions; see docs/DEPENDENCIES.md.
+
+Limits and remaining acceptance:
+
+- No disposable Windows Sandbox/VM or installed ICE command was available. A Windows SDK MsiVal2 installer exists, but it was not installed on the host. Real install/repair/upgrade/downgrade/uninstall, advertised-shortcut maintenance, interrupted-install rollback and minimum-build rejection remain unverified.
+- ARM64 packages were cross-built and inspected; ARM64 native execution and read-only native preflight require an ARM64 host.
+- Real installed reminder delivery, notification activation, user-data retention after uninstall, MSI/MSIX coexistence and real provider authentication remain separate manual checks.
+- No product was installed, no certificate trust was imported, no tag/release was created and no GitHub workflow was run. CI was inspected locally; hosted runner execution remains outstanding.
+- Root AGPL source licensing does not resolve Microsoft binary redistribution conditions. SDK/Windows App SDK/ML/NativeInterop terms are preserved and explicit unresolved public distribution findings are recorded in docs/DEPENDENCIES.md.
+- Bundled Action dependency scans report current advisories and an upstream glob deprecation. Those are recorded upstream exceptions, not a clean-bill-of-health claim.
+
+### Independent review follow-up
+
+A fresh read-only review found three portability/isolation defects and two
+supported-floor/MSI-alias issues. All five were corrected in one fix pass:
+
+- Resolve public paths against the PowerShell filesystem location, including after Set-Location; normalize exact approval paths across slash styles.
+- Remove the redundant default-context package-list query during packaging. The authoritative advisory check is the isolated, forced restore with all severity levels and retrieval failures promoted to errors. Deliberate standalone report queries now use --no-restore.
+- Require PowerShell 7.4+, preserving supported built-in crypto/JSON APIs.
+- Generate 8.3|long aliases for install/menu roots and shortcuts; inspect every configured shortcut mapping.
+
+Regression evidence: the added relative-location, exact-backslash, no-restore
+and root-alias cases first failed against the old implementation. Configuration
+checks now pass 29 cases and native MSI checks pass 43. The full x64 verification
+suite passes again with zero build warnings/errors. Public Get-Help and standalone
+maintenance/file-map documentation were also checked.
+
+The real post-fix ARM64 MSI also builds and passes cabinet inspection. A before/
+after guard over all 15 top-level normal src/*/obj files confirms identical bytes
+and last-write timestamps, proving packaging no longer performs a default-context
+development restore.
+
+## MSI default and explicit MSIX signing — 2026-10-20
+
+The user approved MSI as the default and a Procsight-style explicit MSIX build/
+signing process. Both formats now default to unsigned output. Package creation
+does not create keys, export certificates or import trust. -CertificateThumbprint
+selects one existing CurrentUser/My certificate; an explicit PFX remains an
+alternative. Certificate creation/trust are separate commands.
+
+Verified:
+
+- Updated packaging tests first failed against the old MSIX default, then passed after changing the default to MSI. Tests cover unsigned MSIX metadata, signing-failure behavior, conflicting selectors, orphan passwords/timestamps, invalid thumbprints, HTTP timestamps, publisher mismatch, missing private keys, expiry and wrong EKU.
+- Full verification passed: 29 JSON/configuration checks, 43 native synthetic MSI checks, dependency-report, adapter and verification-entry tests, all Agenda test executables and Release build with zero warnings/errors.
+- Actual x64 opt-in MSIX publish/pack/unpack inspection passed, final SHA-256 matched, Get-AuthenticodeSignature reported NotSigned and CurrentUser/My thumbprints were identical before/after. No certificate was created or imported.
+- Actual x64 packaging without a Format argument produced an unsigned MSI, passed cabinet inspection and final SHA-256 verification, retained tool-output.log and left CurrentUser/My thumbprints unchanged.
+- Tool logging has a failing-then-passing regression: full output is saved in per-build tool-output.log with concise console summaries. Signing arguments/passwords never go through that logger.
+- Public package Get-Help, 27 current documentation links and all 18 Agenda script parsers passed. CI explicitly builds and validates unsigned opt-in MSIX metadata.
+
+A live thumbprint-signing test using a temporary test certificate was blocked
+by automatic approval review before execution (stated reason: blocked by policy).
+No test certificate was created. Live thumbprint signing remains unverified;
+metadata/option validation and signing-failure behavior are covered by tests.
+The prior installed lifecycle/ICE, ARM64 execution and redistribution limitations
+remain unchanged.

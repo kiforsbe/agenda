@@ -1,0 +1,32 @@
+[
+  {
+    "SHA256": "2F07C72751AED99790B8A4869CF2311DF85A860B22DED05FA22803587A48922C",
+    "Source": "https://raw.githubusercontent.com/AzureAD/microsoft-authentication-library-for-dotnet/4.91.1/LICENSE",
+    "Package": "Microsoft.Identity.Client.Broker-4.91.1"
+  },
+  {
+    "SHA256": "FE4667AF79D01506CFDA6062136861426248A216BB84B39B76324AFAB70EA670",
+    "Source": "https://raw.githubusercontent.com/ical-org/ical.net/1344396c18dfe7349584709990f431931bc0b6be/license.md",
+    "Package": "Ical.Net-5.2.3"
+  },
+  {
+    "SHA256": "CFC7749B96F63BD31C3C42B5C471BF756814053E847C10F3EB003417BC523D30",
+    "Source": "https://raw.githubusercontent.com/nodatime/nodatime/9c72945729dfa4f9626cd8488f70366c59ed9e94/LICENSE.txt",
+    "Package": "NodaTime-3.3.5"
+  },
+  {
+    "SHA256": "2F07C72751AED99790B8A4869CF2311DF85A860B22DED05FA22803587A48922C",
+    "Source": "https://raw.githubusercontent.com/AzureAD/microsoft-authentication-library-for-dotnet/4.91.1/LICENSE",
+    "Package": "Microsoft.Identity.Client-4.91.1"
+  },
+  {
+    "SHA256": "CBA03F5387B05405E56B688376421ACAE396136AF4B5116738DC6E5160F87DDD",
+    "Source": "https://raw.githubusercontent.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet/8.23.0/LICENSE.txt",
+    "Package": "Microsoft.IdentityModel.Abstractions-8.23.0"
+  },
+  {
+    "SHA256": "DD07EB178E00C6BBA4148457FC00FF77CD4887EB521D504186FE59C9EC8BBE62",
+    "Source": "https://aka.ms/WinSDKLicenseURL",
+    "Package": "Microsoft.Windows.SDK.BuildTools-10.0.28000.2705"
+  }
+]

@@ -1,0 +1,1354 @@
+[
+  {
+    "Name": "@actions/artifact",
+    "Version": "6.3.1",
+    "LatestStable": "6.3.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40actions%2Fartifact/6.3.1"
+  },
+  {
+    "Name": "@actions/cache",
+    "Version": "6.2.0",
+    "LatestStable": "6.3.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40actions%2Fcache/6.2.0"
+  },
+  {
+    "Name": "@actions/core",
+    "Version": "3.0.1",
+    "LatestStable": "3.0.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40actions%2Fcore/3.0.1"
+  },
+  {
+    "Name": "@actions/exec",
+    "Version": "3.0.0",
+    "LatestStable": "3.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40actions%2Fexec/3.0.0"
+  },
+  {
+    "Name": "@actions/github",
+    "Version": "9.1.1",
+    "LatestStable": "9.1.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40actions%2Fgithub/9.1.1"
+  },
+  {
+    "Name": "@actions/glob",
+    "Version": "0.6.1",
+    "LatestStable": "0.7.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40actions%2Fglob/0.6.1"
+  },
+  {
+    "Name": "@actions/glob",
+    "Version": "0.7.0",
+    "LatestStable": "0.7.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40actions%2Fglob/0.7.0"
+  },
+  {
+    "Name": "@actions/http-client",
+    "Version": "3.0.2",
+    "LatestStable": "4.0.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40actions%2Fhttp-client/3.0.2"
+  },
+  {
+    "Name": "@actions/http-client",
+    "Version": "4.0.1",
+    "LatestStable": "4.0.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40actions%2Fhttp-client/4.0.1"
+  },
+  {
+    "Name": "@actions/io",
+    "Version": "3.0.2",
+    "LatestStable": "3.0.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40actions%2Fio/3.0.2"
+  },
+  {
+    "Name": "@actions/tool-cache",
+    "Version": "4.0.0",
+    "LatestStable": "4.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40actions%2Ftool-cache/4.0.0"
+  },
+  {
+    "Name": "@azure/abort-controller",
+    "Version": "2.1.2",
+    "LatestStable": "2.2.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fabort-controller/2.1.2"
+  },
+  {
+    "Name": "@azure/core-auth",
+    "Version": "1.10.1",
+    "LatestStable": "1.11.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-auth/1.10.1"
+  },
+  {
+    "Name": "@azure/core-client",
+    "Version": "1.10.1",
+    "LatestStable": "1.11.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-client/1.10.1"
+  },
+  {
+    "Name": "@azure/core-client",
+    "Version": "1.10.2",
+    "LatestStable": "1.11.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-client/1.10.2"
+  },
+  {
+    "Name": "@azure/core-http-compat",
+    "Version": "2.3.2",
+    "LatestStable": "2.5.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-http-compat/2.3.2"
+  },
+  {
+    "Name": "@azure/core-http-compat",
+    "Version": "2.4.0",
+    "LatestStable": "2.5.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-http-compat/2.4.0"
+  },
+  {
+    "Name": "@azure/core-lro",
+    "Version": "2.7.2",
+    "LatestStable": "3.4.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-lro/2.7.2"
+  },
+  {
+    "Name": "@azure/core-paging",
+    "Version": "1.6.2",
+    "LatestStable": "1.7.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-paging/1.6.2"
+  },
+  {
+    "Name": "@azure/core-rest-pipeline",
+    "Version": "1.22.2",
+    "LatestStable": "1.25.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-rest-pipeline/1.22.2"
+  },
+  {
+    "Name": "@azure/core-rest-pipeline",
+    "Version": "1.24.0",
+    "LatestStable": "1.25.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-rest-pipeline/1.24.0"
+  },
+  {
+    "Name": "@azure/core-tracing",
+    "Version": "1.3.1",
+    "LatestStable": "1.4.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-tracing/1.3.1"
+  },
+  {
+    "Name": "@azure/core-util",
+    "Version": "1.13.1",
+    "LatestStable": "1.14.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-util/1.13.1"
+  },
+  {
+    "Name": "@azure/core-xml",
+    "Version": "1.5.0",
+    "LatestStable": "1.6.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-xml/1.5.0"
+  },
+  {
+    "Name": "@azure/core-xml",
+    "Version": "1.5.1",
+    "LatestStable": "1.6.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fcore-xml/1.5.1"
+  },
+  {
+    "Name": "@azure/logger",
+    "Version": "1.3.0",
+    "LatestStable": "1.4.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Flogger/1.3.0"
+  },
+  {
+    "Name": "@azure/storage-blob",
+    "Version": "12.31.0",
+    "LatestStable": "12.34.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fstorage-blob/12.31.0"
+  },
+  {
+    "Name": "@azure/storage-blob",
+    "Version": "12.32.0",
+    "LatestStable": "12.34.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fstorage-blob/12.32.0"
+  },
+  {
+    "Name": "@azure/storage-common",
+    "Version": "12.3.0",
+    "LatestStable": "12.5.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fstorage-common/12.3.0"
+  },
+  {
+    "Name": "@azure/storage-common",
+    "Version": "12.4.1",
+    "LatestStable": "12.5.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40azure%2Fstorage-common/12.4.1"
+  },
+  {
+    "Name": "@isaacs/cliui",
+    "Version": "8.0.2",
+    "LatestStable": "9.0.0",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40isaacs%2Fcliui/8.0.2"
+  },
+  {
+    "Name": "@nodable/entities",
+    "Version": "2.2.0",
+    "LatestStable": "3.1.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40nodable%2Fentities/2.2.0"
+  },
+  {
+    "Name": "@octokit/auth-token",
+    "Version": "6.0.0",
+    "LatestStable": "6.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Fauth-token/6.0.0"
+  },
+  {
+    "Name": "@octokit/core",
+    "Version": "7.0.6",
+    "LatestStable": "7.0.8",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Fcore/7.0.6"
+  },
+  {
+    "Name": "@octokit/endpoint",
+    "Version": "11.0.3",
+    "LatestStable": "11.0.5",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Fendpoint/11.0.3"
+  },
+  {
+    "Name": "@octokit/graphql",
+    "Version": "9.0.3",
+    "LatestStable": "9.0.5",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Fgraphql/9.0.3"
+  },
+  {
+    "Name": "@octokit/openapi-types",
+    "Version": "27.0.0",
+    "LatestStable": "29.0.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Fopenapi-types/27.0.0"
+  },
+  {
+    "Name": "@octokit/plugin-paginate-rest",
+    "Version": "14.0.0",
+    "LatestStable": "16.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Fplugin-paginate-rest/14.0.0"
+  },
+  {
+    "Name": "@octokit/plugin-request-log",
+    "Version": "6.0.0",
+    "LatestStable": "6.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Fplugin-request-log/6.0.0"
+  },
+  {
+    "Name": "@octokit/plugin-rest-endpoint-methods",
+    "Version": "17.0.0",
+    "LatestStable": "18.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Fplugin-rest-endpoint-methods/17.0.0"
+  },
+  {
+    "Name": "@octokit/plugin-retry",
+    "Version": "8.1.0",
+    "LatestStable": "8.1.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Fplugin-retry/8.1.0"
+  },
+  {
+    "Name": "@octokit/request",
+    "Version": "10.0.10",
+    "LatestStable": "10.0.16",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Frequest/10.0.10"
+  },
+  {
+    "Name": "@octokit/request",
+    "Version": "10.0.8",
+    "LatestStable": "10.0.16",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Frequest/10.0.8"
+  },
+  {
+    "Name": "@octokit/request-error",
+    "Version": "7.1.0",
+    "LatestStable": "7.1.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Frequest-error/7.1.0"
+  },
+  {
+    "Name": "@octokit/types",
+    "Version": "16.0.0",
+    "LatestStable": "18.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40octokit%2Ftypes/16.0.0"
+  },
+  {
+    "Name": "@pkgjs/parseargs",
+    "Version": "0.11.0",
+    "LatestStable": "0.11.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40pkgjs%2Fparseargs/0.11.0"
+  },
+  {
+    "Name": "@protobuf-ts/runtime",
+    "Version": "2.11.1",
+    "LatestStable": "2.11.1",
+    "License": "(Apache-2.0 AND BSD-3-Clause)",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40protobuf-ts%2Fruntime/2.11.1"
+  },
+  {
+    "Name": "@protobuf-ts/runtime-rpc",
+    "Version": "2.11.1",
+    "LatestStable": "2.11.1",
+    "License": "Apache-2.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40protobuf-ts%2Fruntime-rpc/2.11.1"
+  },
+  {
+    "Name": "@typespec/ts-http-runtime",
+    "Version": "0.3.5",
+    "LatestStable": "0.3.9",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40typespec%2Fts-http-runtime/0.3.5"
+  },
+  {
+    "Name": "@typespec/ts-http-runtime",
+    "Version": "0.3.6",
+    "LatestStable": "0.3.9",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/%40typespec%2Fts-http-runtime/0.3.6"
+  },
+  {
+    "Name": "abort-controller",
+    "Version": "3.0.0",
+    "LatestStable": "3.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/abort-controller/3.0.0"
+  },
+  {
+    "Name": "agent-base",
+    "Version": "7.1.4",
+    "LatestStable": "9.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/agent-base/7.1.4"
+  },
+  {
+    "Name": "ansi-regex",
+    "Version": "5.0.1",
+    "LatestStable": "6.4.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/ansi-regex/5.0.1"
+  },
+  {
+    "Name": "ansi-regex",
+    "Version": "6.2.2",
+    "LatestStable": "6.4.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/ansi-regex/6.2.2"
+  },
+  {
+    "Name": "ansi-styles",
+    "Version": "4.3.0",
+    "LatestStable": "7.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/ansi-styles/4.3.0"
+  },
+  {
+    "Name": "ansi-styles",
+    "Version": "6.2.3",
+    "LatestStable": "7.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/ansi-styles/6.2.3"
+  },
+  {
+    "Name": "anynum",
+    "Version": "1.0.1",
+    "LatestStable": "1.0.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/anynum/1.0.1"
+  },
+  {
+    "Name": "archiver",
+    "Version": "7.0.1",
+    "LatestStable": "8.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/archiver/7.0.1"
+  },
+  {
+    "Name": "archiver-utils",
+    "Version": "5.0.2",
+    "LatestStable": "5.0.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/archiver-utils/5.0.2"
+  },
+  {
+    "Name": "async",
+    "Version": "3.2.6",
+    "LatestStable": "3.2.6",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/async/3.2.6"
+  },
+  {
+    "Name": "b4a",
+    "Version": "1.8.0",
+    "LatestStable": "1.9.0",
+    "License": "Apache-2.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/b4a/1.8.0"
+  },
+  {
+    "Name": "balanced-match",
+    "Version": "1.0.2",
+    "LatestStable": "5.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/balanced-match/1.0.2"
+  },
+  {
+    "Name": "balanced-match",
+    "Version": "4.0.4",
+    "LatestStable": "5.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/balanced-match/4.0.4"
+  },
+  {
+    "Name": "bare-events",
+    "Version": "2.8.2",
+    "LatestStable": "2.9.2",
+    "License": "Apache-2.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/bare-events/2.8.2"
+  },
+  {
+    "Name": "base64-js",
+    "Version": "1.5.1",
+    "LatestStable": "1.5.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/base64-js/1.5.1"
+  },
+  {
+    "Name": "before-after-hook",
+    "Version": "4.0.0",
+    "LatestStable": "4.0.0",
+    "License": "Apache-2.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/before-after-hook/4.0.0"
+  },
+  {
+    "Name": "binary",
+    "Version": "0.3.0",
+    "LatestStable": "0.3.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/binary/0.3.0"
+  },
+  {
+    "Name": "bottleneck",
+    "Version": "2.19.5",
+    "LatestStable": "2.19.5",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/bottleneck/2.19.5"
+  },
+  {
+    "Name": "brace-expansion",
+    "Version": "1.1.12",
+    "LatestStable": "5.0.12",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/brace-expansion/1.1.12"
+  },
+  {
+    "Name": "brace-expansion",
+    "Version": "1.1.15",
+    "LatestStable": "5.0.12",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/brace-expansion/1.1.15"
+  },
+  {
+    "Name": "brace-expansion",
+    "Version": "2.0.2",
+    "LatestStable": "5.0.12",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/brace-expansion/2.0.2"
+  },
+  {
+    "Name": "brace-expansion",
+    "Version": "5.0.3",
+    "LatestStable": "5.0.12",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/brace-expansion/5.0.3"
+  },
+  {
+    "Name": "brace-expansion",
+    "Version": "5.0.6",
+    "LatestStable": "5.0.12",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/brace-expansion/5.0.6"
+  },
+  {
+    "Name": "buffer",
+    "Version": "6.0.3",
+    "LatestStable": "6.0.3",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/buffer/6.0.3"
+  },
+  {
+    "Name": "buffer-crc32",
+    "Version": "1.0.0",
+    "LatestStable": "1.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/buffer-crc32/1.0.0"
+  },
+  {
+    "Name": "buffers",
+    "Version": "0.1.1",
+    "LatestStable": "0.1.1",
+    "License": null,
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/buffers/0.1.1"
+  },
+  {
+    "Name": "chainsaw",
+    "Version": "0.1.0",
+    "LatestStable": "0.1.0",
+    "License": "MIT/X11",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/chainsaw/0.1.0"
+  },
+  {
+    "Name": "color-convert",
+    "Version": "2.0.1",
+    "LatestStable": "3.1.3",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/color-convert/2.0.1"
+  },
+  {
+    "Name": "color-name",
+    "Version": "1.1.4",
+    "LatestStable": "2.1.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/color-name/1.1.4"
+  },
+  {
+    "Name": "compress-commons",
+    "Version": "6.0.2",
+    "LatestStable": "7.0.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/compress-commons/6.0.2"
+  },
+  {
+    "Name": "concat-map",
+    "Version": "0.0.1",
+    "LatestStable": "0.0.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/concat-map/0.0.1"
+  },
+  {
+    "Name": "content-type",
+    "Version": "2.0.0",
+    "LatestStable": "3.1.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/content-type/2.0.0"
+  },
+  {
+    "Name": "core-util-is",
+    "Version": "1.0.3",
+    "LatestStable": "1.0.3",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/core-util-is/1.0.3"
+  },
+  {
+    "Name": "crc-32",
+    "Version": "1.2.2",
+    "LatestStable": "1.2.2",
+    "License": "Apache-2.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/crc-32/1.2.2"
+  },
+  {
+    "Name": "crc32-stream",
+    "Version": "6.0.0",
+    "LatestStable": "7.0.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/crc32-stream/6.0.0"
+  },
+  {
+    "Name": "cross-spawn",
+    "Version": "7.0.6",
+    "LatestStable": "7.0.6",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/cross-spawn/7.0.6"
+  },
+  {
+    "Name": "debug",
+    "Version": "4.4.3",
+    "LatestStable": "4.4.3",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/debug/4.4.3"
+  },
+  {
+    "Name": "eastasianwidth",
+    "Version": "0.2.0",
+    "LatestStable": "0.3.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/eastasianwidth/0.2.0"
+  },
+  {
+    "Name": "emoji-regex",
+    "Version": "8.0.0",
+    "LatestStable": "11.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/emoji-regex/8.0.0"
+  },
+  {
+    "Name": "emoji-regex",
+    "Version": "9.2.2",
+    "LatestStable": "11.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/emoji-regex/9.2.2"
+  },
+  {
+    "Name": "event-target-shim",
+    "Version": "5.0.1",
+    "LatestStable": "6.0.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/event-target-shim/5.0.1"
+  },
+  {
+    "Name": "events",
+    "Version": "3.3.0",
+    "LatestStable": "3.3.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/events/3.3.0"
+  },
+  {
+    "Name": "events-universal",
+    "Version": "1.0.1",
+    "LatestStable": "1.0.1",
+    "License": "Apache-2.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/events-universal/1.0.1"
+  },
+  {
+    "Name": "fast-content-type-parse",
+    "Version": "3.0.0",
+    "LatestStable": "4.0.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/fast-content-type-parse/3.0.0"
+  },
+  {
+    "Name": "fast-fifo",
+    "Version": "1.3.2",
+    "LatestStable": "1.3.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/fast-fifo/1.3.2"
+  },
+  {
+    "Name": "fast-xml-builder",
+    "Version": "1.0.0",
+    "LatestStable": "1.3.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/fast-xml-builder/1.0.0"
+  },
+  {
+    "Name": "fast-xml-builder",
+    "Version": "1.2.0",
+    "LatestStable": "1.3.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/fast-xml-builder/1.2.0"
+  },
+  {
+    "Name": "fast-xml-parser",
+    "Version": "5.4.1",
+    "LatestStable": "5.11.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/fast-xml-parser/5.4.1"
+  },
+  {
+    "Name": "fast-xml-parser",
+    "Version": "5.9.3",
+    "LatestStable": "5.11.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/fast-xml-parser/5.9.3"
+  },
+  {
+    "Name": "foreground-child",
+    "Version": "3.3.1",
+    "LatestStable": "4.0.3",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/foreground-child/3.3.1"
+  },
+  {
+    "Name": "glob",
+    "Version": "10.5.0",
+    "LatestStable": "13.0.6",
+    "License": "ISC",
+    "Deprecated": "Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me",
+    "Registry": "https://registry.npmjs.org/glob/10.5.0"
+  },
+  {
+    "Name": "graceful-fs",
+    "Version": "4.2.11",
+    "LatestStable": "4.2.11",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/graceful-fs/4.2.11"
+  },
+  {
+    "Name": "http-proxy-agent",
+    "Version": "7.0.2",
+    "LatestStable": "9.1.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/http-proxy-agent/7.0.2"
+  },
+  {
+    "Name": "https-proxy-agent",
+    "Version": "7.0.6",
+    "LatestStable": "9.1.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/https-proxy-agent/7.0.6"
+  },
+  {
+    "Name": "ieee754",
+    "Version": "1.2.1",
+    "LatestStable": "1.2.1",
+    "License": "BSD-3-Clause",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/ieee754/1.2.1"
+  },
+  {
+    "Name": "inherits",
+    "Version": "2.0.4",
+    "LatestStable": "2.0.4",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/inherits/2.0.4"
+  },
+  {
+    "Name": "is-fullwidth-code-point",
+    "Version": "3.0.0",
+    "LatestStable": "5.1.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/is-fullwidth-code-point/3.0.0"
+  },
+  {
+    "Name": "is-stream",
+    "Version": "2.0.1",
+    "LatestStable": "4.0.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/is-stream/2.0.1"
+  },
+  {
+    "Name": "is-unsafe",
+    "Version": "1.0.1",
+    "LatestStable": "2.0.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/is-unsafe/1.0.1"
+  },
+  {
+    "Name": "isarray",
+    "Version": "1.0.0",
+    "LatestStable": "2.0.5",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/isarray/1.0.0"
+  },
+  {
+    "Name": "isexe",
+    "Version": "2.0.0",
+    "LatestStable": "4.0.0",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/isexe/2.0.0"
+  },
+  {
+    "Name": "jackspeak",
+    "Version": "3.4.3",
+    "LatestStable": "4.2.3",
+    "License": "BlueOak-1.0.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/jackspeak/3.4.3"
+  },
+  {
+    "Name": "json-with-bigint",
+    "Version": "3.5.3",
+    "LatestStable": "3.5.12",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/json-with-bigint/3.5.3"
+  },
+  {
+    "Name": "json-with-bigint",
+    "Version": "3.5.8",
+    "LatestStable": "3.5.12",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/json-with-bigint/3.5.8"
+  },
+  {
+    "Name": "json5",
+    "Version": "2.2.3",
+    "LatestStable": "2.2.3",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/json5/2.2.3"
+  },
+  {
+    "Name": "jwt-decode",
+    "Version": "4.0.0",
+    "LatestStable": "4.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/jwt-decode/4.0.0"
+  },
+  {
+    "Name": "lazystream",
+    "Version": "1.0.1",
+    "LatestStable": "1.0.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/lazystream/1.0.1"
+  },
+  {
+    "Name": "lodash",
+    "Version": "4.17.23",
+    "LatestStable": "4.18.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/lodash/4.17.23"
+  },
+  {
+    "Name": "lru-cache",
+    "Version": "10.4.3",
+    "LatestStable": "11.5.3",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/lru-cache/10.4.3"
+  },
+  {
+    "Name": "minimatch",
+    "Version": "10.2.4",
+    "LatestStable": "10.2.6",
+    "License": "BlueOak-1.0.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/minimatch/10.2.4"
+  },
+  {
+    "Name": "minimatch",
+    "Version": "10.2.5",
+    "LatestStable": "10.2.6",
+    "License": "BlueOak-1.0.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/minimatch/10.2.5"
+  },
+  {
+    "Name": "minimatch",
+    "Version": "3.1.5",
+    "LatestStable": "10.2.6",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/minimatch/3.1.5"
+  },
+  {
+    "Name": "minimatch",
+    "Version": "5.1.8",
+    "LatestStable": "10.2.6",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/minimatch/5.1.8"
+  },
+  {
+    "Name": "minimatch",
+    "Version": "9.0.8",
+    "LatestStable": "10.2.6",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/minimatch/9.0.8"
+  },
+  {
+    "Name": "minimist",
+    "Version": "1.2.8",
+    "LatestStable": "1.2.8",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/minimist/1.2.8"
+  },
+  {
+    "Name": "minipass",
+    "Version": "7.1.3",
+    "LatestStable": "7.1.3",
+    "License": "BlueOak-1.0.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/minipass/7.1.3"
+  },
+  {
+    "Name": "mkdirp",
+    "Version": "0.5.6",
+    "LatestStable": "3.0.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/mkdirp/0.5.6"
+  },
+  {
+    "Name": "ms",
+    "Version": "2.1.3",
+    "LatestStable": "2.1.3",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/ms/2.1.3"
+  },
+  {
+    "Name": "normalize-path",
+    "Version": "3.0.0",
+    "LatestStable": "3.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/normalize-path/3.0.0"
+  },
+  {
+    "Name": "package-json-from-dist",
+    "Version": "1.0.1",
+    "LatestStable": "1.0.1",
+    "License": "BlueOak-1.0.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/package-json-from-dist/1.0.1"
+  },
+  {
+    "Name": "path-expression-matcher",
+    "Version": "1.5.0",
+    "LatestStable": "1.6.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/path-expression-matcher/1.5.0"
+  },
+  {
+    "Name": "path-key",
+    "Version": "3.1.1",
+    "LatestStable": "4.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/path-key/3.1.1"
+  },
+  {
+    "Name": "path-scurry",
+    "Version": "1.11.1",
+    "LatestStable": "2.0.2",
+    "License": "BlueOak-1.0.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/path-scurry/1.11.1"
+  },
+  {
+    "Name": "process",
+    "Version": "0.11.10",
+    "LatestStable": "0.11.10",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/process/0.11.10"
+  },
+  {
+    "Name": "process-nextick-args",
+    "Version": "2.0.1",
+    "LatestStable": "2.0.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/process-nextick-args/2.0.1"
+  },
+  {
+    "Name": "readable-stream",
+    "Version": "2.3.8",
+    "LatestStable": "4.8.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/readable-stream/2.3.8"
+  },
+  {
+    "Name": "readable-stream",
+    "Version": "4.7.0",
+    "LatestStable": "4.8.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/readable-stream/4.7.0"
+  },
+  {
+    "Name": "readdir-glob",
+    "Version": "1.1.3",
+    "LatestStable": "3.0.0",
+    "License": "Apache-2.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/readdir-glob/1.1.3"
+  },
+  {
+    "Name": "safe-buffer",
+    "Version": "5.1.2",
+    "LatestStable": "5.2.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/safe-buffer/5.1.2"
+  },
+  {
+    "Name": "safe-buffer",
+    "Version": "5.2.1",
+    "LatestStable": "5.2.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/safe-buffer/5.2.1"
+  },
+  {
+    "Name": "semver",
+    "Version": "7.8.4",
+    "LatestStable": "7.8.5",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/semver/7.8.4"
+  },
+  {
+    "Name": "semver",
+    "Version": "7.8.5",
+    "LatestStable": "7.8.5",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/semver/7.8.5"
+  },
+  {
+    "Name": "shebang-command",
+    "Version": "2.0.0",
+    "LatestStable": "2.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/shebang-command/2.0.0"
+  },
+  {
+    "Name": "shebang-regex",
+    "Version": "3.0.0",
+    "LatestStable": "4.0.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/shebang-regex/3.0.0"
+  },
+  {
+    "Name": "signal-exit",
+    "Version": "4.1.0",
+    "LatestStable": "4.1.0",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/signal-exit/4.1.0"
+  },
+  {
+    "Name": "streamx",
+    "Version": "2.23.0",
+    "LatestStable": "2.28.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/streamx/2.23.0"
+  },
+  {
+    "Name": "string_decoder",
+    "Version": "1.1.1",
+    "LatestStable": "1.3.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/string_decoder/1.1.1"
+  },
+  {
+    "Name": "string_decoder",
+    "Version": "1.3.0",
+    "LatestStable": "1.3.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/string_decoder/1.3.0"
+  },
+  {
+    "Name": "string-width",
+    "Version": "4.2.3",
+    "LatestStable": "8.3.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/string-width/4.2.3"
+  },
+  {
+    "Name": "string-width",
+    "Version": "5.1.2",
+    "LatestStable": "8.3.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/string-width/5.1.2"
+  },
+  {
+    "Name": "strip-ansi",
+    "Version": "6.0.1",
+    "LatestStable": "7.2.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/strip-ansi/6.0.1"
+  },
+  {
+    "Name": "strip-ansi",
+    "Version": "7.1.2",
+    "LatestStable": "7.2.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/strip-ansi/7.1.2"
+  },
+  {
+    "Name": "strnum",
+    "Version": "2.1.2",
+    "LatestStable": "2.5.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/strnum/2.1.2"
+  },
+  {
+    "Name": "strnum",
+    "Version": "2.4.1",
+    "LatestStable": "2.5.1",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/strnum/2.4.1"
+  },
+  {
+    "Name": "tar-stream",
+    "Version": "3.1.7",
+    "LatestStable": "3.2.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/tar-stream/3.1.7"
+  },
+  {
+    "Name": "text-decoder",
+    "Version": "1.2.7",
+    "LatestStable": "1.2.7",
+    "License": "Apache-2.0",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/text-decoder/1.2.7"
+  },
+  {
+    "Name": "traverse",
+    "Version": "0.3.9",
+    "LatestStable": "0.6.14",
+    "License": "MIT/X11",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/traverse/0.3.9"
+  },
+  {
+    "Name": "tslib",
+    "Version": "2.8.1",
+    "LatestStable": "2.8.1",
+    "License": "0BSD",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/tslib/2.8.1"
+  },
+  {
+    "Name": "tunnel",
+    "Version": "0.0.6",
+    "LatestStable": "0.0.6",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/tunnel/0.0.6"
+  },
+  {
+    "Name": "undici",
+    "Version": "6.23.0",
+    "LatestStable": "8.12.3",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/undici/6.23.0"
+  },
+  {
+    "Name": "undici",
+    "Version": "6.27.0",
+    "LatestStable": "8.12.3",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/undici/6.27.0"
+  },
+  {
+    "Name": "universal-user-agent",
+    "Version": "7.0.3",
+    "LatestStable": "7.0.3",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/universal-user-agent/7.0.3"
+  },
+  {
+    "Name": "unzip-stream",
+    "Version": "0.3.4",
+    "LatestStable": "0.3.4",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/unzip-stream/0.3.4"
+  },
+  {
+    "Name": "util-deprecate",
+    "Version": "1.0.2",
+    "LatestStable": "1.0.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/util-deprecate/1.0.2"
+  },
+  {
+    "Name": "which",
+    "Version": "2.0.2",
+    "LatestStable": "7.0.0",
+    "License": "ISC",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/which/2.0.2"
+  },
+  {
+    "Name": "wrap-ansi",
+    "Version": "7.0.0",
+    "LatestStable": "10.0.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/wrap-ansi/7.0.0"
+  },
+  {
+    "Name": "wrap-ansi",
+    "Version": "8.1.0",
+    "LatestStable": "10.0.2",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/wrap-ansi/8.1.0"
+  },
+  {
+    "Name": "xml-naming",
+    "Version": "0.1.0",
+    "LatestStable": "0.3.0",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/xml-naming/0.1.0"
+  },
+  {
+    "Name": "zip-stream",
+    "Version": "6.0.1",
+    "LatestStable": "7.0.5",
+    "License": "MIT",
+    "Deprecated": null,
+    "Registry": "https://registry.npmjs.org/zip-stream/6.0.1"
+  }
+]

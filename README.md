@@ -18,7 +18,7 @@ Agenda is a native Windows 11 calendar flyout for the notification area. It give
 
 ## Install and open Agenda
 
-Download the package for your Windows architecture from the repository's [Releases](https://github.com/kiforsbe/agenda/releases) page and install it. A package signed with a development certificate requires that certificate to be trusted on the computer before Windows will install it; public releases should use a trusted publisher certificate or the Microsoft Store.
+Download the MSI or MSIX package for your Windows architecture from the repository's [Releases](https://github.com/kiforsbe/agenda/releases) page and install it. A package signed with a development certificate requires that certificate to be trusted on the computer before Windows will install it; public releases should use a trusted publisher certificate or the Microsoft Store.
 
 After Agenda starts, its icon appears in the notification area. If Windows puts it in the hidden overflow menu, open that menu to find it. Left-click the icon to toggle the flyout. Right-click it for **Open**, **Settings**, and **Exit**. Agenda keeps one instance per Windows session.
 
@@ -60,7 +60,7 @@ Agenda is built with C#, WinUI 3, and Windows App SDK. The component boundaries,
 
 ### Build and run
 
-Requirements: Windows 11, .NET 10 SDK, and Windows SDK 10.0.26100.0. The Windows App SDK is restored from NuGet; the flyout does not use a browser rendering engine.
+Requirements: Windows 11, PowerShell 7.4 or later, .NET 10 SDK, and Windows SDK 10.0.26100.0. The Windows App SDK is restored from NuGet; the flyout does not use a browser rendering engine.
 
 ```powershell
 ./scripts/build.ps1
@@ -89,24 +89,53 @@ The check fails when the tag, project version, or changelog heading does not mat
 
 ### Packaging and signing
 
-Self-contained builds include the notification runtime resource from the matching NuGet runtime package through [NotificationRuntime.targets](deployment/NotificationRuntime.targets). This works around the missing-resource registration failure tracked in [Windows App SDK #6071](https://github.com/microsoft/WindowsAppSDK/issues/6071); the package script checks that the DLL reaches the publish output.
+Self-contained builds preserve compiled XAML and the notification runtime resource
+from [NotificationRuntime.targets](deployment/NotificationRuntime.targets).
 
 ```powershell
-./scripts/package.ps1 -Architecture x64
-./scripts/package.ps1 -Architecture ARM64
+./scripts/package.ps1                         # Default: unsigned x64 MSI
+./scripts/package.ps1 -Architecture ARM64      # Unsigned ARM64 MSI
+./scripts/package.ps1 -Format Msix             # Explicit unsigned MSIX build
 ```
 
-The script creates a self-contained portable directory and a **signed** MSIX in `artifacts/`. By default it uses a temporary self-signed development certificate and removes its private key afterward. To reuse the persistent certificate in the current user's Personal certificate store (`Cert:\CurrentUser\My`), pass `-UseCertificateStore`; it creates the certificate if needed and exports only its public certificate to `artifacts/signing/`. Trust that certificate once per computer from an administrator PowerShell before installing:
+Both formats produce isolated, inspected artifacts and a final hash manifest.
+Unsigned MSI needs no development certificate import; Windows reputation or device
+policy may still block it. Unsigned MSIX is a build artifact and must be signed
+with a publisher-matching certificate before installation.
+
+Signing is explicit, as in Procsight. Select an existing code-signing certificate
+in CurrentUser/My by thumbprint, or supply a PFX with `-CertificatePath` and optional
+`-CertificatePassword`. Use an HTTPS `-TimestampUri` when required for distribution.
+Packaging never creates a certificate or imports trust.
+
+For development, creating/selecting a certificate is a separate command:
 
 ```powershell
-./scripts/package.ps1 -Architecture x64 -UseCertificateStore
-./scripts/trust-dev-certificate.ps1
-Add-AppxPackage ./artifacts/Agenda-x64.msix
+$certificate = ./scripts/setup-dev-certificate.ps1
+$package = ./scripts/package.ps1 -Format Msix -CertificateThumbprint $certificate.Thumbprint
 ```
 
-To create or inspect the persistent development certificate without packaging, run `./scripts/setup-dev-certificate.ps1`. For distribution, pass a publisher-matching PFX with `-CertificatePath` and, when needed, `-CertificatePassword`.
+The certificate helper exports only the public .cer. Trust is a separate,
+deliberate administrator action using `scripts/trust-dev-certificate.ps1`.
+After trusting the reviewed development certificate, install using the returned
+`$package.Artifact` path. The former `-UseCertificateStore` packaging switch and
+overwritten `artifacts/Agenda-ARCHITECTURE.msix` alias are no longer used.
+See [DEVELOPERS.md](DEVELOPERS.md) for output paths and signing details.
+Development trust does not make a public download universally installable.
 
-A self-signed certificate is suitable for development, testing, or managed devices where an administrator deploys the certificate. It cannot make a direct GitHub download installable for every Windows user because each target device must explicitly trust that certificate. Public distribution should use the Microsoft Store or a CA-trusted/Azure Artifact Signing certificate. Never commit a private key.
+### MSI and contributor tooling
+
+```powershell
+./scripts/package.ps1 -Format Msi -Architecture x64
+./scripts/package.ps1 -Format Msi -Architecture ARM64
+./scripts/verify.ps1 -Configuration Release -Architecture x64
+```
+
+MSI bundles the app and runtimes, installs under Program Files, adds a Start-menu shortcut and preserves per-user data on uninstall. It defaults to unsigned output and needs no development certificate import; Windows reputation or device policy may still block it. Close Agenda before maintenance. MSI is the default; MSIX requires an explicit `-Format Msix`.
+
+The engine in [tools/msi](tools/msi/README.md) is reusable with a JSON configuration; Agenda metadata lives in [deployment/msi.json](deployment/msi.json). Each build produces isolated output and a final artifact hash manifest. See [DEVELOPERS.md](DEVELOPERS.md) for both formats, signing, dependencies and validation limits.
+
+Contributors should read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [SECURITY.md](SECURITY.md). For troubleshooting see [SUPPORT.md](SUPPORT.md).
 
 ### Provider and data notes
 
@@ -120,4 +149,4 @@ User settings and caches are under `%LOCALAPPDATA%/Agenda` unless `--data-dir` i
 
 Store or certificate publishing remains a separate step; the scripts do not register startup, install the package automatically, or publish to the Store. Use `-Publisher` to set the intended certificate subject; Store publishing requires the identity assigned by Partner Center.
 
-This repository does not yet include a software license. Add one before accepting third-party contributions or distributing the code.
+Agenda source is licensed under [GNU AGPL version 3](LICENSE). Third-party binary terms remain separate; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and the [dependency review](docs/DEPENDENCIES.md).

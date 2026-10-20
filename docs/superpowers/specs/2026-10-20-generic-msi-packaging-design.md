@@ -3,6 +3,17 @@
 Date: 2026-10-20
 Status: Scope and written design approved by the user on 2026-10-20
 
+## Approved follow-up: default format and explicit signing
+
+On 2026-10-20 the user approved making MSI the default and MSIX an explicit
+-Format Msix choice. Both formats now build unsigned unless an existing signing
+certificate is explicitly supplied. Procsight-style -CertificateThumbprint
+selects CurrentUser/My; explicit PFX input remains an alternative. Certificate
+creation/trust are separate commands, automatic signing/key creation and the
+fixed-name MSIX alias are removed, and CI inspects unsigned MSIX.
+This follow-up supersedes the original default/signing compatibility statements
+below; the isolated publishing and generic MSI boundaries remain unchanged.
+
 ## Intent and scope
 
 Add Agenda MSI installers using the native Windows Installer authoring approach

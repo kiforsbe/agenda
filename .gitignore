@@ -3,9 +3,11 @@
 .vs/
 .packages/
 .dotnet/
+.dotnet-sdk/
 work/
 artifacts/
 *.msix
+*.msi
 *.appx
 *.appxbundle
 *.cer

@@ -12,5 +12,15 @@
     <LangVersion>latest</LangVersion>
     <RestorePackagesPath>$(MSBuildThisFileDirectory).packages</RestorePackagesPath>
     <NuGetAudit>true</NuGetAudit>
+    <NuGetAuditMode>all</NuGetAuditMode>
+    <NuGetAuditLevel>low</NuGetAuditLevel>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(AgendaPackagingRoot)' != ''">
+    <BaseIntermediateOutputPath>$(AgendaPackagingRoot)obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(AgendaPackagingRoot)bin/$(MSBuildProjectName)/</BaseOutputPath>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(MSBuildProjectDirectory)/obj/**;$(MSBuildProjectDirectory)/bin/**</DefaultItemExcludes>
   </PropertyGroup>
 </Project>
