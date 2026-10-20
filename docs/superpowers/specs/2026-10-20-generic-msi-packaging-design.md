@@ -1,7 +1,7 @@
 # Generic MSI packaging and Agenda integration
 
 Date: 2026-10-20
-Status: Proposed for written-design approval
+Status: Scope and written design approved by the user on 2026-10-20
 
 ## Intent and scope
 
