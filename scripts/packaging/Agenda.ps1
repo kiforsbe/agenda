@@ -1,4 +1,40 @@
 #requires -Version 7.4
+# Agenda product adapter: generic packaging mechanisms are imported from the
+# pinned checkout. Only publishing, resource/license policy and product metadata
+# live here. No certificate creation, trust, signing, SDK or hashing code is copied.
+function Get-AgendaBuildToolsRoot([string]$Root) {
+    $tools=Join-Path $Root 'external/winbuildtools'
+    foreach($relative in @('msi/package.ps1','msix/package.ps1','common/Tools.ps1','common/Artifacts.ps1','signing/Signing.ps1','verify.ps1','VERSION')) {
+        if(!(Test-Path -LiteralPath (Join-Path $tools $relative) -PathType Leaf)) {
+            throw 'winbuildtools checkout is missing or incomplete. Run: git submodule update --init --recursive'
+        }
+    }
+    return $tools
+}
+
+function New-AgendaInstaller {
+    param([string]$Root,[ValidateSet('Msi','Msix')][string]$Format,[string]$PayloadDirectory,[string]$Version,[ValidateSet('x64','ARM64')][string]$Architecture,[string]$Publisher='CN=Agenda.Development',[string]$OutputDirectory)
+    $tools=Get-AgendaBuildToolsRoot $Root
+    if($Format -eq 'Msi') {
+        return & (Join-Path $tools 'msi/package.ps1') -Config (Join-Path $Root 'deployment/msi.json') -PayloadDirectory $PayloadDirectory -Version $Version -Architecture $Architecture -OutputDirectory $OutputDirectory
+    }
+    # Supply the normal MSIX XML, with Agenda's version/architecture/publisher.
+    # Keep it beside the new output tree so portable publish files are unchanged
+    # and the external engine receives no stale container manifest/signature.
+    $manifestPath="$OutputDirectory.AppxManifest.xml"
+    if(Test-Path -LiteralPath $manifestPath) { throw 'Generated MSIX manifest already exists; use a fresh build directory.' }
+    [xml]$manifest=Get-Content -LiteralPath (Join-Path $Root 'deployment/AppxManifest.xml') -Raw
+    $manifest.Package.Identity.ProcessorArchitecture=$Architecture.ToLowerInvariant()
+    $manifest.Package.Identity.Publisher=$Publisher
+    $manifest.Package.Identity.Version="$Version.0"
+    $manifest.Save($manifestPath)
+    & (Join-Path $tools 'msix/package.ps1') -PayloadDirectory $PayloadDirectory -Manifest $manifestPath -OutputDirectory $OutputDirectory
+}
+$agendaRoot=Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+$script:AgendaBuildToolsRoot=Get-AgendaBuildToolsRoot $agendaRoot
+. (Join-Path $script:AgendaBuildToolsRoot 'common/Tools.ps1')
+. (Join-Path $script:AgendaBuildToolsRoot 'common/Artifacts.ps1')
+. (Join-Path $script:AgendaBuildToolsRoot 'signing/Signing.ps1')
 . (Join-Path $PSScriptRoot '../dependencies/Common.ps1')
 function Get-AgendaVersion([string]$Root) {
     [xml]$props=Get-Content -LiteralPath (Join-Path $Root 'Directory.Build.props') -Raw
@@ -6,31 +42,13 @@ function Get-AgendaVersion([string]$Root) {
     if($version -notmatch '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$') { throw 'AgendaVersion must be major.minor.patch.' }
     return $version
 }
-function Invoke-AgendaTool([string]$Tool,[string[]]$Arguments) {
-    # Like ProcSight, retain full diagnostics but keep routine package output
-    # concise. Never call this logger with signing arguments/PFX passwords.
-    $messages=@(& $Tool @Arguments 2>&1)
-    $exitCode=$LASTEXITCODE
-    if($script:AgendaToolLog) { $messages | Out-String | Add-Content -LiteralPath $script:AgendaToolLog }
-    if($exitCode -ne 0) {
-        $messages | Select-Object -Last 12 | Out-Host
-        throw "$([IO.Path]::GetFileName($Tool)) failed (exit $exitCode). See tool-output.log."
-    }
-    Write-Host "$([IO.Path]::GetFileName($Tool)): succeeded"
-}
-function Get-AgendaSdkTool([ValidateSet('makeappx.exe','signtool.exe')][string]$Name) {
-    $sdk=Join-Path ${env:ProgramFiles(x86)} 'Windows Kits/10/bin'
-    foreach($dir in Get-ChildItem -LiteralPath $sdk -Directory | Where-Object Name -Match '^10\.' | Sort-Object { [version]$_.Name } -Descending) {
-        $path=Join-Path $dir.FullName "x64/$Name"
-        if(Test-Path -LiteralPath $path) { return $path }
-    }
-    throw "Windows SDK $Name not found."
-}
+
 function Assert-AgendaPayload([string]$Folder) {
     foreach($name in @('Agenda.App.exe','Agenda.App.dll','Agenda.App.pri','App.xbf','MainWindow.xbf','Microsoft.WindowsAppRuntime.Insights.Resource.dll')) {
         if(!(Test-Path -LiteralPath (Join-Path $Folder $name) -PathType Leaf)) { throw "Published Agenda is missing $name" }
     }
 }
+
 function Export-AgendaLicenseMaterials([string]$AssetsPath,[string]$Destination) {
     $assets=Get-Content -LiteralPath $AssetsPath -Raw | ConvertFrom-Json -AsHashtable
     $licenses=Join-Path $Destination 'Licenses'
@@ -72,18 +90,18 @@ function Export-AgendaLicenseMaterials([string]$AssetsPath,[string]$Destination)
         if(!$found) { throw "Cannot locate resolved package $($pair.Key)." }
     }
 }
-# Application-specific work stays here: the generic MSI engine knows nothing
-# about .NET restore/publish, WinUI resources, Git, signing or dependency licenses.
+
 function Publish-AgendaPayload([string]$Architecture,[string]$BuildRoot) {
     $root=Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
     $project=Join-Path $root 'src/Agenda.App/Agenda.App.csproj'
     $stage=Join-Path $BuildRoot 'publish'
+    $log=Join-Path $BuildRoot 'tool-output.log'
     $common=@("-p:AgendaPackagingRoot=$BuildRoot/","-p:Platform=$Architecture",('-p:RuntimeIdentifier=win-'+$Architecture.ToLowerInvariant()),'-p:SelfContained=true')
-    Invoke-AgendaTool dotnet (@('restore',$project,'--locked-mode','--configfile',(Join-Path $root 'NuGet.Config'))+(Get-AgendaAuditArguments)+$common)
+    Invoke-WbtTool dotnet (@('restore',$project,'--locked-mode','--configfile',(Join-Path $root 'NuGet.Config'))+(Get-AgendaAuditArguments)+$common) -LogPath $log
     # The isolated restore above is the advisory gate for this exact RID graph.
     # A second package-list query would evaluate normal development obj paths and,
     # on .NET 10, restore them implicitly. Never audit a different graph here.
-    Invoke-AgendaTool dotnet (@('publish',$project,'--no-restore','-c','Release','-o',$stage,'-p:DebugType=None','-p:DebugSymbols=false')+$common)
+    Invoke-WbtTool dotnet (@('publish',$project,'--no-restore','-c','Release','-o',$stage,'-p:DebugType=None','-p:DebugSymbols=false')+$common) -LogPath $log
     Assert-AgendaPayload $stage
     & (Join-Path $root 'scripts/create-assets.ps1') | Out-Host
     $null=New-Item -ItemType Directory -Path (Join-Path $stage 'Assets') -Force
@@ -114,11 +132,20 @@ function Publish-AgendaPayload([string]$Architecture,[string]$BuildRoot) {
     return $stage
 }
 function Complete-AgendaArtifact {
-    param([string]$Artifact,[string]$Version,[string]$Commit,[string]$Format,[string]$Architecture,[switch]$SourceDirty,[switch]$Sign,[string]$Publisher,[string]$CertificateThumbprint,[string]$CertificatePath,[string]$CertificatePassword,[string]$TimestampUri)
-    $signingPublisher=if($Format -eq 'Msix') { $Publisher } else { '' }
-    if($Sign) { Invoke-AgendaSignature -Artifact $Artifact -Publisher $signingPublisher -CertificateThumbprint $CertificateThumbprint -CertificatePath $CertificatePath -CertificatePassword $CertificatePassword -TimestampUri $TimestampUri }
+    param([string]$Artifact,[string]$Version,[string]$Commit,[string]$Format,[string]$Architecture,[switch]$SourceDirty,[switch]$Sign,[string]$CertificateThumbprint,[string]$CertificatePath,[string]$CertificatePassword,[string]$TimestampUri)
     $manifest=Join-Path (Split-Path $Artifact -Parent) 'release-artifacts.json'
-    [pscustomobject]@{Version=$Version;Commit=$Commit;SourceDirty=[bool]$SourceDirty;Format=$Format;Architecture=$Architecture;Artifact=[IO.Path]::GetFileName($Artifact);SHA256=(Get-FileHash -LiteralPath $Artifact -Algorithm SHA256).Hash;Signed=[bool]$Sign} |
-        ConvertTo-Json | Set-Content -LiteralPath $manifest -Encoding utf8NoBOM
-    [pscustomobject]@{Artifact=$Artifact;Manifest=$manifest;Version=$Version;Commit=$Commit}
+    if(Test-Path -LiteralPath $manifest) { throw 'Release manifest already exists; use a fresh build directory.' }
+    if($Sign) {
+        # Shared signing reads the actual embedded MSIX publisher and validates
+        # the final signature; no output manifest is written after a failure.
+        $null=Invoke-WbtSignature -Artifact $Artifact -CertificateThumbprint $CertificateThumbprint -CertificatePath $CertificatePath -CertificatePassword $CertificatePassword -TimestampUri $TimestampUri
+    }
+    $result=Write-WbtArtifactManifest -Artifact $Artifact -OutputPath $manifest -Version $Version -SourceCommit $Commit -SourceDirty:$SourceDirty
+    # Preserve the shared record verbatim except for Agenda's release fields.
+    # Commit is the historical alias of SourceCommit; hashes/signature state are
+    # measured only by winbuildtools, never derived from the requested Sign flag.
+    $record=Get-Content -LiteralPath $result.Manifest -Raw | ConvertFrom-Json
+    $record | Add-Member -NotePropertyMembers @{Commit=$Commit;Format=$Format;Architecture=$Architecture}
+    $record | ConvertTo-Json | Set-Content -LiteralPath $result.Manifest -Encoding utf8NoBOM
+    [pscustomobject]@{Artifact=$result.Artifact;Manifest=$result.Manifest;Version=$Version;Commit=$Commit}
 }

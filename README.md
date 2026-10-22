@@ -64,7 +64,7 @@ Requirements: Windows 11, PowerShell 7.4 or later, .NET 10 SDK, and Windows SDK 
 
 Clone with `git clone --recurse-submodules https://github.com/kiforsbe/agenda.git`.
 For an existing checkout, run `git submodule update --init --recursive` before
-packaging or verification. Installer tooling is pinned to winbuildtools `v0.1.0`;
+packaging or verification. Installer tooling is pinned to winbuildtools `v0.2.0`;
 builds never download or update that checkout automatically.
 
 ```powershell
@@ -113,15 +113,17 @@ in CurrentUser/My by thumbprint, or supply a PFX with `-CertificatePath` and opt
 `-CertificatePassword`. Use an HTTPS `-TimestampUri` when required for distribution.
 Packaging never creates a certificate or imports trust.
 
-For development, creating/selecting a certificate is a separate command:
+For development, creating a certificate is a separate shared-tool command:
 
 ```powershell
-$certificate = ./scripts/setup-dev-certificate.ps1
+$certificate = ./external/winbuildtools/signing/new-dev-certificate.ps1 `
+  -Subject 'CN=Agenda.Development' -PublicCertificatePath ./artifacts/signing/Agenda-Development.cer
 $package = ./scripts/package.ps1 -Format Msix -CertificateThumbprint $certificate.Thumbprint
 ```
 
 The certificate helper exports only the public .cer. Trust is a separate,
-deliberate administrator action using `scripts/trust-dev-certificate.ps1`.
+deliberate administrator action using the shared `signing/trust-dev-certificate.ps1`
+command with the reviewed CER path and an explicit `-ExpectedThumbprint`.
 After trusting the reviewed development certificate, install using the returned
 `$package.Artifact` path. The former `-UseCertificateStore` packaging switch and
 overwritten `artifacts/Agenda-ARCHITECTURE.msix` alias are no longer used.
@@ -138,7 +140,7 @@ Development trust does not make a public download universally installable.
 
 MSI bundles the app and runtimes, installs under Program Files, adds a Start-menu shortcut and preserves per-user data on uninstall. It defaults to unsigned output and needs no development certificate import; Windows reputation or device policy may still block it. Close Agenda before maintenance. MSI is the default; MSIX requires an explicit `-Format Msix`.
 
-MSI and MSIX creation/inspection use the pinned [winbuildtools checkout](external/winbuildtools/README.md). Agenda metadata stays in [deployment/msi.json](deployment/msi.json) and [AppxManifest.xml](deployment/AppxManifest.xml). Each build produces isolated output and a final artifact hash manifest. See [DEVELOPERS.md](DEVELOPERS.md) for both formats, signing, dependencies and validation limits.
+MSI/MSIX creation, signing, certificate handling, SDK discovery, diagnostics and final hash/signature metadata use the pinned [winbuildtools checkout](external/winbuildtools/README.md). Only the packaging entry point and [Agenda product adapter](scripts/packaging/Agenda.ps1) remain locally: publishing, resources, license collection and product/release fields. Metadata stays in [deployment/msi.json](deployment/msi.json) and [AppxManifest.xml](deployment/AppxManifest.xml). See [DEVELOPERS.md](DEVELOPERS.md) for usage and validation limits.
 
 Contributors should read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [SECURITY.md](SECURITY.md). For troubleshooting see [SUPPORT.md](SUPPORT.md).
 

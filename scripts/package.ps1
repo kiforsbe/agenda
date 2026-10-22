@@ -7,9 +7,9 @@ Publishes and inspects Agenda installers; MSI is the default, MSIX is opt-in.
 Both formats are unsigned unless an existing certificate is explicitly selected.
 Packaging never creates certificates or imports trust. Each build has isolated
 output and a release-artifacts.json describing the final bytes and source state.
-Requires the initialized external/winbuildtools submodule (release v0.1.0).
-Installer creation/inspection is delegated to that pinned checkout; application
-publishing, product metadata, signing and final release hashes remain in Agenda.
+Requires the initialized external/winbuildtools submodule (release v0.2.0).
+Packaging, signing, SDK discovery, diagnostics and final byte/signature metadata
+use that checkout. Agenda supplies publishing, product identity and release fields.
 .PARAMETER Format
 Msi by default. Select Msix explicitly for a Windows app package.
 .PARAMETER CertificateThumbprint
@@ -36,20 +36,18 @@ param(
 )
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
-. (Join-Path $PSScriptRoot 'packaging/Installers.ps1')
-# Reject an uninitialized checkout before restore/publish or signing work.
-$null=Get-AgendaBuildToolsRoot $root
-. (Join-Path $PSScriptRoot 'packaging/Common.ps1')
-. (Join-Path $PSScriptRoot 'packaging/Signing.ps1')
-Assert-AgendaSigningOptions -CertificateThumbprint $CertificateThumbprint -CertificatePath $CertificatePath -CertificatePassword $CertificatePassword -TimestampUri $TimestampUri
-if($CertificatePath) { $CertificatePath=(Resolve-Path -LiteralPath $CertificatePath).Path }
+. (Join-Path $PSScriptRoot 'packaging/Agenda.ps1')
 $sign=[bool]($CertificateThumbprint -or $CertificatePath)
+if($sign -or $CertificatePassword -or $TimestampUri) {
+    Assert-WbtSigningOptions -CertificateThumbprint $CertificateThumbprint -CertificatePath $CertificatePath -CertificatePassword $CertificatePassword -TimestampUri $TimestampUri
+}
+if($CertificatePath) { $CertificatePath=Resolve-WbtPath $CertificatePath }
 if($sign) {
     # Reject bad credentials/options before paying for restore and publish.
     $signingPublisher=if($Format -eq 'Msix') { $Publisher } else { '' }
-    $certificate=Get-AgendaSigningCertificate -CertificateThumbprint $CertificateThumbprint -CertificatePath $CertificatePath -CertificatePassword $CertificatePassword -Publisher $signingPublisher
+    $certificate=Get-WbtSigningCertificate -CertificateThumbprint $CertificateThumbprint -CertificatePath $CertificatePath -CertificatePassword $CertificatePassword -Publisher $signingPublisher
     $certificate.Dispose()
-    $null=Get-AgendaSdkTool signtool.exe
+    $null=Get-WbtSdkTool signtool.exe
 }
 $version=Get-AgendaVersion $root
 $commit=(& git -C $root rev-parse HEAD).Trim()
@@ -63,7 +61,6 @@ Push-Location $root
 try {
     $env:DOTNET_CLI_HOME=Join-Path $root '.dotnet'
     $null=New-Item -ItemType Directory -Path $buildRoot -Force
-    $script:AgendaToolLog=Join-Path $buildRoot 'tool-output.log'
     $stage=Publish-AgendaPayload $Architecture $buildRoot
     $installer=New-AgendaInstaller -Root $root -Format $Format -PayloadDirectory $stage -Version $version -Architecture $Architecture -Publisher $Publisher -OutputDirectory (Join-Path $buildRoot 'installer')
     $artifact=$installer.Artifact
@@ -74,7 +71,7 @@ try {
         # the Agenda-named copy and compute final hashes after optional signing.
         Copy-Item -LiteralPath $installer.Artifact -Destination $artifact
     }
-    $result=Complete-AgendaArtifact -Artifact $artifact -Version $version -Commit $commit -Format $Format -Architecture $Architecture -SourceDirty:$sourceDirty -Sign:$sign -Publisher $Publisher -CertificateThumbprint $CertificateThumbprint -CertificatePath $CertificatePath -CertificatePassword $CertificatePassword -TimestampUri $TimestampUri
+    $result=Complete-AgendaArtifact -Artifact $artifact -Version $version -Commit $commit -Format $Format -Architecture $Architecture -SourceDirty:$sourceDirty -Sign:$sign -CertificateThumbprint $CertificateThumbprint -CertificatePath $CertificatePath -CertificatePassword $CertificatePassword -TimestampUri $TimestampUri
     if(!$sign -and $Format -eq 'Msix') {
         Write-Host 'Unsigned MSIX build artifact: sign with an explicitly selected publisher-matching certificate before installation.'
     } elseif(!$sign) { Write-Host 'Unsigned MSI created. Windows reputation or device policy may warn or block installation.' }

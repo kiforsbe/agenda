@@ -8,8 +8,8 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for component/runtime boundaries.
 Initialize the external tooling with `git submodule update --init --recursive`,
 or clone Agenda using `--recurse-submodules`. Packaging and verification fail
 early with initialization instructions when it is missing. The submodule at
-external/winbuildtools is pinned to `v0.1.0`, commit
-`5ebe3c79ec35cfbcd015eb1de17848602375f883`; this tool version is independent
+external/winbuildtools is pinned to `v0.2.0`, commit
+`99d60cf6f0ef4b823f55237e664fc02684bb001d`; this tool version is independent
 of Agenda's application version. Builds never fetch or follow a moving branch.
 
 ```powershell
@@ -43,6 +43,10 @@ Full build-tool diagnostics are saved in tool-output.log at the build directory
 root; the console shows concise success summaries and failure tails.
 The manifest records version, source commit, format, architecture, signing state
 and the final artifact SHA-256. SourceDirty explicitly marks uncommitted changes.
+winbuildtools supplies SchemaVersion, SourceCommit, SignatureStatus and
+SignerThumbprint along with the hash and measured Signed state. Agenda adds
+Format/Architecture and retains Commit as an alias of SourceCommit. The requested
+signing switch is never used as evidence that an artifact is signed.
 Packaging a dirty checkout records HEAD, not an
 assertion that uncommitted source matches that commit. Release builds should be
 made from a clean reviewed revision.
@@ -69,17 +73,21 @@ development default is CN=Agenda.Development.
 For a development MSIX, creation/inspection and trust are separate operations:
 
 ```powershell
-$certificate = ./scripts/setup-dev-certificate.ps1
+$certificate = ./external/winbuildtools/signing/new-dev-certificate.ps1 `
+  -Subject 'CN=Agenda.Development' -PublicCertificatePath ./artifacts/signing/Agenda-Development.cer
 $package = ./scripts/package.ps1 -Format Msix -CertificateThumbprint $certificate.Thumbprint
 # Trust only the reviewed public certificate, in an administrator shell:
-./scripts/trust-dev-certificate.ps1 -CertificatePath $certificate.PublicCertificate
+./external/winbuildtools/signing/trust-dev-certificate.ps1 `
+  -CertificatePath $certificate.PublicCertificate -ExpectedThumbprint $certificate.Thumbprint
 # Install the returned package path in the intended user context:
 Add-AppxPackage $package.Artifact
 ```
 
-The certificate helper returns Thumbprint, Publisher and PublicCertificate.
-It can reuse a matching valid development certificate; a newly created key is
-non-exportable and lasts one year. The packaging command itself never creates
+The shared certificate helper returns Thumbprint, Subject and PublicCertificate.
+It explicitly creates a new non-exportable key lasting one year and requires a
+new public CER path. To reuse a certificate, select its existing thumbprint;
+do not run key creation again. The former local setup/trust scripts are removed.
+Trust now requires an independently reviewed ExpectedThumbprint. The packaging command never creates
 or selects certificates by subject and no longer accepts -UseCertificateStore.
 The former fixed-name MSIX alias is not refreshed. Unsigned MSIX is inspected
 build output, not installable until explicitly signed with a trusted matching
@@ -92,19 +100,24 @@ testing. No automatic MSI/MSIX data migration or supported coexistence is claime
 
 ## External installer tooling
 
-[winbuildtools](external/winbuildtools/README.md) owns MSI and MSIX creation and
-inspection. [deployment/msi.json](deployment/msi.json) owns MSI metadata/payload
+[winbuildtools](external/winbuildtools/README.md) owns MSI/MSIX creation and
+inspection, certificate validation, signing, SDK discovery, diagnostic logging
+and final byte/signature metadata. The shared development-certificate and trust
+commands are invoked explicitly from its checkout. [deployment/msi.json](deployment/msi.json) owns MSI metadata/payload
 approval; keep its product namespace stable. Agenda's AppxManifest.xml owns MSIX
-capabilities, identity and extensions. scripts/packaging/Installers.ps1 translates
+capabilities, identity and extensions. scripts/packaging/Agenda.ps1 translates
 Agenda's application version, architecture and chosen publisher and invokes the
 external commands. Its generated XML sits outside the portable publish directory.
 The external MSIX stage, unsigned artifact, logs and inspection remain under the
 build's installer directory; the Agenda-named artifact and final hash manifest
 remain at the build root. The published portable directory is not modified.
 
-Agenda retains .NET publish, resource checks, dependency audit, license collection,
-signing and Git provenance. The old tools/msi directory and local MSIX pack/unpack
-implementation are removed. verify.ps1 runs the pinned tools' verification suite
+Agenda retains its custom isolated .NET publish context, resource checks,
+dependency audit, license collection, Git provenance and product/release fields.
+Its publish commands use the shared tool runner. The old tools/msi, local signing,
+SDK/log/hash implementations, Common/Installers helpers and setup/trust commands
+are removed. Runtime packaging code is scripts/package.ps1 plus one product
+adapter, scripts/packaging/Agenda.ps1. verify.ps1 runs the pinned tools' verification suite
 plus Agenda's adapter/application tests. GitHub CI remains manual-only and checks
 out recursive submodules.
 

@@ -36,6 +36,12 @@ establish reputation, license compatibility or safe application behavior.
 Both formats build unsigned unless an existing signing certificate is explicitly
 selected. Packaging never creates signing keys, exports certificates or imports
 trust. Development certificate creation and trust are separate commands.
+These mechanisms use the pinned winbuildtools checkout; there is no local
+certificate/signing implementation. Its trust utility requires an explicit
+reviewed thumbprint. Shared signing rejects unknown/error signature states;
+only Valid/NotTrusted integrity states are accepted. Public trust is a separate
+policy decision. Final Signed/SignatureStatus fields describe measured bytes,
+not the user's requested signing switch.
 Development MSIX signing never imports certificate trust. MSI needs no
 development certificate import, but Windows reputation or managed policy can
 block unsigned installers. Real install/repair/upgrade/uninstall and notification

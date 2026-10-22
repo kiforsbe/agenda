@@ -1,7 +1,7 @@
 #requires -Version 7.4
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
-$helper=Join-Path $PSScriptRoot 'packaging/Installers.ps1'
+$helper=Join-Path $PSScriptRoot 'packaging/Agenda.ps1'
 if(Test-Path -LiteralPath $helper) { . $helper }
 function Check([bool]$Value,[string]$Message) { if(!$Value) { throw $Message } }
 function Rejected([scriptblock]$Action,[string]$Pattern) {
@@ -16,23 +16,26 @@ try {
     # A missing checkout must fail before application restore/publish starts.
     Rejected { Get-AgendaBuildToolsRoot "$fixture/consumer" } 'git submodule update --init --recursive'
     Copy-Item -LiteralPath "$root/scripts/package.ps1" -Destination "$fixture/consumer/scripts/package.ps1"
-    Copy-Item -LiteralPath $helper -Destination "$fixture/consumer/scripts/packaging/Installers.ps1"
+    Copy-Item -LiteralPath $helper -Destination "$fixture/consumer/scripts/packaging/Agenda.ps1"
     Rejected { & "$fixture/consumer/scripts/package.ps1" } 'git submodule update --init --recursive'
 
     $tools=Get-AgendaBuildToolsRoot $root
-    Check ((Get-Content "$tools/VERSION" -Raw).Trim() -eq '0.1.0') 'Build tools version stays separate from Agenda version.'
+    Check ((Get-Content "$tools/VERSION" -Raw).Trim() -eq '0.2.0') 'Build tools version stays separate from Agenda version.'
     $commit=(& git -C $tools rev-parse HEAD).Trim()
-    Check ($commit -eq '5ebe3c79ec35cfbcd015eb1de17848602375f883') 'Exact v0.1.0 tool checkout.'
+    Check ($commit -eq '99d60cf6f0ef4b823f55237e664fc02684bb001d') 'Exact v0.2.0 tool checkout.'
     Check (!(Test-Path "$root/tools/msi") -and !(Test-Path "$root/scripts/packaging/Msix.ps1")) 'Duplicate installer implementations removed.'
 
     # Stub only the external command boundary to inspect product translation;
     # real native engine tests and application packages cover the actual tools.
     $null=New-Item -ItemType Directory -Path "$fixture/consumer/external/winbuildtools/msi" -Force
     $null=New-Item -ItemType Directory -Path "$fixture/consumer/external/winbuildtools/msix" -Force
+    $null=New-Item -ItemType Directory -Path "$fixture/consumer/external/winbuildtools/common" -Force
+    $null=New-Item -ItemType Directory -Path "$fixture/consumer/external/winbuildtools/signing" -Force
+    foreach($relative in @('common/Tools.ps1','common/Artifacts.ps1','signing/Signing.ps1')) { Set-Content "$fixture/consumer/external/winbuildtools/$relative" '# Fixture boundary only' }
     $null=New-Item -ItemType Directory -Path "$fixture/consumer/deployment" -Force
     $null=New-Item -ItemType Directory -Path "$fixture/payload" -Force
     Copy-Item -LiteralPath "$root/deployment/AppxManifest.xml" -Destination "$fixture/consumer/deployment/AppxManifest.xml"
-    Set-Content "$fixture/consumer/external/winbuildtools/VERSION" '0.1.0'
+    Set-Content "$fixture/consumer/external/winbuildtools/VERSION" '0.2.0'
     Set-Content "$fixture/consumer/external/winbuildtools/verify.ps1" '# Fixture entry point'
     Set-Content "$fixture/consumer/external/winbuildtools/msi/package.ps1" @'
 param($Config,$PayloadDirectory,$Version,$Architecture,$OutputDirectory)

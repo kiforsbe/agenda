@@ -98,16 +98,22 @@ silently assumed or implemented here.
 
 ## External build tooling — reviewed 2026-10-22
 
-The user requested winbuildtools release 0.1.0. Live authoritative Git tag
-enumeration found `v0.1.0` (annotated tag object
-`25f3c0aa986ab5f8820cb61321de407b94486f25`), resolving to
-`5ebe3c79ec35cfbcd015eb1de17848602375f883`; no newer stable tags were listed.
+The user requested complete delegation of packaging mechanisms and release 0.2.0.
+Live authoritative Git tag enumeration found `v0.2.0` (annotated tag object
+`a678931f9dd7cc470aaf77e5db5c30aee21b9047`), resolving to
+`99d60cf6f0ef4b823f55237e664fc02684bb001d`; no newer stable tags were listed.
 Agenda records that commit as the submodule gitlink at external/winbuildtools.
+Compared with the earlier v0.1.0 pin, shared implementation files and the MIT
+license are unchanged. The example script changes only help/comments; executable
+PowerShell tokens were compared. v0.2.0 clarifies complete consumer integration,
+metadata composition and explicit local/hosted verification boundaries.
 The release source, changelog, security guidance and MIT license/attribution were
 inspected from that remote checkout. No replacement/deprecation is announced in
 the release guidance. The tree declares no runtime NuGet/npm/PowerShell packages,
 vendored executable dependencies or nested submodules, so it adds no package
 transitive tree. Existing Windows/SDK/PowerShell prerequisites remain separate.
+The public repository advisory endpoint returned zero published records during
+this review; that does not establish absence of private or unknown issues.
 This inspection is not a guarantee against source or platform vulnerabilities.
 Public advisory endpoint results and actual build validation are recorded in
 [validation.md](validation.md). No application dependency versions or Actions

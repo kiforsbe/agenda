@@ -1,7 +1,7 @@
 # Third-party components
 
 Agenda source is licensed under GNU AGPL version 3. The external winbuildtools
-`v0.1.0` build dependency is MIT-licensed; its license and source attribution are
+`v0.2.0` build dependency is MIT-licensed; its license and source attribution are
 preserved in the pinned submodule. It is build tooling, not an application runtime
 payload. See [its license](external/winbuildtools/LICENSE) and
 [provenance](external/winbuildtools/NOTICE.md).

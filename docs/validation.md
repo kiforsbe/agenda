@@ -157,3 +157,46 @@ before execution (reason: blocked by policy). No checkout fixture was created by
 that command. A fresh-clone end-to-end check and hosted Actions execution remain
 unverified; local initialized-submodule builds, missing-checkout preflight,
 exact-release-pin checks and the four real package inspections passed.
+
+## Complete shared packaging delegation — 2026-10-22
+
+The winbuildtools project chat updated consumer guidance and published v0.2.0 at
+99d60cf6f0ef4b823f55237e664fc02684bb001d, annotated tag object
+a678931f9dd7cc470aaf77e5db5c30aee21b9047. Remote tag/commit were checked before
+updating Agenda's gitlink. Shared implementation directories and MIT license are
+identical to v0.1.0; the example's executable tokens are unchanged. Upstream
+instructions now explicitly require delegation of all applicable packaging
+mechanisms, not just installer creation. No hosted workflow was dispatched.
+
+Agenda now has scripts/package.ps1 plus one product adapter,
+scripts/packaging/Agenda.ps1. Local Common/Installers/Signing implementations and
+certificate setup/trust scripts were deleted. Publishing/resource/license policy
+and product fields remain local; SDK discovery, logs, certificate checks/signing
+and final hashes/signature state come from the external checkout. Shared metadata
+is preserved and augmented with Format/Architecture and legacy Commit. New
+SourceCommit/SignatureStatus/SignerThumbprint fields describe the shared result.
+
+Delegation tests failed on the missing product-only adapter before implementation
+and now pass. They check shared function source ownership, removal of duplicate
+files, signing failure without a success manifest, actual final-byte/signature
+metadata rather than the requested Sign flag, preserved product fields, unsigned
+defaults/options and a no-mutation certificate -WhatIf path. No key is created,
+trusted or used by these checks. The separate read-only cleanup review reported
+no actionable findings. Live signing/trust remains unverified.
+
+Final local verification against the published v0.2.0 pin passed: 29 shared
+configuration checks, 43 native MSI checks, shared MSIX/signing/common checks,
+Agenda delegation/adapter/dependency checks, application test executables and
+Release x64 build with zero warnings/errors. All four real unsigned MSI/MSIX
+x64/ARM64 packages passed inspection; final shared hashes matched the artifacts,
+Signed was false and SignatureStatus was NotSigned. SourceCommit matched legacy
+Commit and Format/Architecture were retained. Agenda version remains 0.4.0.
+All 15 Agenda scripts parsed and 36 current documentation links resolved.
+Logs/results are under ignored artifacts/verification/winbuildtools-0.2.
+
+The delegated project reports its full local suite and pinned consumer test
+passed. Its additional ad-hoc metadata-example fixture was blocked by automatic
+approval review before execution; no claim is made for that extra example run.
+Agenda's own composition tests and four actual package finalizations did execute
+the shared writer plus additive product fields successfully. Hosted workflows
+and the prior installed lifecycle/signing/redistribution limits remain separate.

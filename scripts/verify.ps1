@@ -3,7 +3,7 @@
 param([ValidateSet('Debug','Release')][string]$Configuration='Release',[ValidateSet('x64','ARM64')][string]$Architecture='x64')
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
-. (Join-Path $PSScriptRoot 'packaging/Installers.ps1')
+. (Join-Path $PSScriptRoot 'packaging/Agenda.ps1')
 $tools=Get-AgendaBuildToolsRoot $root
 Push-Location $root
 try {
