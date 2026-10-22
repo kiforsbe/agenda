@@ -7,7 +7,7 @@ Publishes and inspects Agenda installers; MSI is the default, MSIX is opt-in.
 Both formats are unsigned unless an existing certificate is explicitly selected.
 Packaging never creates certificates or imports trust. Each build has isolated
 output and a release-artifacts.json describing the final bytes and source state.
-Requires the initialized external/winbuildtools submodule (release v0.2.0).
+Requires the initialized external/winbuildtools submodule (release v0.3.0).
 Packaging, signing, SDK discovery, diagnostics and final byte/signature metadata
 use that checkout. Agenda supplies publishing, product identity and release fields.
 .PARAMETER Format

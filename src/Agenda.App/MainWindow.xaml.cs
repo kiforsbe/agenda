@@ -82,14 +82,9 @@ public sealed partial class MainWindow : Window
         _settings.InterceptClock = false;
         ClientIdBox.Text = _settings.ClientId;
         _clockTimer.Tick += (_, _) => {
-            var today = DateOnly.FromDateTime(DateTime.Today);
-            var yesterday = DateOnly.FromDateTime(_lastClockDate);
-            UpdateClock();
+            var dateChanged = UpdateClock();
             foreach(var update in _agendaAppearanceUpdates)update();
-            if (today != yesterday) {
-                RenderCalendar(); RenderAgenda();
-                if(CalendarMath.MonthStart(today,_culture)!=CalendarMath.MonthStart(yesterday,_culture))_=RefreshAsync();
-            }
+            if (dateChanged) { RenderCalendar(); RenderAgenda(); }
         };
         _refreshTimer.Tick += async (_, _) => { if (_provider?.AccountName is not null && !_authBusy) await RefreshAsync(); };
         _ready = true;
@@ -133,11 +128,21 @@ public sealed partial class MainWindow : Window
     }
 
     private DateTime _lastClockDate = DateTime.Today;
-    private void UpdateClock()
+    private bool UpdateClock()
     {
-        _lastClockDate = DateTime.Now;
-        ClockText.Text = _lastClockDate.ToString("t", _culture);
-        DateText.Text = _lastClockDate.ToString("D", _culture);
+        var now = DateTime.Now;
+        var today = DateOnly.FromDateTime(now);
+        var dateChanged = today != DateOnly.FromDateTime(_lastClockDate);
+        _lastClockDate = now;
+        if (dateChanged) {
+            // Also catches rollover while hidden or asleep, before RenderAll redraws.
+            var monthChanged = CalendarMath.MonthStart(_month,_culture) != CalendarMath.MonthStart(today,_culture);
+            _month = _selected = today;
+            if (monthChanged) _ = RefreshAsync(preferCache:true);
+        }
+        ClockText.Text = now.ToString("t", _culture);
+        DateText.Text = now.ToString("D", _culture);
+        return dateChanged;
     }
 
     private void RegionalChanged()

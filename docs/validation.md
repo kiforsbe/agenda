@@ -200,3 +200,51 @@ approval review before execution; no claim is made for that extra example run.
 Agenda's own composition tests and four actual package finalizations did execute
 the shared writer plus additive product fields successfully. Hosted workflows
 and the prior installed lifecycle/signing/redistribution limits remain separate.
+
+## Restart Manager tooling pin, 2026-10-22
+
+Agenda now pins winbuildtools v0.3.0 at
+9a3bf8cf1d79d05946abbd020fe57ccec3d0ceb5. Newly generated MSI packages enable
+Restart Manager with normal shutdown, suppress automatic application relaunch,
+and retain reboot suppression. Full UI includes native files-in-use consent;
+silent maintenance can request shutdown without prompting. See the external
+msi/README.md for complete policy and limitations.
+
+Agenda's native shutdown-message handling is not yet updated. No running-app
+uninstall, repair, upgrade, rendered-dialog or ICE acceptance is established by
+this pin update. Previously generated/cached MSIs keep their original policy.
+The earlier stall remains unproven; the approved app-closed retry succeeded with
+status 0 and its log remains under artifacts/diagnostics/.
+
+Local verification of the actual v0.3.0 checkout passed: shared configuration
+checks (29), native MSI checks (157), common/MSIX/signing/.NET helper and
+repository checks, plus Agenda packaging delegation and installer adapter checks.
+These checks install no products. git diff --check also passed. No application
+code changed, and no new application build or real lifecycle test was run.
+
+## Agenda 0.5.0 release preparation, 2026-10-22
+
+Release metadata matches v0.5.0. The date rollover fix was built in Release x64
+with zero warnings/errors; all existing application/provider/shell tests passed.
+A non-installing probe of the actual clock-update method covered overnight and
+multi-day rollover, backwards date changes, repeated ticks, same-day browsing
+and same-month refresh behavior. Full scripts/verify.ps1 passed after the fix.
+
+Live dependency evidence was refreshed for all 32 selected package/version pairs,
+including transitive and runtime dependencies. Selected versions are unchanged;
+only the documented target-specific Windows SDK reference-pack exceptions differ
+from the latest listed stable package family. Registry/advisory/deprecation checks
+passed; license materials/redistribution review from the existing identical set
+remains applicable. This is not a complete security assessment.
+
+Logs and candidate packages are under artifacts/releases/0.5.0 and
+artifacts/packages/{Msi,Msix}/0.5.0. Package metadata identifies the uncommitted
+source state. No release tag, remote publication, certificate creation/trust or
+real install/uninstall acceptance is performed by this preparation.
+
+All four 0.5.0 candidates completed successfully: MSI x64/ARM64 and unsigned MSIX
+x64/ARM64. Final artifact hashes were independently compared with their manifests
+and verified again after copying into artifacts/releases/0.5.0; all matched.
+The release folder includes SHA256SUMS.txt, per-package manifests and package index.
+Release metadata and whitespace checks passed. Candidates remain unsigned and
+built from uncommitted source; MSIX requires signing before installation.

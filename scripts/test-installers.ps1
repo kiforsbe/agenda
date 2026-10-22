@@ -20,9 +20,9 @@ try {
     Rejected { & "$fixture/consumer/scripts/package.ps1" } 'git submodule update --init --recursive'
 
     $tools=Get-AgendaBuildToolsRoot $root
-    Check ((Get-Content "$tools/VERSION" -Raw).Trim() -eq '0.2.0') 'Build tools version stays separate from Agenda version.'
+    Check ((Get-Content "$tools/VERSION" -Raw).Trim() -eq '0.3.0') 'Build tools version stays separate from Agenda version.'
     $commit=(& git -C $tools rev-parse HEAD).Trim()
-    Check ($commit -eq '99d60cf6f0ef4b823f55237e664fc02684bb001d') 'Exact v0.2.0 tool checkout.'
+    Check ($commit -eq '9a3bf8cf1d79d05946abbd020fe57ccec3d0ceb5') 'Exact v0.3.0 tool checkout.'
     Check (!(Test-Path "$root/tools/msi") -and !(Test-Path "$root/scripts/packaging/Msix.ps1")) 'Duplicate installer implementations removed.'
 
     # Stub only the external command boundary to inspect product translation;
@@ -35,7 +35,7 @@ try {
     $null=New-Item -ItemType Directory -Path "$fixture/consumer/deployment" -Force
     $null=New-Item -ItemType Directory -Path "$fixture/payload" -Force
     Copy-Item -LiteralPath "$root/deployment/AppxManifest.xml" -Destination "$fixture/consumer/deployment/AppxManifest.xml"
-    Set-Content "$fixture/consumer/external/winbuildtools/VERSION" '0.2.0'
+    Set-Content "$fixture/consumer/external/winbuildtools/VERSION" '0.3.0'
     Set-Content "$fixture/consumer/external/winbuildtools/verify.ps1" '# Fixture entry point'
     Set-Content "$fixture/consumer/external/winbuildtools/msi/package.ps1" @'
 param($Config,$PayloadDirectory,$Version,$Architecture,$OutputDirectory)

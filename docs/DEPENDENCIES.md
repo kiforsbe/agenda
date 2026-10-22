@@ -170,3 +170,19 @@ deprecated/unsupported with a security notice. This is an explicit upstream
 Action exception, not an application dependency selection. The pinned Action's
 production graph is reviewed as supplied; no claim is made that upgrading its
 internal packages independently would be supported by upstream.
+
+## winbuildtools v0.3.0 Restart Manager update (2026-10-22)
+
+Live upstream tag enumeration identified v0.3.0 as the newest listed stable tag,
+resolving to 9a3bf8cf1d79d05946abbd020fe57ccec3d0ceb5 (annotated tag object
+a25d3542f08959f6e72ee2fd0b359d4ad91ce6fb). MIT license and attribution remain
+applicable. The reviewed source adds native MSI maintenance UI and inspection;
+it adds no NuGet/npm/PowerShell packages, bundled binaries or nested submodules,
+so there is no new package transitive dependency tree. Existing host prerequisites
+and Agenda application dependencies are unchanged. Upstream guidance lists no
+replacement/deprecation for this release. The live GitHub security page reported
+no published advisories; this is not a complete security assessment.
+
+Sources: https://github.com/kiforsbe/winbuildtools/tree/v0.3.0,
+https://github.com/kiforsbe/winbuildtools/security,
+https://github.com/kiforsbe/winbuildtools/blob/v0.3.0/docs/DEPENDENCIES.md.

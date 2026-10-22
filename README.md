@@ -64,7 +64,7 @@ Requirements: Windows 11, PowerShell 7.4 or later, .NET 10 SDK, and Windows SDK 
 
 Clone with `git clone --recurse-submodules https://github.com/kiforsbe/agenda.git`.
 For an existing checkout, run `git submodule update --init --recursive` before
-packaging or verification. Installer tooling is pinned to winbuildtools `v0.2.0`;
+packaging or verification. Installer tooling is pinned to winbuildtools `v0.3.0`;
 builds never download or update that checkout automatically.
 
 ```powershell

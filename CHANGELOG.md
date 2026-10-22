@@ -1,24 +1,29 @@
 # Changelog
 
-All notable changes to Agenda are documented here. The current project version is **0.4.0**; future work should use an **Unreleased** section until the next version is prepared.
+All notable changes to Agenda are documented here. The current project version is **0.5.0**; future work should use an **Unreleased** section until the next version is prepared.
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-10-22
+
 ### Added
 
-- JSON-configured, reusable native MSI packaging for x64 and ARM64 with inspected payloads and artifact hash manifests.
-- Standard build verification and contributor, security, licensing and developer documentation.
+- Native MSI installers for x64 and ARM64.
+- Contributor, security, licensing and developer documentation.
 
 ### Changed
 
-- Updated the reviewed dependency set and retained existing MSIX packaging commands.
-- Made MSI the default and MSIX opt-in, with unsigned builds by default and explicit certificate selection for signing.
-- MSI/MSIX packaging now uses the pinned winbuildtools `v0.2.0` submodule. Clone
-  recursively or run `git submodule update --init --recursive` before packaging
-  or verification; CI initializes the checkout automatically when run manually.
-- Signing, certificate validation, SDK/tool logging and final hash metadata now
-  use shared winbuildtools helpers. Local certificate setup/trust scripts are
-  removed; use the external commands with an explicit reviewed trust thumbprint.
+- MSI is the default package; MSIX remains opt-in, with explicit signing for both.
+- Packaging uses shared winbuildtools v0.3.0 through a pinned submodule.
+- Updated dependencies and build verification.
+
+### Fixed
+
+- Agenda automatically selects today when the date changes, including after being hidden or asleep.
+
+### Known limitations
+
+- Exit Agenda before maintenance; running-app shutdown support and lifecycle validation remain pending.
 
 ## [0.4.0] — 2026-09-12
 
