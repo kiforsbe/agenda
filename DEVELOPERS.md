@@ -5,6 +5,13 @@ SDK and Windows SDK 10.0.26100.0 or later. The application runtime floor is .NET
 10.0.13; self-contained packages bundle it. Windows App SDK restores from NuGet.
 See [ARCHITECTURE.md](ARCHITECTURE.md) for component/runtime boundaries.
 
+Initialize the external tooling with `git submodule update --init --recursive`,
+or clone Agenda using `--recurse-submodules`. Packaging and verification fail
+early with initialization instructions when it is missing. The submodule at
+external/winbuildtools is pinned to `v0.1.0`, commit
+`5ebe3c79ec35cfbcd015eb1de17848602375f883`; this tool version is independent
+of Agenda's application version. Builds never fetch or follow a moving branch.
+
 ```powershell
 ./scripts/build.ps1 -Configuration Release -Architecture x64
 ./scripts/run.ps1
@@ -83,15 +90,29 @@ notification resource workaround. Both container formats are inspected against
 the published payload. Actual reminder delivery/activation needs installed-host
 testing. No automatic MSI/MSIX data migration or supported coexistence is claimed.
 
-## Shared MSI engine
+## External installer tooling
 
-[tools/msi](tools/msi/README.md) owns generic authoring/inspection and standalone
-tests. [deployment/msi.json](deployment/msi.json) owns Agenda metadata and payload
-approval. Keep its product namespace stable. The adapter owns .NET publish,
-resource checks, dependency audit, license collection, signing and Git provenance.
-A second consumer needs only the engine directory and its own JSON configuration.
-The future shared repository will replace a pinned local engine; no automatic
-download/update mechanism is present.
+[winbuildtools](external/winbuildtools/README.md) owns MSI and MSIX creation and
+inspection. [deployment/msi.json](deployment/msi.json) owns MSI metadata/payload
+approval; keep its product namespace stable. Agenda's AppxManifest.xml owns MSIX
+capabilities, identity and extensions. scripts/packaging/Installers.ps1 translates
+Agenda's application version, architecture and chosen publisher and invokes the
+external commands. Its generated XML sits outside the portable publish directory.
+The external MSIX stage, unsigned artifact, logs and inspection remain under the
+build's installer directory; the Agenda-named artifact and final hash manifest
+remain at the build root. The published portable directory is not modified.
+
+Agenda retains .NET publish, resource checks, dependency audit, license collection,
+signing and Git provenance. The old tools/msi directory and local MSIX pack/unpack
+implementation are removed. verify.ps1 runs the pinned tools' verification suite
+plus Agenda's adapter/application tests. GitHub CI remains manual-only and checks
+out recursive submodules.
+
+To update the tool dependency, fetch in external/winbuildtools, check out a
+reviewed exact release commit, validate both architectures/formats, update the
+recorded version/commit and adapter pin test, and commit the submodule gitlink.
+Do not use `git submodule update --remote` in normal builds. Fresh recursive
+clones must resolve every referenced tool commit from its GitHub repository.
 
 ## Dependency review and updates
 

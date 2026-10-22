@@ -116,3 +116,44 @@ No test certificate was created. Live thumbprint signing remains unverified;
 metadata/option validation and signing-failure behavior are covered by tests.
 The prior installed lifecycle/ICE, ARM64 execution and redistribution limitations
 remain unchanged.
+
+## External winbuildtools integration — 2026-10-22
+
+The requested build-tools release 0.1.0 is published as tag v0.1.0, resolving to
+5ebe3c79ec35cfbcd015eb1de17848602375f883. The HTTPS submodule at
+external/winbuildtools records that exact commit; Agenda's application version
+remains 0.4.0. Local MSI authoring and MSIX packing/inspection implementations
+were removed. Agenda owns product configuration, manifest translation, publish
+resources, signing and final hash metadata. New planning is outside Git.
+
+Live upstream review inspected the remote tags, release source/changelog/security
+guidance, MIT license and attribution. No other stable tags were listed. The
+public GitHub repository advisory endpoint returned zero published records on
+2026-10-22; this does not rule out private/unknown issues. The release declares
+no runtime package dependencies, vendored executables or nested submodules.
+Existing platform prerequisites, application dependency exceptions and public
+redistribution limitations are unchanged.
+
+The adapter tests first failed because the shared adapter did not exist, then
+passed with the implementation. They cover a missing/incomplete checkout before
+restore/publish, the exact tool commit, unchanged default format/application
+version, product version/architecture/publisher translation, an external manifest
+and an unchanged portable publish directory. The shared tool suite and all Agenda
+tests plus a Release x64 build pass, with zero build warnings/errors. The separate
+read-only integration review reported no actionable findings. CI remains manual
+only and now initializes recursive submodules.
+
+Real Agenda MSI and unsigned MSIX packages for x64 and ARM64 all passed the
+external engine's database/cabinet or manifest/payload inspection. All four final
+Agenda hash manifests matched the actual artifact bytes. Application version
+remained 0.4.0; MSIX retained the Agenda-named output and portable publishing
+remained separate from the external stage. Logs/results are under ignored
+artifacts/verification/winbuildtools. All 19 Agenda scripts parsed and 32 current
+documentation links resolved. These are local unsigned builds, not installed-host
+acceptance or public redistribution approval; prior limitations remain applicable.
+
+Automatic approval review rejected the fresh-recursive-clone smoke-test command
+before execution (reason: blocked by policy). No checkout fixture was created by
+that command. A fresh-clone end-to-end check and hosted Actions execution remain
+unverified; local initialized-submodule builds, missing-checkout preflight,
+exact-release-pin checks and the four real package inspections passed.

@@ -62,6 +62,11 @@ Agenda is built with C#, WinUI 3, and Windows App SDK. The component boundaries,
 
 Requirements: Windows 11, PowerShell 7.4 or later, .NET 10 SDK, and Windows SDK 10.0.26100.0. The Windows App SDK is restored from NuGet; the flyout does not use a browser rendering engine.
 
+Clone with `git clone --recurse-submodules https://github.com/kiforsbe/agenda.git`.
+For an existing checkout, run `git submodule update --init --recursive` before
+packaging or verification. Installer tooling is pinned to winbuildtools `v0.1.0`;
+builds never download or update that checkout automatically.
+
 ```powershell
 ./scripts/build.ps1
 ./scripts/run.ps1
@@ -133,7 +138,7 @@ Development trust does not make a public download universally installable.
 
 MSI bundles the app and runtimes, installs under Program Files, adds a Start-menu shortcut and preserves per-user data on uninstall. It defaults to unsigned output and needs no development certificate import; Windows reputation or device policy may still block it. Close Agenda before maintenance. MSI is the default; MSIX requires an explicit `-Format Msix`.
 
-The engine in [tools/msi](tools/msi/README.md) is reusable with a JSON configuration; Agenda metadata lives in [deployment/msi.json](deployment/msi.json). Each build produces isolated output and a final artifact hash manifest. See [DEVELOPERS.md](DEVELOPERS.md) for both formats, signing, dependencies and validation limits.
+MSI and MSIX creation/inspection use the pinned [winbuildtools checkout](external/winbuildtools/README.md). Agenda metadata stays in [deployment/msi.json](deployment/msi.json) and [AppxManifest.xml](deployment/AppxManifest.xml). Each build produces isolated output and a final artifact hash manifest. See [DEVELOPERS.md](DEVELOPERS.md) for both formats, signing, dependencies and validation limits.
 
 Contributors should read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [SECURITY.md](SECURITY.md). For troubleshooting see [SUPPORT.md](SUPPORT.md).
 

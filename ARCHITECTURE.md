@@ -281,7 +281,11 @@ Refreshes are cancellable and serialized by an operation gate. A refresh capture
 
 ## Packaging and deployment
 
-The normal development build is an unpackaged WinUI 3 executable. `scripts/build.ps1` restores and builds x64 or ARM64. `scripts/package.ps1` creates a self-contained portable directory and a signed MSIX in the ignored `artifacts/` directory. By default it uses a temporary development certificate; `-UseCertificateStore` instead creates or reuses a self-signed certificate in `Cert:\CurrentUser\My`, signs with its private key, exports only the public `.cer`, and leaves trust installation to the explicit `scripts/trust-dev-certificate.ps1` command, which requires administrator privileges and imports the public signing certificate into Local Machine Trusted People. Current-user stores do not satisfy MSIX deployment trust; importing it as a root CA is unnecessary. A publisher-matching PFX can be supplied for distribution signing. The scripts do not register startup, install the package automatically, or publish to the Store. `deployment/Assets` contains source artwork and tray icons used by both unpackaged and packaged output.
+The normal development build is an unpackaged WinUI 3 executable. `scripts/build.ps1` restores and builds x64 or ARM64. `scripts/package.ps1` publishes a self-contained portable directory and creates an MSI by default; MSIX requires `-Format Msix`. Both formats are unsigned unless an existing signing certificate is explicitly selected by thumbprint or PFX. Certificate creation and trust are separate commands; packaging never creates keys or installs trust.
+
+Installer creation and inspection use the Git submodule at `external/winbuildtools`, pinned to its `v0.1.0` release commit. Checkout initialization belongs to the developer/CI checkout, not the build. `scripts/packaging/Installers.ps1` fails before publishing if that checkout is missing, passes Agenda's MSI JSON directly to the shared engine, or generates Agenda's MSIX manifest outside the portable payload and invokes the shared MSIX command. The generated manifest preserves Agenda's capabilities/extensions while applying the selected version, architecture and publisher.
+
+Agenda retains dependency auditing, license collection, resource checks, optional signing and final hash metadata. The external MSIX stage/unsigned package and inspection evidence remain under the isolated build's installer directory; an Agenda-named copy is finalized at the build root. Generic installer source is no longer duplicated in Agenda. Builds do not install products, register startup or publish to the Store. `deployment/Assets` contains source artwork and tray icons used by both unpackaged and packaged output.
 
 ## Test seams
 
@@ -293,7 +297,7 @@ The repository uses small executable test projects rather than a test framework:
 - `tests/Agenda.ProviderTests` uses deterministic fixtures and mocked transport/authentication for Graph, ICS parsing, recurrence, limits, protected caches, and failure behavior.
 - `tests/Agenda.ShellTests` links the shell sources directly and checks geometry, strict clock-target validation, tray lifecycle, notification callback de-duplication, and native smoke behavior.
 
-The GitHub Actions workflow runs the full test script and a Release x64 build on Windows. Live account consent, remote feed freshness, multiple-monitor variations, signed installation, and ARM64 execution remain environment-dependent manual checks.
+The GitHub Actions workflow is manual-only. It initializes recursive submodules, runs pinned tool and Agenda verification, and builds/inspects MSI/MSIX for x64 and ARM64 on Windows. Live account consent, remote feed freshness, multiple-monitor variations, signed installation, and native ARM64 execution remain environment-dependent manual checks.
 
 ## Extension points
 

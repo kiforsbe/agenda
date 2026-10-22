@@ -80,7 +80,8 @@ runtimeconfig and payload determine the actual selected .NET runtime.
 
 ## Unresolved public redistribution conditions
 
-Agenda source and the ported MSI engine adopt AGPL-3.0. Microsoft binary packages
+Agenda source remains AGPL-3.0; the external winbuildtools dependency is MIT.
+Microsoft binary packages
 are not automatically MIT because upstream source repositories are open source.
 Windows App SDK/ML terms include distribution requirements and restrictions
 relating to source-disclosure obligations. NativeInterop's binary terms include
@@ -95,7 +96,24 @@ actual binary set before publishing installers. Removing unused broker/ML/SDK
 dependencies or obtaining appropriate rights may be follow-up options; neither is
 silently assumed or implemented here.
 
-## GitHub Actions
+## External build tooling — reviewed 2026-10-22
+
+The user requested winbuildtools release 0.1.0. Live authoritative Git tag
+enumeration found `v0.1.0` (annotated tag object
+`25f3c0aa986ab5f8820cb61321de407b94486f25`), resolving to
+`5ebe3c79ec35cfbcd015eb1de17848602375f883`; no newer stable tags were listed.
+Agenda records that commit as the submodule gitlink at external/winbuildtools.
+The release source, changelog, security guidance and MIT license/attribution were
+inspected from that remote checkout. No replacement/deprecation is announced in
+the release guidance. The tree declares no runtime NuGet/npm/PowerShell packages,
+vendored executable dependencies or nested submodules, so it adds no package
+transitive tree. Existing Windows/SDK/PowerShell prerequisites remain separate.
+This inspection is not a guarantee against source or platform vulnerabilities.
+Public advisory endpoint results and actual build validation are recorded in
+[validation.md](validation.md). No application dependency versions or Actions
+versions were changed by this integration.
+
+## GitHub Actions (existing reviewed set)
 
 Live upstream release/tag/license checks selected:
 

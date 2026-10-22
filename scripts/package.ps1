@@ -7,6 +7,9 @@ Publishes and inspects Agenda installers; MSI is the default, MSIX is opt-in.
 Both formats are unsigned unless an existing certificate is explicitly selected.
 Packaging never creates certificates or imports trust. Each build has isolated
 output and a release-artifacts.json describing the final bytes and source state.
+Requires the initialized external/winbuildtools submodule (release v0.1.0).
+Installer creation/inspection is delegated to that pinned checkout; application
+publishing, product metadata, signing and final release hashes remain in Agenda.
 .PARAMETER Format
 Msi by default. Select Msix explicitly for a Windows app package.
 .PARAMETER CertificateThumbprint
@@ -32,8 +35,11 @@ param(
     [string]$TimestampUri=''
 )
 $ErrorActionPreference='Stop'
+$root=Split-Path $PSScriptRoot -Parent
+. (Join-Path $PSScriptRoot 'packaging/Installers.ps1')
+# Reject an uninitialized checkout before restore/publish or signing work.
+$null=Get-AgendaBuildToolsRoot $root
 . (Join-Path $PSScriptRoot 'packaging/Common.ps1')
-. (Join-Path $PSScriptRoot 'packaging/Msix.ps1')
 . (Join-Path $PSScriptRoot 'packaging/Signing.ps1')
 Assert-AgendaSigningOptions -CertificateThumbprint $CertificateThumbprint -CertificatePath $CertificatePath -CertificatePassword $CertificatePassword -TimestampUri $TimestampUri
 if($CertificatePath) { $CertificatePath=(Resolve-Path -LiteralPath $CertificatePath).Path }
@@ -45,7 +51,6 @@ if($sign) {
     $certificate.Dispose()
     $null=Get-AgendaSdkTool signtool.exe
 }
-$root=Split-Path $PSScriptRoot -Parent
 $version=Get-AgendaVersion $root
 $commit=(& git -C $root rev-parse HEAD).Trim()
 if($LASTEXITCODE -ne 0) { throw 'Cannot determine source commit.' }
@@ -60,13 +65,14 @@ try {
     $null=New-Item -ItemType Directory -Path $buildRoot -Force
     $script:AgendaToolLog=Join-Path $buildRoot 'tool-output.log'
     $stage=Publish-AgendaPayload $Architecture $buildRoot
-    if($Format -eq 'Msi') {
-        $result=& (Join-Path $root 'tools/msi/package.ps1') -Config (Join-Path $root 'deployment/msi.json') -PayloadDirectory $stage -Version $version -Architecture $Architecture -OutputDirectory (Join-Path $buildRoot 'installer')
-        $artifact=$result.Artifact
-    } else {
+    $installer=New-AgendaInstaller -Root $root -Format $Format -PayloadDirectory $stage -Version $version -Architecture $Architecture -Publisher $Publisher -OutputDirectory (Join-Path $buildRoot 'installer')
+    $artifact=$installer.Artifact
+    if($Format -eq 'Msix') {
         $suffix=if($sign) { 'signed' } else { 'unsigned' }
         $artifact=Join-Path $buildRoot "Agenda-$version-$Architecture-$suffix.msix"
-        New-AgendaMsix $stage $artifact $version $Architecture $Publisher
+        # Retain the engine's unsigned artifact/inspection evidence; distribute
+        # the Agenda-named copy and compute final hashes after optional signing.
+        Copy-Item -LiteralPath $installer.Artifact -Destination $artifact
     }
     $result=Complete-AgendaArtifact -Artifact $artifact -Version $version -Commit $commit -Format $Format -Architecture $Architecture -SourceDirty:$sourceDirty -Sign:$sign -Publisher $Publisher -CertificateThumbprint $CertificateThumbprint -CertificatePath $CertificatePath -CertificatePassword $CertificatePassword -TimestampUri $TimestampUri
     if(!$sign -and $Format -eq 'Msix') {

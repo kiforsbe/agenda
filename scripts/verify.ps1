@@ -3,9 +3,13 @@
 param([ValidateSet('Debug','Release')][string]$Configuration='Release',[ValidateSet('x64','ARM64')][string]$Architecture='x64')
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
+. (Join-Path $PSScriptRoot 'packaging/Installers.ps1')
+$tools=Get-AgendaBuildToolsRoot $root
 Push-Location $root
 try {
-    foreach($script in @('tools/msi/tests/test-config.ps1','tools/msi/tests/test-msi.ps1','scripts/test-dependencies.ps1','scripts/test-packaging.ps1','scripts/test-verification.ps1')) {
+    & (Join-Path $tools 'verify.ps1')
+    if(!$?) { throw 'Pinned build-tools verification failed.' }
+    foreach($script in @('scripts/test-dependencies.ps1','scripts/test-packaging.ps1','scripts/test-installers.ps1','scripts/test-verification.ps1')) {
         & (Join-Path $root $script)
         if(!$?) { throw "Verification failed: $script" }
     }

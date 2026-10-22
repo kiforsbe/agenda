@@ -13,6 +13,9 @@ All notable changes to Agenda are documented here. The current project version i
 
 - Updated the reviewed dependency set and retained existing MSIX packaging commands.
 - Made MSI the default and MSIX opt-in, with unsigned builds by default and explicit certificate selection for signing.
+- MSI/MSIX packaging now uses the pinned winbuildtools `v0.1.0` submodule. Clone
+  recursively or run `git submodule update --init --recursive` before packaging
+  or verification; CI initializes the checkout automatically when run manually.
 
 ## [0.4.0] — 2026-09-12
 
